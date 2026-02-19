@@ -1,3 +1,9 @@
+---
+title: "Module 6: 修正・改善"
+parent: カリキュラム
+nav_order: 6
+---
+
 # Module 6: 修正・改善 — Git ワークフロー
 
 **所要時間**: 約 1.5 時間
