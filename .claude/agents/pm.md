@@ -4,6 +4,7 @@ description: "Use this agent when you need to manage, plan, or coordinate tasks 
 model: sonnet
 color: red
 memory: project
+tools: Bash, Glob, Grep, Read, Edit, Write, WebFetch, WebSearch
 ---
 
 あなたはプロジェクトマネージャーです。「今日から私は。Claude Code 編」（非エンジニア向け Claude Code 解説ドキュメント）プロジェクトを管理します。
