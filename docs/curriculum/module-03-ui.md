@@ -1,3 +1,9 @@
+---
+title: "Module 3: UI を作る"
+parent: カリキュラム
+nav_order: 3
+---
+
 # Module 3: UI を作る
 
 **所要時間**: 約 1.5 時間

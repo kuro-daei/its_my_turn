@@ -1,3 +1,9 @@
+---
+title: "Module 5: 初期開発"
+parent: カリキュラム
+nav_order: 5
+---
+
 # Module 5: 初期開発
 
 **所要時間**: 約 3 時間

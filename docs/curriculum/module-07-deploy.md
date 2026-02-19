@@ -1,3 +1,9 @@
+---
+title: "Module 7: Vercel デプロイ"
+parent: カリキュラム
+nav_order: 7
+---
+
 # Module 7: Vercel デプロイ
 
 **所要時間**: 約 1 時間

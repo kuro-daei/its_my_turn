@@ -1,3 +1,9 @@
+---
+title: "Module 1: Claude Code を整える"
+parent: カリキュラム
+nav_order: 1
+---
+
 # Module 1: Claude Code を整える
 
 **所要時間**: 約 1 時間

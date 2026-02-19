@@ -1,3 +1,9 @@
+---
+title: "Module 0: 環境準備"
+parent: カリキュラム
+nav_order: 0
+---
+
 # Module 0: 環境準備
 
 **所要時間**: 約 1 時間

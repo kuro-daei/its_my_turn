@@ -1,3 +1,9 @@
+---
+title: "Module 4: Supabase 初期設定"
+parent: カリキュラム
+nav_order: 4
+---
+
 # Module 4: Supabase 初期設定
 
 **所要時間**: 約 30 分
