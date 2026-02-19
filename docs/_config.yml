@@ -1,0 +1,28 @@
+title: 今日から私は。Claude Code 編
+description: 非エンジニアのための Claude Code 入門カリキュラム
+remote_theme: just-the-docs/just-the-docs@v0.10.0
+
+url: https://kuro-daei.github.io/its_my_turn
+
+# 日本語対応
+lang: ja
+
+# ナビゲーション
+nav_sort: order
+
+# 検索
+search_enabled: true
+
+# フッター
+footer_content: "© 2026 今日から私は。Claude Code 編"
+
+# aux links（右上のリンク）
+aux_links:
+  "GitHub":
+    - "https://github.com/kuro-daei/its_my_turn"
+
+# カラースキーム
+color_scheme: light
+
+# コードブロックのコピーボタン
+enable_copy_code_button: true
