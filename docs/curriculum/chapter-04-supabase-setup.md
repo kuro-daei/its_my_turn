@@ -1,10 +1,10 @@
 ---
-title: "Module 4: Supabase 初期設定"
+title: "Chapter 4: Supabase 初期設定"
 parent: カリキュラム
 nav_order: 4
 ---
 
-# Module 4: Supabase 初期設定
+# Chapter 4: Supabase 初期設定
 
 **所要時間**: 約 30 分
 **ゴール**: Supabase のデータベースが立ち上がり、Next.js アプリから接続できる状態にする
@@ -12,14 +12,14 @@ nav_order: 4
 
 ---
 
-## このモジュールで学ぶこと
+## このチャプターで学ぶこと
 
 - Supabase のアカウントを作成し、プロジェクトを立ち上げる
 - `todos` テーブルを Claude Code に設計・SQL 生成させ、ダッシュボードで実行する
 - `.env.local` に接続情報を設定する
 - Supabase クライアントの初期化ファイルを Claude Code に作成させる
 - 動作確認（接続テスト）を行う
-- Module 0 の「随時追記セクション」を更新する
+- Chapter 0 の「随時追記セクション」を更新する
 
 全部終わったら、Next.js アプリから Supabase のデータベースに接続できる状態になります。
 
@@ -367,13 +367,13 @@ npm run dev
 
 ---
 
-## Step 5: Module 0 の「随時追記セクション」を更新する
+## Step 5: Chapter 0 の「随時追記セクション」を更新する
 
-このモジュールで行った作業（Supabase アカウント作成、パッケージインストール）を Module 0 の「随時追記セクション」に記録します。
+このチャプターで行った作業（Supabase アカウント作成、パッケージインストール）を Chapter 0 の「随時追記セクション」に記録します。
 
 ### Claude Code への指示
 
-> `docs/curriculum/module-00-setup.md` の「Supabase アカウント + supabase-js（Module 4 で追加）」セクションを更新して。以下の内容を追記して:
+> `docs/curriculum/chapter-00-setup.md` の「Supabase アカウント + supabase-js（Chapter 4 で追加）」セクションを更新して。以下の内容を追記して:
 > - Supabase アカウントの作成済み（https://supabase.com でアカウント登録）
 > - プロジェクト `its-my-turn` 作成済み
 > - `@supabase/supabase-js` のインストール: `npm install @supabase/supabase-js`
@@ -383,13 +383,13 @@ npm run dev
 
 **確認ポイント**
 
-- [ ] `module-00-setup.md` の Supabase セクションが更新されている
+- [ ] `chapter-00-setup.md` の Supabase セクションが更新されている
 
 ---
 
-## モジュール全体の確認ポイント
+## チャプター全体の確認ポイント
 
-このモジュールの全作業が終わったら、以下をまとめて確認してください。
+このチャプターの全作業が終わったら、以下をまとめて確認してください。
 
 - [ ] Supabase プロジェクトが作成されている
 - [ ] Supabase の Table Editor に `todos` テーブルが存在する
@@ -491,7 +491,7 @@ npm install @supabase/supabase-js
 
 ---
 
-## このモジュールで学んだこと
+## このチャプターで学んだこと
 
 | 機能 | 体験した内容 |
 |------|-------------|
@@ -501,8 +501,8 @@ npm install @supabase/supabase-js
 
 ---
 
-## 次のモジュールへ
+## 次のチャプターへ
 
 Supabase のセットアップが完了しました。
 
-次の **Module 5: 初期開発** では、このデータベースと画面を実際につなぎ、TODO の追加・一覧表示・完了切り替え・削除が動く状態にします。さらにログイン機能も組み込み、自分専用のアプリが完成します。
+次の **Chapter 5: 初期開発** では、このデータベースと画面を実際につなぎ、TODO の追加・一覧表示・完了切り替え・削除が動く状態にします。さらにログイン機能も組み込み、自分専用のアプリが完成します。

@@ -1,10 +1,10 @@
 ---
-title: "Module 0: 環境準備"
+title: "Chapter 0: 環境準備"
 parent: カリキュラム
 nav_order: 0
 ---
 
-# Module 0: 環境準備
+# Chapter 0: 環境準備
 
 > **この資料について**: 事前準備および保守用の参照資料です。ハンズオン当日は、この資料を閲覧できる状態で参加してください。
 
@@ -15,7 +15,7 @@ nav_order: 0
 
 ---
 
-## このモジュールでインストールするもの
+## このチャプターでインストールするもの
 
 | ツール | 読み方 | 役割 |
 |--------|--------|------|
@@ -455,7 +455,7 @@ Claude から返答が来れば完璧です。終了するには `/exit` と入�
 
 ## 完了チェックリスト
 
-Module 0 が完了したら、以下がすべてチェックできているはずです。
+Chapter 0 が完了したら、以下がすべてチェックできているはずです。
 
 - [ ] `claude --version` でバージョン番号が表示される
 - [ ] `claude` コマンドで起動して会話できる
@@ -466,9 +466,9 @@ Module 0 が完了したら、以下がすべてチェックできているは�
 
 ---
 
-## このモジュールのまとめ
+## このチャプターのまとめ
 
-このモジュールでは、Claude Code を使うための環境を整えました。
+このチャプターでは、Claude Code を使うための環境を整えました。
 
 - **Claude Code** をネイティブアプリとしてインストール・認証しました
 - **Git（ギット）** で変更履歴の管理ができるようになりました
@@ -477,22 +477,42 @@ Module 0 が完了したら、以下がすべてチェックできているは�
 - **uv + Python** で Python の実行環境を整えました
 - 作業用ディレクトリ `~/projects` を用意しました
 
-次の Module 1 では、Claude Code に「プロジェクトの説明書（CLAUDE.md）」を作成し、各種ツールの設定を行います。
+次の Chapter 1 では、Claude Code に「プロジェクトの説明書（CLAUDE.md）」を作成し、各種ツールの設定を行います。
 
-すべてチェックできたら **Module 1** に進んでください。お疲れさまでした。
+すべてチェックできたら **Chapter 1** に進んでください。お疲れさまでした。
 
 ---
 
 ## 随時追記セクション
 
-> このセクションには、後のモジュールで必要になるツールやアカウントをまとめています。
-> 各モジュールに進む前に、該当する項目を準備してください。
+> このセクションには、後のチャプターで必要になるツールやアカウントをまとめています。
+> 各チャプターに進む前に、該当する項目を**必ず**準備してください。
 
 ---
 
-### Figma アカウント + Personal Access Token（Module 3 で使用）
+### Slack ワークスペース + Bot Token（**Chapter 1 で使用・必須**）
 
-Module 3 で Figma MCP サーバーを使って UI デザインを作成します。事前に準備しておきましょう。
+Chapter 1 で Slack MCP サーバーを設定し、Claude Code から Slack にメッセージを送れるようにします。事前に以下を準備してください。
+
+1. Slack ワークスペースに参加済みであることを確認します（なければ無料で作成できます）
+2. [Slack API](https://api.slack.com/apps) にアクセスし、「Create New App」→「From scratch」を選択します
+3. App Name に `Claude Code Bot` などと入力し、ワークスペースを選択して作成します
+4. 左メニュー「OAuth & Permissions」→「Bot Token Scopes」に以下を追加します:
+   - `channels:history` / `channels:read` / `chat:write` / `users:read`
+5. 「Install to Workspace」をクリックし、ボットトークン（`xoxb-` で始まる文字列）をコピーします
+6. 「Incoming Webhooks」を有効にし、Webhook URL（`https://hooks.slack.com/services/...`）をコピーします
+
+> **注意:** ボットトークンと Webhook URL は外部に漏らさないようにしてください。
+
+- [ ] Slack ワークスペースに参加している
+- [ ] Slack アプリを作成してボットトークンを取得した
+- [ ] Slack の Incoming Webhook URL を取得した
+
+---
+
+### Figma アカウント + Personal Access Token（Chapter 1 & 3 で使用）
+
+Chapter 1（MCP サーバー設定）と Chapter 3（UI 作成）で Figma を使います。事前に準備しておきましょう。
 
 1. [Figma](https://www.figma.com/) にアクセスしてアカウントを作成（無料プランで OK）
 2. Personal Access Token を発行:
@@ -508,9 +528,9 @@ Module 3 で Figma MCP サーバーを使って UI デザインを作成しま�
 
 ---
 
-### Supabase アカウント + supabase-js（Module 4 で使用）
+### Supabase アカウント + supabase-js（Chapter 4 で使用）
 
-Module 4 で Supabase（データベースと認証を提供するクラウドサービス）を使います。
+Chapter 4 で Supabase（データベースと認証を提供するクラウドサービス）を使います。
 
 1. [Supabase](https://supabase.com/) にアクセスしてアカウントを作成（GitHub 連携が簡単）
 2. パッケージのインストール（プロジェクトディレクトリで実行）:
@@ -519,7 +539,7 @@ Module 4 で Supabase（データベースと認証を提供するクラウド�
 npm install @supabase/supabase-js
 ```
 
-3. Module 4 で Supabase プロジェクトを作成した後、`.env.local` に接続情報を設定します:
+3. Chapter 4 で Supabase プロジェクトを作成した後、`.env.local` に接続情報を設定します:
 
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=your-project-url
@@ -533,9 +553,9 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 
 ---
 
-### 認証パッケージ（Module 5 で使用）
+### 認証パッケージ（Chapter 5 で使用）
 
-Module 5 で SPA ベースのログイン認証を実装します。以下のパッケージを追加インストールしてください。
+Chapter 5 で SPA ベースのログイン認証を実装します。以下のパッケージを追加インストールしてください。
 
 ```bash
 npm install @supabase/ssr
@@ -547,9 +567,9 @@ npm install @supabase/ssr
 
 ---
 
-### Vercel アカウント + Vercel CLI（Module 7 で使用）
+### Vercel アカウント + Vercel CLI（Chapter 7 で使用）
 
-Module 7 でアプリをインターネットに公開（デプロイ）します。
+Chapter 7 でアプリをインターネットに公開（デプロイ）します。
 
 1. [Vercel](https://vercel.com/) にアクセスしてアカウントを作成（GitHub 連携が簡単）
 2. Vercel CLI（ターミナルから Vercel を操作するツール）をインストール:
