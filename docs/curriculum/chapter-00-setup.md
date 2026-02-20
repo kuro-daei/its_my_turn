@@ -23,7 +23,7 @@ nav_order: 0
 | Git | ギット | ファイルの変更履歴を管理するツール |
 | gh | ジーエイチ | GitHub をターミナルから操作するツール |
 | nvm | エヌ・ブイ・エム | Node.js のバージョン管理ツール |
-| Node.js | ノード・ジェーエス | JavaScript の実行環境 |
+| Node.js | ノード ジェイエス | JavaScript の実行環境 |
 | uv | ユーブイ | Python のバージョン・パッケージ管理ツール |
 | Python | パイソン | Python の実行環境 |
 
@@ -122,7 +122,7 @@ Homebrew を使って一括でインストールします。
 brew install git gh nvm uv
 ```
 
-nvm をターミナルで使えるようにするため、以下を実行してください:
+nvm をターミナルで使えるようにするため、以下を実行してください。これは「ターミナルを開くたびに nvm を自動で読み込む」ための設定です。
 
 ```bash
 echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.zprofile
@@ -144,6 +144,7 @@ uv --version
 - [ ] `git --version` でバージョンが表示された
 - [ ] `gh --version` でバージョンが表示された
 - [ ] `nvm --version` でバージョンが表示された
+- [ ] `uv --version` でバージョンが表示された
 
 ---
 
@@ -229,6 +230,10 @@ PowerShell を**管理者として実行**して以下を入力してくださ�
 winget install Microsoft.WindowsTerminal
 ```
 
+> **すでにインストール済みの場合**: 「既にインストールされています」と表示されることがあります。その場合はそのまま次に進んでください。
+
+- [ ] Windows Terminal をインストールした
+
 ---
 
 ### Step 2: WSL + Ubuntu 24 のインストール
@@ -308,6 +313,8 @@ claude --version
 ```bash
 mkdir ~/projects
 ```
+
+> **`mkdir` とは?** 「make directory」の略で、新しいフォルダを作成するコマンドです。`~/projects` は「ホームフォルダの中に projects フォルダを作る」という意味です。
 
 - [ ] `~/projects` フォルダを作成した
 
@@ -460,9 +467,10 @@ Chapter 0 が完了したら、以下がすべてチェックできているは�
 - [ ] `claude --version` でバージョン番号が表示される
 - [ ] `claude` コマンドで起動して会話できる
 - [ ] `git --version` でバージョン番号が表示される
-- [ ] `gh --version` でバージョン番号が表示される
+- [ ] `gh auth status` で認証済みと表示される
 - [ ] `node --version` でバージョン番号が表示される
 - [ ] `uv --version` でバージョン番号が表示される
+- [ ] Python がインストールされている
 
 ---
 
@@ -483,30 +491,10 @@ Chapter 0 が完了したら、以下がすべてチェックできているは�
 
 ---
 
-## 随時追記セクション
+## 事前準備リファレンス
 
 > このセクションには、後のチャプターで必要になるツールやアカウントをまとめています。
 > 各チャプターに進む前に、該当する項目を**必ず**準備してください。
-
----
-
-### Slack ワークスペース + Bot Token（**Chapter 1 で使用・必須**）
-
-Chapter 1 で Slack MCP サーバーを設定し、Claude Code から Slack にメッセージを送れるようにします。事前に以下を準備してください。
-
-1. Slack ワークスペースに参加済みであることを確認します（なければ無料で作成できます）
-2. [Slack API](https://api.slack.com/apps) にアクセスし、「Create New App」→「From scratch」を選択します
-3. App Name に `Claude Code Bot` などと入力し、ワークスペースを選択して作成します
-4. 左メニュー「OAuth & Permissions」→「Bot Token Scopes」に以下を追加します:
-   - `channels:history` / `channels:read` / `chat:write` / `users:read`
-5. 「Install to Workspace」をクリックし、ボットトークン（`xoxb-` で始まる文字列）をコピーします
-6. 「Incoming Webhooks」を有効にし、Webhook URL（`https://hooks.slack.com/services/...`）をコピーします
-
-> **注意:** ボットトークンと Webhook URL は外部に漏らさないようにしてください。
-
-- [ ] Slack ワークスペースに参加している
-- [ ] Slack アプリを作成してボットトークンを取得した
-- [ ] Slack の Incoming Webhook URL を取得した
 
 ---
 
@@ -592,4 +580,4 @@ vercel login
 
 ---
 
-*最終更新: 2026-02-19*
+*最終更新: 2026-02-21*

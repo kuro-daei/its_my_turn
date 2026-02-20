@@ -1,13 +1,22 @@
 #!/bin/bash
 #
-# Claude Code PreToolUse hook - docs/ 以外への書き込みを制限する
-# Edit/Write ツールが docs/ ディレクトリ外のファイルを操作しようとした場合にブロックする
+# Claude Code PreToolUse hook - サブエージェントのみ docs/ 外への書き込みを制限する
+# メインエージェントは全ファイル編集可能
 #
 
 INPUT=$(cat)
 
-# ツール名と対象ファイルパスを取得
-TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // ""')
+# transcript_path でメイン/サブを判定
+TRANSCRIPT_PATH=$(echo "$INPUT" | jq -r '.transcript_path // ""')
+
+# メインエージェントならスルー（何でも編集OK）
+if [[ "$TRANSCRIPT_PATH" != *"/subagents/"* ]]; then
+  exit 0
+fi
+
+# --- 以下はサブエージェントのみ ---
+
+# 対象ファイルパスを取得
 FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // ""')
 
 # file_path がない場合はスルー
@@ -31,7 +40,7 @@ if [[ "$FILE_PATH" == "$DOCS_DIR"/* ]] || [[ "$FILE_PATH" == "$DOCS_DIR" ]]; the
 fi
 
 # docs/ 外への書き込みをブロック
-echo "ブロック: docs/ ディレクトリ外のファイルは編集できません。"
+echo "ブロック: サブエージェントは docs/ ディレクトリ外のファイルを編集できません。"
 echo "対象ファイル: $FILE_PATH"
 echo "許可されている範囲: $DOCS_DIR"
 exit 2
