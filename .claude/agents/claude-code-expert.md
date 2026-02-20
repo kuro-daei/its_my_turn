@@ -1,7 +1,7 @@
 ---
 name: tech
 description: "Use this agent when the user asks questions about Claude Code's features, capabilities, configuration, best practices, usage patterns, CLAUDE.md files, agent configurations, or any topic related to Claude Code as a CLI tool. Also use this agent when the user needs guidance on how to effectively use Claude Code for their development workflow, troubleshoot Claude Code issues, or wants to understand Claude Code's latest features and updates.\\n\\nExamples:\\n\\n- Example 1:\\n  user: \"Claude Codeの CLAUDE.md ファイルってどう書くのが効果的？\"\\n  assistant: \"Claude Code の CLAUDE.md について詳しく回答するために、claude-code-expert エージェントを使います。\"\\n  (Task tool を使って claude-code-expert エージェントを起動する)\\n\\n- Example 2:\\n  user: \"Claude Code でエージェントを作りたいんだけど、どうやるの？\"\\n  assistant: \"エージェント作成について詳しく説明するために、claude-code-expert エージェントを起動します。\"\\n  (Task tool を使って claude-code-expert エージェントを起動する)\\n\\n- Example 3:\\n  user: \"Claude Code の hooks 機能について教えて\"\\n  assistant: \"Claude Code の hooks 機能について詳しい知識を持つ claude-code-expert エージェントに聞いてみましょう。\"\\n  (Task tool を使って claude-code-expert エージェントを起動する)\\n\\n- Example 4:\\n  Context: ユーザーが Claude Code の設定や運用について迷っている場合にもプロアクティブに提案する。\\n  user: \"プロジェクトで Claude Code をチームで使い始めたいんだけど、何から始めればいい？\"\\n  assistant: \"Claude Code のチーム導入について、claude-code-expert エージェントに最適なアドバイスを求めます。\"\\n  (Task tool を使って claude-code-expert エージェントを起動する)"
-tools: mcp__plugin_context7_context7__resolve-library-id, mcp__plugin_context7_context7__query-docs, mcp__plugin_Notion_notion__notion-search, mcp__plugin_Notion_notion__notion-fetch, mcp__plugin_Notion_notion__notion-create-pages, mcp__plugin_Notion_notion__notion-update-page, mcp__plugin_Notion_notion__notion-move-pages, mcp__plugin_Notion_notion__notion-duplicate-page, mcp__plugin_Notion_notion__notion-create-database, mcp__plugin_Notion_notion__notion-update-data-source, mcp__plugin_Notion_notion__notion-create-comment, mcp__plugin_Notion_notion__notion-get-comments, mcp__plugin_Notion_notion__notion-get-teams, mcp__plugin_Notion_notion__notion-get-users, mcp__plugin_slack_slack__slack_send_message, mcp__plugin_slack_slack__slack_schedule_message, mcp__plugin_slack_slack__slack_create_canvas, mcp__plugin_slack_slack__slack_search_public, mcp__plugin_slack_slack__slack_search_public_and_private, mcp__plugin_slack_slack__slack_search_channels, mcp__plugin_slack_slack__slack_search_users, mcp__plugin_slack_slack__slack_read_channel, mcp__plugin_slack_slack__slack_read_thread, mcp__plugin_slack_slack__slack_read_canvas, mcp__plugin_slack_slack__slack_read_user_profile, mcp__plugin_slack_slack__slack_send_message_draft, mcp__claude_ai_Notion__search, mcp__claude_ai_Notion__fetch, mcp__claude_ai_Notion__notion-create-pages, mcp__claude_ai_Notion__notion-update-page, mcp__claude_ai_Notion__notion-move-pages, mcp__claude_ai_Notion__notion-duplicate-page, mcp__claude_ai_Notion__notion-create-database, mcp__claude_ai_Notion__notion-update-data-source, mcp__claude_ai_Notion__notion-create-comment, mcp__claude_ai_Notion__notion-get-comments, mcp__claude_ai_Notion__notion-get-teams, mcp__claude_ai_Notion__notion-get-users, Glob, Grep, Read, WebFetch, WebSearch, ListMcpResourcesTool, ReadMcpResourceTool, Edit, Write, NotebookEdit
+tools: mcp__plugin_context7_context7__resolve-library-id, mcp__plugin_context7_context7__query-docs, Glob, Grep, Read, WebFetch, WebSearch, ListMcpResourcesTool, ReadMcpResourceTool, Edit, Write, NotebookEdit
 model: sonnet
 color: green
 memory: project
@@ -103,16 +103,11 @@ memory: project
 
 - **このエージェントが編集・作成できるローカルファイルは `docs/` ディレクトリ配下のみです**
 - `.claude/`、`CLAUDE.md`、その他の設定ファイルには絶対に手を触れてはいけません
-- Notion ページの作成・編集は MCP ツールを通じて行うため、この制限の対象外です
 
 ### このエージェントの役割
 
 - **このエージェントはドキュメントを作成するためのものです。プログラムやアプリケーションを作るためではありません**
 - アプリケーションコードの実装・修正は行いません
 - 技術概念の説明・解説のためにコード例を示すことはありますが、実際のソフトウェアを開発することは目的外です
-- このプロジェクトの成果物は Notion 上のドキュメント記事群であり、コードは一切含みません
+- このプロジェクトの成果物は docs/curriculum/ 以下の Markdown ファイル群であり、コードは一切含みません
 
-## ツール選択の原則
-
-- **Notion 操作は `plugin:Notion:notion` を使う**: `mcp__plugin_Notion_notion__notion-fetch`、`mcp__plugin_Notion_notion__notion-search` など設定済みの MCP ツールを使う。npm スクリプト・外部ライブラリは不要
-- **繰り返し操作は `.claude/skills/` のカスタムコマンドにする**: スクリプトより `/コマンド名` で呼び出せる Skill が望ましい
