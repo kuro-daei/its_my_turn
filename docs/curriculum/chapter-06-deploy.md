@@ -1,10 +1,10 @@
 ---
-title: "Chapter 7: Vercel デプロイ"
+title: "Chapter 6: Vercel デプロイ"
 parent: カリキュラム
-nav_order: 7
+nav_order: 6
 ---
 
-# Chapter 7: Vercel デプロイ
+# Chapter 6: Vercel デプロイ
 
 **所要時間**: 約 1 時間
 **ゴール**: 公開 URL で TODO アプリが動いている状態にする
@@ -25,7 +25,7 @@ nav_order: 7
 
 ---
 
-Chapter 6 まででローカル環境（自分のパソコン）で動く TODO アプリが完成しました。このチャプターでは、それをインターネット上に公開します。
+Chapter 5 まででローカル環境（自分のパソコン）で動く TODO アプリが完成しました。このチャプターでは、それをインターネット上に公開します。
 
 > **デプロイ（deploy）とは？** 「展開する」「配備する」という意味の言葉です。IT の世界では「アプリをサーバーに乗せて、インターネット上で使えるようにすること」を指します。自分の部屋で作った料理をレストランで提供し始めるイメージです。
 
@@ -47,15 +47,21 @@ Chapter 6 まででローカル環境（自分のパソコン）で動く TODO �
 
 ## 事前確認
 
-作業を始める前に、現在のブランチを確認してください。
+Claude Code を起動します。
 
 ```bash
-git branch --show-current
+% claude
+```
+
+Claude Code が起動したら、作業を始める前に現在のブランチを確認してください。
+
+```
+$ git branch --show-current
 ```
 
 > **注意:** `main` と表示された場合は、作業を止めてブランチを作成してください。
-> ```bash
-> git checkout -b feature/vercel-deploy
+> ```
+> $ git checkout -b feature/vercel-deploy
 > ```
 
 ---
@@ -83,16 +89,22 @@ git branch --show-current
 
 > **CLI（シーエルアイ）とは？** Command Line Interface の略で、「ターミナルで使うコマンド」のことです。Vercel CLI をインストールすると、ターミナルから `vercel` というコマンドでデプロイ操作ができるようになります。
 
-> **注意:** このコマンドはターミナルで実行します。Claude Code のプロンプトではなく、通常のターミナル（または新しいターミナルウィンドウ）を使用してください。
+Vercel CLI のインストールはターミナルで行います。Claude Code を一度終了します。
+
+```
+$ /exit
+```
+
+ターミナルに戻ったら、以下を実行してください。
 
 ```bash
-npm i -g vercel
+% npm i -g vercel
 ```
 
 インストールが完了したか確認します。
 
 ```bash
-vercel --version
+% vercel --version
 ```
 
 バージョン番号（例: `39.x.x`）が表示されれば成功です。
@@ -108,31 +120,37 @@ Vercel は GitHub と連携して動作します。まず GitHub にリポジト
 **GitHub リポジトリがまだない場合:**
 
 1. ブラウザで `https://github.com/new` を開く
-2. 「Repository name」に `its_my_turn`（またはプロジェクト名）を入力する
+2. 「Repository name」に `todos`（またはプロジェクト名）を入力する
 3. Public または Private を選択する（どちらでも動作します）
 4. 「Create repository」をクリックする
 
 [screenshot: GitHub の新規リポジトリ作成画面]
 
-5. 表示された URL（`https://github.com/あなたのユーザー名/its_my_turn.git`）をメモしておく
+5. 表示された URL（`https://github.com/あなたのユーザー名/todos.git`）をメモしておく
 
 ### 1-4. GitHub にコードを push する
 
-Claude Code に以下のように依頼します。
+Claude Code を起動して、以下のように依頼します。
 
-> GitHub にコードを push する準備をして。リモートリポジトリの URL は `https://github.com/あなたのユーザー名/its_my_turn.git`
+```bash
+% claude
+```
 
-または、ターミナルで直接実行します。
+```
+$ GitHub にコードを push する準備をして。リモートリポジトリの URL は `https://github.com/あなたのユーザー名/todos.git`
+```
+
+または、Claude Code を使わずターミナルで直接実行することもできます。
 
 ```bash
 # リモートリポジトリを登録する
-git remote add origin https://github.com/あなたのユーザー名/its_my_turn.git
+% git remote add origin https://github.com/あなたのユーザー名/todos.git
 
 # 現在のブランチを確認する
-git branch --show-current
+% git branch --show-current
 
 # main ブランチに push する（初回のみ -u オプションが必要）
-git push -u origin main
+% git push -u origin main
 ```
 
 > **push とは？** ローカル（自分のパソコン）にあるコードを、GitHub のサーバー（リモート）に送信することです。手元で書いた原稿を出版社に送るイメージです。
@@ -157,7 +175,15 @@ git push -u origin main
 
 > **体験:** Claude Code に「Vercel にデプロイする準備をして」と依頼してみましょう。必要な手順や設定ファイルを確認してくれます。
 
-> Vercel にデプロイする準備をして。環境変数に何を設定すればいいか教えて
+Claude Code が起動していない場合は起動します。
+
+```bash
+% claude
+```
+
+```
+$ Vercel にデプロイする準備をして。環境変数に何を設定すればいいか教えて
+```
 
 ### Step 1 の確認ポイント
 
@@ -184,10 +210,16 @@ Vercel の「環境変数」機能を使って、本番サーバーにも同じ�
 
 ### 2-1. 環境変数の値を確認する
 
-ローカルの `.env.local` ファイルを確認して、設定する値を用意します。
+ローカルの `.env.local` ファイルを確認して、設定する値を用意します。Claude Code を一度終了します。
+
+```
+$ /exit
+```
+
+ターミナルに戻ったら、以下を実行してください。
 
 ```bash
-cat .env.local
+% cat .env.local
 ```
 
 以下の 2 つの値が必要です。
@@ -197,7 +229,7 @@ NEXT_PUBLIC_SUPABASE_URL=https://xxxxxxxxxxxxxx.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciO...（長い文字列）
 ```
 
-> **注意:** これらの値を第三者に教えないでください。特に `NEXT_PUBLIC_SUPABASE_ANON_KEY` は公開 API キーですが、Supabase の RLS（Chapter 4 で設定したセキュリティ機能）が有効であれば安全に使用できます。
+> **注意:** これらの値を第三者に教えないでください。特に `NEXT_PUBLIC_SUPABASE_ANON_KEY` は公開 API キーですが、Supabase の RLS（Chapter 3 で設定したセキュリティ機能）が有効であれば安全に使用できます。
 
 ### 2-2. Vercel に環境変数を設定する
 
@@ -242,22 +274,32 @@ Vercel のプロジェクト設定画面で環境変数を登録します。
 **方法 B: Vercel CLI から**
 
 ```bash
-vercel
+% vercel
 ```
 
 初回実行時は対話形式で設定を聞かれます。
 
 ```
-? Set up and deploy "~/workspace/its_my_turn"? [Y/n] y
+? Set up and deploy "~/workspace/todos"? [Y/n] y
 ? Which scope do you want to deploy to? → あなたのアカウント名を選択
 ? Link to existing project? [y/N] n
-? What's your project's name? its-my-turn（または任意の名前）
+? What's your project's name? todos（または任意の名前）
 ? In which directory is your code located? ./
 ```
 
-> **体験:** Claude Code に「Vercel にデプロイして」と依頼してみましょう。vercel コマンドの実行方法や、デプロイ前のチェックをサポートしてくれます。
+> **体験:** Claude Code に「Vercel にデプロイして」と依頼してみましょう。デプロイ前のビルドチェックと、問題があれば修正まで対応してくれます。
 
-> Vercel にデプロイして。デプロイ前に問題がないかビルドを確認して
+Claude Code を起動します。
+
+```bash
+% claude
+```
+
+Claude Code が起動したら、以下を入力してください。
+
+```
+$ Vercel にデプロイして。デプロイ前に問題がないかビルドを確認して
+```
 
 Claude Code はまず `npm run build` でビルドが通るかを確認し、問題があれば修正してからデプロイを提案します。
 
@@ -355,7 +397,17 @@ GitHub への push で Vercel が自動デプロイされることを体験し�
 
 > **体験:** Claude Code に「TODO アプリに簡単な改善をして、GitHub に push して」と依頼してみましょう。Claude Code がコードを修正し、commit、push を行います。その後、Vercel が自動的に新バージョンをデプロイするまでの流れを体験します。
 
-> TODO リストのスタイルを少し改善して、feature/style-tweak ブランチを作ってコミットして push して
+Claude Code を起動します。
+
+```bash
+% claude
+```
+
+Claude Code が起動したら、以下を入力してください。
+
+```
+$ TODO リストのスタイルを少し改善して、feature/style-tweak ブランチを作ってコミットして push して
+```
 
 [screenshot: GitHub への push 後、Vercel が自動デプロイしている様子]
 
@@ -366,13 +418,12 @@ GitHub への push で Vercel が自動デプロイされることを体験し�
 | Chapter | 学んだ機能 |
 |--------|-----------|
 | 0 | CLI インストール、初期設定 |
-| 1 | CLAUDE.md、Hooks、Agents、MCP サーバー |
-| 2 | スキャフォールド、Git 操作 |
-| 3 | Figma MCP サーバー、プロンプティング、反復修正 |
-| 4 | DB 設計、SQL 生成 |
-| 5 | 統合指示、エージェント活用、タスク分解 |
-| 6 | コードレビュー、Git ブランチ運用 |
-| 7 | CI/CD、本番設定 |
+| 1 | スキャフォールド、Git 操作 |
+| 2 | CLAUDE.md、Hooks、Agents、MCP サーバー |
+| 3 | DB 設計、SQL 生成 |
+| 4 | 統合指示、エージェント活用、タスク分解 |
+| 5 | Issue 管理、ワークツリー、PR レビュー |
+| 6 | CI/CD、本番設定 |
 
 **このカリキュラムで体験したこと:**
 
@@ -404,7 +455,7 @@ GitHub への push で Vercel が自動デプロイされることを体験し�
 - [ ] **環境変数設定済み**: Vercel に Supabase の接続情報が登録されている
 - [ ] **CI/CD 構築済み**: GitHub への push で自動デプロイが動く
 - [ ] **Supabase 本番設定済み**: 本番 URL でサインアップ・ログインができる
-- [ ] **全機能動作確認済み**: チェックリスト 7 項目がすべてクリア
+- [ ] **全機能動作確認済み**: チェックリスト 6 項目がすべてクリア
 
 ---
 
@@ -413,7 +464,7 @@ GitHub への push で Vercel が自動デプロイされることを体験し�
 このチャプターで使ったツールを、Chapter 0（環境構築）のチェックリストに追加しておきましょう。
 
 ```markdown
-## Chapter 7 で必要なもの（Chapter 0 に追記）
+## Chapter 6 で必要なもの（Chapter 0 に追記）
 
 - [ ] Vercel アカウント（https://vercel.com で GitHub 連携して作成）
 - [ ] Vercel CLI（`npm i -g vercel` でインストール）
@@ -426,15 +477,21 @@ GitHub への push で Vercel が自動デプロイされることを体験し�
 
 ### ビルドエラーが出る
 
-Vercel のビルドログにエラーが表示された場合、まずローカルでビルドを試みます。
+Vercel のビルドログにエラーが表示された場合、まずターミナルでローカルビルドを試みます。
 
 ```bash
-npm run build
+% npm run build
 ```
 
-エラーが出た場合は Claude Code に依頼します。
+エラーが出た場合は Claude Code を起動して依頼します。
 
-> npm run build でエラーが出ています。ログを確認して修正して
+```bash
+% claude
+```
+
+```
+$ npm run build でエラーが出ています。ログを確認して修正して
+```
 
 ビルドエラーの原因として多いもの:
 
@@ -458,7 +515,7 @@ Vercel にデプロイしてもアプリが Supabase に繋がらない場合:
 
 ```bash
 # 環境変数の確認（ローカル）
-cat .env.local
+% cat .env.local
 ```
 
 ---
@@ -478,14 +535,14 @@ cat .env.local
 
 ```bash
 # npm のグローバルインストールパスを確認する
-npm root -g
+% npm root -g
 
 # Vercel CLI を再インストールする
-npm uninstall -g vercel
-npm install -g vercel
+% npm uninstall -g vercel
+% npm install -g vercel
 
 # インストール確認
-vercel --version
+% vercel --version
 ```
 
 ---
@@ -498,9 +555,15 @@ Vercel のビルドログにエラーがなくても、ランタイムエラー�
 
 1. Vercel ダッシュボード → プロジェクト → 「Functions」タブでエラーログを確認する
 2. または、ブラウザの開発者ツール（F12）→「Console」タブでエラーメッセージを確認する
-3. エラーメッセージを Claude Code に貼り付けて原因を調べてもらう
+3. エラーメッセージをメモしてから、Claude Code を起動して原因を調べてもらう
 
-> デプロイ後のページが真っ白になります。ブラウザのコンソールに以下のエラーがあります:（エラーメッセージを貼り付ける）
+```bash
+% claude
+```
+
+```
+$ デプロイ後のページが真っ白になります。ブラウザのコンソールに以下のエラーがあります:（エラーメッセージを貼り付ける）
+```
 
 ---
 
@@ -508,13 +571,13 @@ Vercel のビルドログにエラーがなくても、ランタイムエラー�
 
 ```bash
 # リモートリポジトリが登録されているか確認
-git remote -v
+% git remote -v
 
 # 登録されていない場合は追加する
-git remote add origin https://github.com/あなたのユーザー名/リポジトリ名.git
+% git remote add origin https://github.com/あなたのユーザー名/リポジトリ名.git
 
 # push する
-git push -u origin main
+% git push -u origin main
 ```
 
 認証エラーが出る場合は、GitHub の Personal Access Token（個人アクセストークン。GitHub を使うための鍵）が必要なことがあります。GitHub の設定画面（Settings → Developer settings → Personal access tokens）でトークンを生成してください。わからない場合はメンターに声をかけてください。
@@ -534,7 +597,7 @@ git push -u origin main
 
 ## カリキュラム完了
 
-全 8 チャプター（Chapter 0〜7）が完了しました。
+全 7 チャプター（Chapter 0〜6）が完了しました。
 
 公開 URL を友人や同僚に共有して、自分で作った TODO アプリを使ってもらいましょう。
 
@@ -548,4 +611,4 @@ Claude Code は今後も継続的に機能が追加されています。公式�
 
 ---
 
-前のチャプターへ: [Chapter 6: コードレビュー & Git 運用](./chapter-06-git-workflow.md)
+前のチャプターへ: [Chapter 5: Issue とワークツリー](./chapter-05-git-workflow.md)

@@ -27,18 +27,17 @@ TODO アプリを実際に作りながら、Claude Code の主要な機能を体
 
 ## カリキュラム構成
 
-| # | モジュール | 所要時間 | 内容 |
+| # | チャプター | 所要時間 | 内容 |
 |---|-----------|---------|------|
-| 0 | [環境準備](curriculum/module-00-setup) | 約 1 時間 | Node.js・Git・Claude Code のインストール |
-| 1 | [Claude Code を整える](curriculum/module-01-claude-code) | 約 1 時間 | CLAUDE.md・MCP・エージェント・Hooks |
-| 2 | [プロジェクト初期化](curriculum/module-02-project-init) | 約 1 時間 | Next.js スキャフォールド・Git ブランチ戦略 |
-| 3 | [UI を作る](curriculum/module-03-ui) | 約 1.5 時間 | Figma MCP・プロンプティング・反復修正 |
-| 4 | [Supabase 初期設定](curriculum/module-04-supabase-setup) | 約 30 分 | DB 設計・SQL 生成・接続設定 |
-| 5 | [初期開発](curriculum/module-05-development) | 約 3 時間 | CRUD 実装・認証・エージェント活用 |
-| 6 | [修正・改善](curriculum/module-06-git-workflow) | 約 1.5 時間 | コードレビュー・ブランチ運用 |
-| 7 | [Vercel デプロイ](curriculum/module-07-deploy) | 約 1 時間 | 本番環境公開・CI/CD |
+| 0 | [環境準備](curriculum/chapter-00-setup) | 約 1 時間 | Node.js・Git・Claude Code のインストール |
+| 1 | [プロジェクト初期化](curriculum/chapter-01-project-init) | 約 1 時間 | Next.js スキャフォールド・Git ブランチ戦略 |
+| 2 | [Claude Code を整える](curriculum/chapter-02-claude-code) | 約 1 時間 | CLAUDE.md・MCP・エージェント・Hooks |
+| 3 | [Supabase 初期設定](curriculum/chapter-03-supabase-setup) | 約 30 分 | DB 設計・SQL 生成・接続設定 |
+| 4 | [Vibe Coding で TODO アプリを作る](curriculum/chapter-04-development) | 約 3 時間 | CRUD 実装・認証・エージェント活用 |
+| 5 | [Issue とワークツリー](curriculum/chapter-05-git-workflow) | 約 1.5 時間 | Issue 管理・ワークツリー・PR レビュー |
+| 6 | [Vercel デプロイ](curriculum/chapter-06-deploy) | 約 1 時間 | 本番環境公開・CI/CD |
 
-**合計: 約 10 時間**（メンター付きハンズオン推奨）
+**合計: 約 9 時間**（メンター付きハンズオン推奨）
 
 ---
 
@@ -50,4 +49,4 @@ TODO アプリを実際に作りながら、Claude Code の主要な機能を体
 
 ---
 
-**Module 0: 環境準備** から始めましょう。
+**Chapter 0: 環境準備** から始めましょう。

@@ -1,10 +1,10 @@
 ---
-title: "Chapter 5: Vibe Coding で TODO アプリを作る"
+title: "Chapter 4: Vibe Coding で TODO アプリを作る"
 parent: カリキュラム
-nav_order: 5
+nav_order: 4
 ---
 
-# Chapter 5: Vibe Coding で TODO アプリを作る
+# Chapter 4: Vibe Coding で TODO アプリを作る
 
 **所要時間**: 約 3 時間
 **ゴール**: TODO アプリが一通り動く状態にする（UI + CRUD + Google ログイン）
@@ -48,21 +48,29 @@ nav_order: 5
 
 作業を始める前に、以下を確認してください。
 
-- [ ] Chapter 0〜4 が完了している
+- [ ] Chapter 0〜3 が完了している
 - [ ] Supabase の `todos` テーブルが作成済みである
 - [ ] `.env.local` に Supabase の URL と ANON KEY が設定済みである
 - [ ] Google アカウントを持っている
 - [ ] 現在のブランチを確認する
 
 ```bash
-git branch --show-current
+% git branch --show-current
 ```
 
 > **注意:** `main` と表示された場合は、以下のコマンドで作業ブランチを作成してから進めてください。`main` ブランチは「完成品の棚」のようなもので、直接触るのはルール上禁止されています。
 
 ```bash
-git checkout -b feature/todo-app
+% git checkout -b feature/todo-app
 ```
+
+確認できたら、Claude Code を起動します。
+
+```bash
+% claude
+```
+
+Claude Code が起動したら、このチャプターの作業を始めます。
 
 ---
 
@@ -179,13 +187,25 @@ Vercel（バーセル。Next.js の開発元）が提供する `find-skills`（�
 
 Claude Code の入力欄に、先頭に `!` をつけて以下のコマンドを入力してください。`!` をつけると、Claude Code の入力欄からコマンドを直接実行できます。
 
-```bash
-! npx skills add https://github.com/vercel-labs/skills --skill find-skills
+```
+$ ! npx skills add https://github.com/vercel-labs/skills --skill find-skills
 ```
 
-> **注意:** スキルのインストール後は、Claude Code の再起動が必要です。`/exit` で一度終了してから、再度 `claude` コマンドで起動してください。再起動しないとインストールしたスキルが反映されません。
-
 [screenshot: find-skills がインストールされた様子]
+
+> **注意:** スキルのインストール後は、Claude Code の再起動が必要です。インストールしたスキルを反映するには、一度終了してから再起動する必要があります。
+
+Claude Code を一度終了します。
+
+```
+$ /exit
+```
+
+ターミナルに戻ったら、以下を実行して Claude Code を再起動してください。
+
+```bash
+% claude
+```
 
 ---
 
@@ -227,13 +247,13 @@ Claude Code がインストールを提案してきたら、承認してくだ�
 インストール（Python 3.10 以上が必要）:
 
 ```bash
-pip install cisco-ai-skill-scanner
+% pip install cisco-ai-skill-scanner
 ```
 
 スキャンの実行:
 
 ```bash
-skill-scanner scan スキルのパス
+% skill-scanner scan スキルのパス
 ```
 
 GitHub: https://github.com/cisco-ai-defense/skill-scanner
@@ -327,7 +347,7 @@ src/
 ```bash
 # 開発サーバーが起動しているか確認
 # 別ターミナルで実行
-npm run dev
+% npm run dev
 ```
 
 Claude Code に以下のように聞いてみてください。
@@ -391,13 +411,27 @@ Claude Code に以下のように聞いてみてください。
 
 > **ビルドって何？** 開発用のコードを「本番公開できる形」に変換する作業です。エラーが出ずに完了すれば、コードに問題がないことが確認できます。料理でたとえると、「試作品を実際にお客さんに出せる品質か最終チェックする」工程です。
 
-```bash
-npm run build
+Claude Code を一度終了します。
+
+```
+$ /exit
 ```
 
-> **注意:** ビルドエラーが出た場合は、Claude Code に以下のように指示してください。
+ターミナルに戻ったら、以下を実行してください。
+
+```bash
+% npm run build
+```
+
+> **注意:** ビルドエラーが出た場合は、Claude Code を再起動して以下のように指示してください。
 >
-> `npm run build` でエラーが出た。エラーメッセージを読んで修正して
+> ```bash
+> % claude
+> ```
+>
+> ```
+> $ `npm run build` でエラーが出た。エラーメッセージを読んで修正して
+> ```
 
 #### 確認ポイント
 
@@ -423,9 +457,17 @@ npm run build
 
 ### Phase A: Claude Code に計画を立てさせる
 
+Claude Code を起動します。
+
+```bash
+% claude
+```
+
 まず Claude Code に「まず何をすべきか」を聞いてみます。タスクを分解して手順を提示する体験です。
 
-> Supabase Auth で Google ログインを実装したい。まず何をすべきか手順を教えて
+```
+$ Supabase Auth で Google ログインを実装したい。まず何をすべきか手順を教えて
+```
 
 Claude Code から以下のような計画が返ってきます。
 
@@ -457,9 +499,9 @@ Google ログインを実装するには、以下の手順が必要です。
 
 ### Phase B: Supabase で Google Provider を有効化
 
-Google ログインを使えるようにするには、Supabase 側で「Google を使ったログインを許可する」設定が必要です。
+Google ログインを使えるようにするには、Supabase 側で「Google を使ったログインを許可する」設定が必要です。この手順はブラウザで Supabase ダッシュボードを操作します。Claude Code は使いません。
 
-#### 手順
+#### 手順（ブラウザで操作）
 
 1. Supabase ダッシュボード（`https://supabase.com/dashboard`）を開く
 2. 左サイドバーの「Authentication」をクリック
@@ -524,7 +566,7 @@ Claude Code がターミナルで自動実行します。自分でコマンド�
 Claude Code が以下のコマンドを実行します。
 
 ```bash
-npm install @supabase/ssr
+% npm install @supabase/ssr
 ```
 
 #### 認証フローの実装
@@ -620,7 +662,7 @@ Claude Code が「SELECT / INSERT / UPDATE / DELETE」それぞれのポリシ�
 
 [screenshot: Supabase の SQL Editor に RLS ポリシーの SQL が入力されている様子]
 
-#### SQL の実行手順
+#### SQL の実行手順（ブラウザで操作）
 
 1. Supabase ダッシュボードを開く
 2. 左メニューから「SQL Editor」を選択する
@@ -631,7 +673,7 @@ Claude Code が「SELECT / INSERT / UPDATE / DELETE」それぞれのポリシ�
 
 #### TODO 追加時に user_id を保存するよう更新する
 
-Chapter 4 で `todos` テーブルを作ったとき、`user_id` というカラム（「誰のデータか」を記録する列）も一緒に作っていましたね。ここでようやくそのカラムが活躍します。TODO を追加するときに、ログインユーザーの `user_id` も一緒に保存するよう修正します。
+Chapter 3 で `todos` テーブルを作ったとき、`user_id` というカラム（「誰のデータか」を記録する列）も一緒に作っていましたね。ここでようやくそのカラムが活躍します。TODO を追加するときに、ログインユーザーの `user_id` も一緒に保存するよう修正します。
 
 > AddTodoForm で TODO を追加するとき、ログインユーザーの user_id も一緒に保存するようにして
 
@@ -747,10 +789,16 @@ RLS が有効なのにポリシーが設定されていない状態です。Clau
 
 ### ビルドチェック
 
-コミット前に、ビルドエラーがないことを確認します。
+コミット前に、ビルドエラーがないことを確認します。Claude Code を一度終了してターミナルに戻ります。
+
+```
+$ /exit
+```
+
+ターミナルに戻ったら、以下を実行してください。
 
 ```bash
-npm run build
+% npm run build
 ```
 
 以下のような出力が出ればビルド成功です。
@@ -767,9 +815,17 @@ Route (app)                  Size     First Load JS
 └ ○ /auth/callback            ...
 ```
 
-> **注意:** ビルドエラーが出た場合は、Claude Code に以下のように指示してください。
+> **注意:** ビルドエラーが出た場合は、Claude Code を再起動して以下のように指示してください。
 >
-> `npm run build` でエラーが出た。エラーメッセージを読んで修正して
+> ```bash
+> % claude
+> ```
+>
+> ```
+> $ `npm run build` でエラーが出た。エラーメッセージを読んで修正して
+> ```
+>
+> 修正後は再度 `/exit` してターミナルで `npm run build` を確認してください。
 
 ---
 
@@ -777,30 +833,40 @@ Route (app)                  Size     First Load JS
 
 テストとビルドが通ったら、作業内容をコミットします。
 
-#### 事前確認
+#### 事前確認（ターミナルで実行）
 
 ```bash
 # main ブランチにいないことを確認する
-git branch --show-current
+% git branch --show-current
 ```
 
 `feature/todo-app`（または作業ブランチ名）と表示されれば OK です。`main` と表示された場合はメンターに声をかけてください。
 
-#### Claude Code への指示
+#### Claude Code を起動してコミットを指示する
 
-> 今回の変更をコミットして。Conventional Commits 形式で
+ブランチを確認できたら、Claude Code を起動します。
+
+```bash
+% claude
+```
+
+Claude Code が起動したら、以下を入力してください。
+
+```
+$ 今回の変更をコミットして。Conventional Commits 形式で
+```
 
 Claude Code は以下のような手順でコミットを行います。
 
 ```bash
 # 変更ファイルを確認
-git status
+% git status
 
 # 変更をステージング（.env.local は含めない）
-git add src/ package.json package-lock.json
+% git add src/ package.json package-lock.json
 
 # コミット（Claude Code がメッセージを自動生成）
-git commit -m "feat: implement todo app with CRUD and Google authentication"
+% git commit -m "feat: implement todo app with CRUD and Google authentication"
 ```
 
 > **Conventional Commits って何？** コミットメッセージの「書き方のルール」です。`feat:`（新機能）、`fix:`（バグ修正）、`docs:`（ドキュメント）など、変更の種類をプレフィックス（先頭の文字列）で表現します。
@@ -859,4 +925,4 @@ git commit -m "feat: implement todo app with CRUD and Google authentication"
 
 ---
 
-次のチャプターへ: [Chapter 6: 修正・改善](./chapter-06-git-workflow.md)
+次のチャプターへ: [Chapter 5: Issue とワークツリー](./chapter-05-git-workflow.md)
