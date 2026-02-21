@@ -35,23 +35,25 @@ Claude Code を起動する前に、まずターミナルで Next.js プロジ�
 ターミナルを開いて、以下のコマンドを実行してください。
 
 ```bash
-npx create-next-app@latest todos --typescript --eslint --tailwind --src-dir --app --import-alias "@/*"
+yes | npx create-next-app@latest todos --typescript --eslint --tailwind --src-dir --app --import-alias "@/*" --rc
 ```
 
 > **`npx`（エヌピーエックス）とは?** Node.js に付属するコマンドで、パッケージを一時的にダウンロードして実行するツールです。`create-next-app` を事前にインストールしなくても、このコマンドだけで最新版を使えます。
 
-実行すると、いくつかの設定を対話形式で聞かれます。以下を参考に答えてください。
+コマンドが長く見えますが、`--` で始まる部分は「フラグ（flag）」と呼ばれるオプション指定です。本来なら「TypeScript を使いますか？」のように一問一答で聞かれる設定を、このコマンドではあらかじめすべて答えた状態にしています。そのため、実行すると質問なしにセットアップが自動で進みます。
 
-| 質問 | 選択 |
-|------|------|
-| TypeScript を使いますか? | Yes |
-| ESLint を使いますか? | Yes |
-| Tailwind CSS を使いますか? | Yes |
-| `src/` ディレクトリを使いますか? | Yes |
-| App Router を使いますか? | Yes |
-| Import エイリアスを変更しますか? | No（デフォルトのまま） |
+各フラグが何を設定しているかは次の表のとおりです。
 
-[screenshot: create-next-app の対話形式セットアップ画面]
+| フラグ | 意味 |
+|--------|------|
+| `--typescript` | TypeScript（型チェック付きの JavaScript）を使う |
+| `--eslint` | ESLint（コードの書き方を自動チェックするツール）を使う |
+| `--tailwind` | Tailwind CSS（クラス名を書くだけでデザインが整うツール）を使う |
+| `--src-dir` | ソースコードを `src/` フォルダにまとめる |
+| `--app` | App Router（最新のページ管理の仕組み）を使う |
+| `--import-alias "@/*"` | ファイルの読み込みパスを `@/` で書けるようにする |
+
+[screenshot: create-next-app のセットアップ完了画面（Successfully created と表示されている状態）]
 
 ### 各オプションの意味
 
@@ -67,18 +69,20 @@ Next.js の最新のページ管理方式です。`src/app/` フォルダの中�
 **src ディレクトリ**
 アプリのコードを `src/`（ソース）フォルダにまとめる構成です。設定ファイルとアプリコードが混ざらないので整理しやすくなります。
 
-### スキャフォールド後にプロジェクトへ移動して Claude Code を起動する
+### スキャフォールド後にプロジェクトへ移動する
 
-スキャフォールドが完了したら、生成されたフォルダに移動して Claude Code を起動します。
+スキャフォールドが完了したら、生成されたフォルダに移動して VS Code でプロジェクトを開きます。
 
 ```bash
 cd todos
-claude
+code .
 ```
 
 > **`cd`（シーディー）とは?** Change Directory の略で、「ディレクトリ（フォルダ）を移動する」コマンドです。`cd todos` と実行すると、`todos` フォルダの中に入った状態になります。
 
-[screenshot: cd todos して claude を起動した様子]
+VS Code（ビジュアルスタジオコード）でプロジェクトが開きます。左側のエクスプローラー（ファイル一覧）で、生成されたファイルを確認できます。
+
+[screenshot: VS Code でプロジェクトが開かれた様子]
 
 ### 生成されるファイル構成
 
@@ -98,11 +102,15 @@ todos/
 └── package.json              # プロジェクトの依存パッケージ一覧（材料リストのようなもの）
 ```
 
+`code .` で VS Code を開くと、左側のエクスプローラーにこの構造が表示されます。ファイルをクリックして中身を確認してみてください。
+
 > **注意:** `node_modules/` フォルダが自動生成されますが、中に大量のファイルが入っています。Git には登録しないので心配しなくて大丈夫です（`.gitignore` で自動的に除外されます）。
 >
 > **`node_modules/` とは?** アプリが動くために必要な「材料（ライブラリ）」が入ったフォルダです。数千〜数万個のファイルが入ることもありますが、`package.json` があれば `npm install` コマンドで自動再生成できるので、Git には含めません。
 
 ### 確認ポイント
+
+VS Code のエクスプローラーで、以下のファイルが存在することを確認してください。
 
 - [ ] `src/app/page.tsx` が存在する
 - [ ] `src/app/layout.tsx` が存在する
@@ -201,6 +209,16 @@ git push -u origin main
 
 ## Step 3: /init で CLAUDE.md を作成（10分）
 
+### Claude Code を起動する
+
+ここからは Claude Code を使って作業します。ターミナルで `todos` フォルダにいることを確認してから、以下のコマンドを実行してください。
+
+```bash
+claude
+```
+
+[screenshot: ターミナルで claude を起動した様子]
+
 ### `/init` コマンドとは
 
 `/init`（スラッシュ イニット）は、Claude Code にプロジェクトの概要を伝えて、CLAUDE.md を自動生成してもらうコマンドです。
@@ -214,7 +232,7 @@ git push -u origin main
 Claude Code のセッションで、以下を入力してください。
 
 ```plaintext
-$ /init WebアプリでTODO管理をしたいです
+/init WebアプリでTODO管理をしたいです
 ```
 
 > **体験ポイント:** 「TODO 管理アプリを作りたい」という一言を添えるだけで、Claude Code がプロジェクトのコンテキスト（文脈）を理解した上で CLAUDE.md を生成してくれます。ファイル構造も自動で読み取るので、ゼロから書く必要がありません。
@@ -223,15 +241,11 @@ $ /init WebアプリでTODO管理をしたいです
 
 ### 生成された CLAUDE.md を確認する
 
-`/init` が完了すると、プロジェクトルート（`todos/` 直下）に `CLAUDE.md` が生成されます。内容を確認してみましょう。
-
-```bash
-cat CLAUDE.md
-```
+`/init` が完了すると、プロジェクトルート（`todos/` 直下）に `CLAUDE.md` が生成されます。VS Code に戻ると、エクスプローラーに `CLAUDE.md` が新しく表示されているはずです。クリックして内容を確認してみましょう。
 
 プロジェクトの技術スタック（Next.js、TypeScript、Tailwind CSS など）や目的（TODO 管理アプリ）がまとまった内容が生成されているはずです。
 
-[screenshot: 生成された CLAUDE.md の内容]
+[screenshot: VS Code で CLAUDE.md を開いている様子]
 
 > **注意:** 生成された内容が意図と異なる場合は、Claude Code に直接指示して修正できます。「CLAUDE.md の目的の説明をもっと具体的にして」のように頼むと対応してくれます。
 
@@ -248,20 +262,11 @@ cat CLAUDE.md
 
 `/init` で CLAUDE.md が生成されましたが、まだコミット（変更の保存）はされていません。Claude Code に以下のように指示してください。
 
-> コミットして
+```paintext
+コミットして
+```
 
 Claude Code はコミットメッセージを自動で考えて、実行してくれます。
-
-> **Conventional Commits（コンベンショナル コミッツ）とは?** コミットメッセージを「種類: 説明」の形式で書くルールです。主なプレフィックスは以下のとおりです。
->
-> | プレフィックス | 意味 | 使用例 |
-> |--------------|------|--------|
-> | `feat:` | 新しい機能を追加 | `feat: add todo list component` |
-> | `fix:` | バグを修正 | `fix: resolve login error` |
-> | `docs:` | ドキュメントを変更 | `docs: update README` |
-> | `chore:` | ビルドや設定ファイルの変更 | `chore: update dependencies` |
->
-> Claude Code はこのルールを知っているので、「コミットして」と頼むだけで適切な形式のメッセージを自動で作成してくれます。
 
 期待される出力の例:
 
@@ -278,8 +283,8 @@ git commit -m "docs: add CLAUDE.md for project context"
 
 コミットが完了したら、GitHub に反映させます。
 
-```bash
-git push
+```plaintetxt
+プッシュして
 ```
 
 ブラウザで GitHub の `todos` リポジトリを開き、`CLAUDE.md` が追加されていることを確認してください。
@@ -333,7 +338,9 @@ Next.js のウェルカムページが表示されれば、アプリが正常に
 
 Claude Code のセッション（別のターミナル）に戻り、以下のように指示します。
 
-> src/ の中身を説明して
+```plaintext
+src/ の中身を説明して
+```
 
 Claude Code からは以下のような応答が期待されます。
 
