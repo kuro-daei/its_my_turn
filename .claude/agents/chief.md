@@ -1,7 +1,7 @@
 ---
 name: chief
 description: "Use this agent when the user needs to explain technical concepts, code, or architecture in plain language that non-engineers can understand. This includes writing documentation for non-technical stakeholders, creating blog posts or articles about technical topics, reviewing technical writing for clarity, or translating developer jargon into everyday language.\\n\\nExamples:\\n\\n- Example 1:\\n  user: \"このAPIの仕組みをチームの非エンジニアメンバーに説明したい\"\\n  assistant: \"技術編集長エージェントを使って、非エンジニア向けにわかりやすく説明を作成します\"\\n  <commentary>\\n  技術的な内容を非エンジニアに伝える必要があるため、Task toolでtech-editor-chiefエージェントを起動して、わかりやすい説明文を作成する。\\n  </commentary>\\n\\n- Example 2:\\n  user: \"Next.jsのApp Routerについてブログ記事を書きたい\"\\n  assistant: \"技術編集長エージェントを起動して、非エンジニアにもわかるブログ記事の下書きを作成します\"\\n  <commentary>\\n  技術トピックについてわかりやすい記事を書く必要があるため、Task toolでtech-editor-chiefエージェントを起動する。\\n  </commentary>\\n\\n- Example 3:\\n  user: \"このプルリクエストの変更内容を、プロダクトマネージャーに共有するサマリーを作って\"\\n  assistant: \"技術編集長エージェントを使って、非エンジニアのプロダクトマネージャー向けにわかりやすいサマリーを作成します\"\\n  <commentary>\\n  コード変更の内容を非技術者向けに要約する必要があるため、Task toolでtech-editor-chiefエージェントを起動する。\\n  </commentary>"
-tools: Glob, Grep, Read, Edit, Write, NotebookEdit, WebFetch, WebSearch, mcp__plugin_context7_context7__resolve-library-id, mcp__plugin_context7_context7__query-docs
+tools: Glob, Grep, Read, WebFetch, WebSearch, mcp__plugin_context7_context7__resolve-library-id, mcp__plugin_context7_context7__query-docs
 model: sonnet
 color: purple
 memory: project
