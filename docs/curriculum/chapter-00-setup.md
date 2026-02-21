@@ -1,9 +1,3 @@
----
-title: "Chapter 0: 環境準備"
-parent: カリキュラム
-nav_order: 0
----
-
 # Chapter 0: 環境準備
 
 > **この資料について**: 事前準備および保守用の参照資料です。ハンズオン当日は、この資料を閲覧できる状態で参加してください。
@@ -65,6 +59,7 @@ brew --version
 > ```
 
 **うまくいかない場合は**
+
 - `curl: command not found` と表示された場合: ターミナルを一度閉じて開き直してから再試行してください。
 - わからない場合はメンターに声をかけてください。
 
@@ -93,6 +88,7 @@ claude --version
 バージョン番号が表示されれば OK です。
 
 **うまくいかない場合は**
+
 - ブラウザが開かない場合: ターミナルに表示された URL を手動でブラウザに貼り付けてください。
 - メンターに声をかけてください。
 
@@ -261,6 +257,7 @@ uname -a
 `Linux ...` から始まる文字列が表示されれば OK です。
 
 **うまくいかない場合は**
+
 - Windows Update で最新版にアップデートしてから再試行してください。
 - BIOS で仮想化が無効になっている場合は、メンターに確認してください。
 
@@ -445,13 +442,14 @@ claude
 
 `>` プロンプトが表示されたら起動成功です。試しに話しかけてみてください。
 
-```
-こんにちは！
+```plaintext
+$ こんにちは！
 ```
 
 Claude から返答が来れば完璧です。終了するには `/exit` と入力するか `Ctrl + C` を押してください。
 
 **うまくいかない場合は**
+
 - 認証エラーが表示された場合: `claude --version` でインストールを確認してください。
 - それでも解決しない場合は、メンターに声をかけてください。
 
@@ -485,7 +483,7 @@ Chapter 0 が完了したら、以下がすべてチェックできているは�
 - **uv + Python** で Python の実行環境を整えました
 - 作業用ディレクトリ `~/projects` を用意しました
 
-次の Chapter 1 では、Claude Code に「プロジェクトの説明書（CLAUDE.md）」を作成し、各種ツールの設定を行います。
+次の Chapter 1 では、Next.js アプリのスキャフォールドを実行し、GitHub にリポジトリを作成して `/init` コマンドで CLAUDE.md を生成します。
 
 すべてチェックできたら **Chapter 1** に進んでください。お疲れさまでした。
 
@@ -498,9 +496,9 @@ Chapter 0 が完了したら、以下がすべてチェックできているは�
 
 ---
 
-### Figma アカウント + Personal Access Token（Chapter 1 & 3 で使用）
+### Figma アカウント + Personal Access Token（Chapter 2 で使用）
 
-Chapter 1（MCP サーバー設定）と Chapter 3（UI 作成）で Figma を使います。事前に準備しておきましょう。
+Chapter 2（MCP サーバー設定）で Figma を使います。事前に準備しておきましょう。
 
 1. [Figma](https://www.figma.com/) にアクセスしてアカウントを作成（無料プランで OK）
 2. Personal Access Token を発行:
@@ -516,9 +514,9 @@ Chapter 1（MCP サーバー設定）と Chapter 3（UI 作成）で Figma を�
 
 ---
 
-### Supabase アカウント + supabase-js（Chapter 4 で使用）
+### Supabase アカウント + supabase-js（Chapter 3 で使用）
 
-Chapter 4 で Supabase（データベースと認証を提供するクラウドサービス）を使います。
+Chapter 3 で Supabase（データベースと認証を提供するクラウドサービス）を使います。
 
 1. [Supabase](https://supabase.com/) にアクセスしてアカウントを作成（GitHub 連携が簡単）
 2. パッケージのインストール（プロジェクトディレクトリで実行）:
@@ -527,9 +525,9 @@ Chapter 4 で Supabase（データベースと認証を提供するクラウド�
 npm install @supabase/supabase-js
 ```
 
-3. Chapter 4 で Supabase プロジェクトを作成した後、`.env.local` に接続情報を設定します:
+3. Chapter 3 で Supabase プロジェクトを作成した後、`.env.local` に接続情報を設定します:
 
-```bash
+```text
 NEXT_PUBLIC_SUPABASE_URL=your-project-url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 ```
@@ -541,9 +539,9 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 
 ---
 
-### 認証パッケージ（Chapter 5 で使用）
+### 認証パッケージ（Chapter 4 で使用）
 
-Chapter 5 で SPA ベースのログイン認証を実装します。以下のパッケージを追加インストールしてください。
+Chapter 4 で SPA ベースのログイン認証を実装します。以下のパッケージを追加インストールしてください。
 
 ```bash
 npm install @supabase/ssr
@@ -555,9 +553,9 @@ npm install @supabase/ssr
 
 ---
 
-### Vercel アカウント + Vercel CLI（Chapter 7 で使用）
+### Vercel アカウント + Vercel CLI（Chapter 6 で使用）
 
-Chapter 7 でアプリをインターネットに公開（デプロイ）します。
+Chapter 6 でアプリをインターネットに公開（デプロイ）します。
 
 1. [Vercel](https://vercel.com/) にアクセスしてアカウントを作成（GitHub 連携が簡単）
 2. Vercel CLI（ターミナルから Vercel を操作するツール）をインストール:

@@ -1,22 +1,17 @@
----
-title: "Chapter 2: プロジェクト初期化"
-parent: カリキュラム
-nav_order: 2
----
-
-# Chapter 2: プロジェクト初期化
+# Chapter 1: プロジェクト初期化
 
 **所要時間**: 約 1 時間
-**ゴール**: Next.js アプリが `http://localhost:3000` で動いている + Git ブランチ戦略が整っている
-**学ぶ Claude Code 機能**: スキャフォールド指示、Git 操作
+**ゴール**: Next.js アプリが `http://localhost:3000` で動いている + GitHub にリポジトリが作成されている + CLAUDE.md が生成されている
+**学ぶ Claude Code 機能**: `/init` コマンド、プロジェクト理解、コミット指示
 
 ---
 
 ## このチャプターで学ぶこと
 
-- Claude Code に「アプリの骨格を作って」と頼む方法
-- Git でバージョン管理を始める方法
-- ブランチを使った安全な開発の進め方
+- Next.js アプリの骨格を一括生成する方法（スキャフォールド）
+- GitHub にリポジトリを作成してコードを保存する方法
+- `/init` コマンドで CLAUDE.md を自動生成する方法
+- Claude Code にコミットを指示する方法
 - Claude Code がプロジェクト全体を理解していることを体感する
 
 **このチャプターが終わるとどうなる?**
@@ -25,7 +20,7 @@ nav_order: 2
 
 ---
 
-## Step 1: Next.js スキャフォールド（20分）
+## Step 1: Next.js スキャフォールド（15分）
 
 ### 「スキャフォールド」って何?
 
@@ -33,31 +28,19 @@ nav_order: 2
 
 ゼロからファイルを一つひとつ作るのではなく、「Next.js アプリの標準的な構成」を一括で生成してもらいます。
 
-### Claude Code への指示
+### ターミナルからスキャフォールドを実行する
 
-まず Claude Code を起動します。
+Claude Code を起動する前に、まずターミナルで Next.js プロジェクトを生成します。Claude Code 経由で実行する方法もありますが、スキャフォールドはターミナルで直接実行するのが確実です。
 
-```bash
-claude
-```
-
-起動したら、以下の指示をそのまま入力してください。
-
-> Next.js プロジェクトを初期化して。TypeScript、Tailwind CSS、App Router、src ディレクトリ構成で
-
-> **体験ポイント:** 「npx create-next-app --typescript --tailwind ...」のような専門的なコマンドを覚えなくても大丈夫です。自然な日本語で指示するだけで、Claude Code が適切なコマンドを判断して実行します。
-
-[screenshot: Claude Code がコマンドを提案・実行している様子]
-
-### 実行されるコマンド
-
-Claude Code は内部で以下のコマンドを実行します。参考として記載しておきますが、覚える必要はありません。
+ターミナルを開いて、以下のコマンドを実行してください。
 
 ```bash
-npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --import-alias "@/*"
+npx create-next-app@latest todos --typescript --eslint --tailwind --src-dir --app --import-alias "@/*"
 ```
 
-インタラクティブに質問される場合は、Claude Code が自動で回答するか、以下を参考に答えてください。
+> **`npx`（エヌピーエックス）とは?** Node.js に付属するコマンドで、パッケージを一時的にダウンロードして実行するツールです。`create-next-app` を事前にインストールしなくても、このコマンドだけで最新版を使えます。
+
+実行すると、いくつかの設定を対話形式で聞かれます。以下を参考に答えてください。
 
 | 質問 | 選択 |
 |------|------|
@@ -67,6 +50,8 @@ npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir --
 | `src/` ディレクトリを使いますか? | Yes |
 | App Router を使いますか? | Yes |
 | Import エイリアスを変更しますか? | No（デフォルトのまま） |
+
+[screenshot: create-next-app の対話形式セットアップ画面]
 
 ### 各オプションの意味
 
@@ -82,12 +67,25 @@ Next.js の最新のページ管理方式です。`src/app/` フォルダの中�
 **src ディレクトリ**
 アプリのコードを `src/`（ソース）フォルダにまとめる構成です。設定ファイルとアプリコードが混ざらないので整理しやすくなります。
 
+### スキャフォールド後にプロジェクトへ移動して Claude Code を起動する
+
+スキャフォールドが完了したら、生成されたフォルダに移動して Claude Code を起動します。
+
+```bash
+cd todos
+claude
+```
+
+> **`cd`（シーディー）とは?** Change Directory の略で、「ディレクトリ（フォルダ）を移動する」コマンドです。`cd todos` と実行すると、`todos` フォルダの中に入った状態になります。
+
+[screenshot: cd todos して claude を起動した様子]
+
 ### 生成されるファイル構成
 
 スキャフォールド後、主要なファイルは以下のようになります。
 
-```
-its_my_turn/
+```text
+todos/
 ├── src/
 │   └── app/
 │       ├── layout.tsx        # アプリ全体の外枠（ヘッダーなど共通部分）
@@ -97,12 +95,11 @@ its_my_turn/
 ├── next.config.ts            # Next.js の設定ファイル
 ├── tailwind.config.ts        # Tailwind CSS の設定ファイル
 ├── tsconfig.json             # TypeScript の設定ファイル
-├── package.json              # プロジェクトの依存パッケージ一覧（材料リストのようなもの）
-└── CLAUDE.md                 # Claude Code への指示ファイル（Chapter 1 で作成済み）
+└── package.json              # プロジェクトの依存パッケージ一覧（材料リストのようなもの）
 ```
 
 > **注意:** `node_modules/` フォルダが自動生成されますが、中に大量のファイルが入っています。Git には登録しないので心配しなくて大丈夫です（`.gitignore` で自動的に除外されます）。
-
+>
 > **`node_modules/` とは?** アプリが動くために必要な「材料（ライブラリ）」が入ったフォルダです。数千〜数万個のファイルが入ることもありますが、`package.json` があれば `npm install` コマンドで自動再生成できるので、Git には含めません。
 
 ### 確認ポイント
@@ -114,17 +111,13 @@ its_my_turn/
 
 ---
 
-## Step 2: Git を理解する & ブランチ戦略（20分）
+## Step 2: GitHub にプッシュ（15分）
 
-### Git でバージョン管理を始める理由
-
-> **なぜ Git を使うの?** コードはどんどん変わります。「昨日の状態に戻したい」「この機能を試してみたいけど、うまくいかなかったら元に戻したい」というとき、Git がなければ毎回手動でファイルをコピーして保管しなければなりません。Git を使えば「いつでも過去の任意の状態に戻せる」のです。
-
-#### 2-1. create-next-app がすでに Git を準備してくれていた
+### create-next-app がすでに Git を準備してくれていた
 
 実は、Step 1 で実行した `npx create-next-app` は、Next.js プロジェクトの生成と同時に、こっそり Git の初期化と初回コミットもやってくれています。「特に何も頼んでいないのに、もう準備が整っていた」という状況です。
 
-確認してみましょう。ターミナルで以下を実行してください。
+確認してみましょう。Claude Code のセッション内で、あるいは別ターミナルからプロジェクトフォルダで以下を実行してください。
 
 ```bash
 git log --oneline
@@ -134,7 +127,7 @@ git log --oneline
 
 以下のように、すでにコミットが 1 件表示されるはずです。
 
-```
+```text
 a1b2c3d Initial commit
 ```
 
@@ -151,120 +144,161 @@ cat .gitignore
 ```
 
 > **`.gitignore` とは?** Git に「このファイルは管理しなくていいよ」と伝えるリストです。たとえば `node_modules/`（大量の材料ファイル）は、リストに書いておけば Git の管理から外せます。
-
+>
 > **`cat`（キャット）コマンドとは?** ファイルの中身を画面に表示するコマンドです。`cat ファイル名` で中身を確認できます。
 
 `node_modules` や `.env.local` などが記載されていることを確認してください。`create-next-app` が自動生成する `.gitignore` には通常これらが含まれています。
 
 [screenshot: .gitignore の内容が表示されている様子]
 
-### Conventional Commits（コンベンショナル コミッツ）とは
+### GitHub にリポジトリを作成してプッシュする
 
-コミットメッセージを「種類: 説明」の形式で書くルールです。チームで開発するときに、変更の目的が一目でわかるようになります。
+Git はローカル（自分のパソコン）でバージョン管理するツールです。それに対し GitHub はコードをインターネット上に保存・共有できるサービスです。「ローカルの変更履歴をインターネット上にバックアップする」のがプッシュです。
 
-> **なぜこのルールが必要?** 「ちょっと変更した」「いろいろ修正」のようなコミットメッセージが続くと、後で「この変更は何だったっけ？」となります。ルールに従えば、変更の種類と内容が一目でわかります。
+ここでは `gh`（ジーエイチ）コマンドを使って、ターミナルから GitHub を操作します。
 
-| プレフィックス | 意味 | 使用例 |
-|--------------|------|--------|
-| `feat:` | 新しい機能を追加 | `feat: add todo list component` |
-| `fix:` | バグを修正 | `fix: resolve login error` |
-| `docs:` | ドキュメントを変更 | `docs: update README` |
-| `refactor:` | 機能を変えずにコードを整理 | `refactor: extract helper functions` |
-| `style:` | コードの見た目を変更（動作は変えない） | `style: format with prettier` |
-| `chore:` | ビルドや設定ファイルの変更 | `chore: update dependencies` |
+> **`gh` とは?** GitHub CLI（コマンドラインインターフェース）と呼ばれるツールです。ブラウザでの操作なしに、ターミナルから GitHub のリポジトリ作成・PR 操作などができます。Chapter 0 でインストール済みのはずです。
 
-### プロジェクトルートの CLAUDE.md にブランチ命名規則を追記する
-
-Chapter 1 で作成した、プロジェクトルート直下の `CLAUDE.md` にブランチのルールを追加します。こうすることで、Claude Code がそのルールを自動的に参照し、ブランチ管理に従うようになります。
-
-> **補足: CLAUDE.md には 2 種類ある**
->
-> - **プロジェクトスコープ**（今使っているもの）: プロジェクトフォルダ直下の `CLAUDE.md`。そのプロジェクトにいるときだけ有効で、Git でチームと共有できます
-> - **ユーザースコープ**: `~/.claude/CLAUDE.md`。自分のすべてのプロジェクトで有効な個人設定です
->
-> 「プロジェクトスコープ」は「この会社のルールブック」、「ユーザースコープ」は「自分だけの手帳」のイメージです。Chapter 1 で作成したのも、今追記するのも、プロジェクトルートの CLAUDE.md（プロジェクトスコープ）です。
-
-> プロジェクトルートの CLAUDE.md に以下のブランチ命名規則を追記して
-
-```markdown
-## Git ブランチ戦略
-
-### ブランチ命名規則
-
-- `feature/` — 新機能の開発
-- `fix/` — バグの修正
-- `refactor/` — リファクタリング（機能変更なし）
-- `docs/` — ドキュメントの更新
-
-### ルール
-
-- **main ブランチへの直接コミットは禁止**
-- 作業は必ずブランチを作成してから始める
-- コミット前に `git branch --show-current` でブランチを確認する
-```
-
-> **体験ポイント:** CLAUDE.md にルールを書いておくと、Claude Code は毎回そのルールを参照します。「main にコミットして」と指示しても、Claude Code がブランチを作るよう促してくれるようになります。これが「引き継ぎメモの力」です。
-
-[screenshot: CLAUDE.md にブランチルールが追記された様子]
-
-#### 2-2. CLAUDE.md の変更を Claude Code にコミットしてもらう
-
-CLAUDE.md へのブランチルール追記が済んだら、Claude Code に次のように指示してください。
-
-> CLAUDE.md に追記した変更をコミットして。コミットメッセージは Conventional Commits 形式で
-
-> **「ステージング」とは?** Git でファイルを保存する前の「下書き確認」のステップです。変更したファイルを「コミット（保存）する候補」として選ぶ作業です。
-
-Claude Code はコミットメッセージを自動で考えてくれます。期待される出力の例:
+以下のコマンドを実行してください。
 
 ```bash
-git add CLAUDE.md
-git commit -m "docs: add branch naming conventions to CLAUDE.md"
+gh repo create todos --private --source=. --remote=origin
 ```
 
-> **体験ポイント:** Claude Code はコミットメッセージのベストプラクティス（Conventional Commits）を知っています。「コミットして」と頼むだけで、適切な形式のメッセージを自動で作成してくれます。
+| オプション | 意味 |
+|-----------|------|
+| `todos` | 作成するリポジトリの名前 |
+| `--private` | 非公開リポジトリとして作成する |
+| `--source=.` | 現在のフォルダをリポジトリのソースとする |
+| `--remote=origin` | GitHub のリポジトリを `origin` という名前で登録する |
 
-### feature/setup ブランチを作成する
+> **`origin`（オリジン）とは?** 「大元（もと）」という意味で、GitHub 上のリポジトリの呼び名です。`git push origin main` のように使います。
 
-今後の作業用ブランチを作成します。Claude Code に指示するか、直接コマンドを実行します。
-
-> feature/setup ブランチを作成して、そのブランチに切り替えて
+リポジトリが作成できたら、コードを GitHub に送ります。
 
 ```bash
-git checkout -b feature/setup
+git push -u origin main
 ```
 
-> **`git checkout -b`（ギット チェックアウト）とは?** 新しいブランチを作成して、そこに切り替えるコマンドです。`-b` は「branch（ブランチ）を作る」オプションです。書類のコピーを作って、そのコピーの編集を始めるイメージです。
+> **`git push`（ギット プッシュ）とは?** ローカルの変更を GitHub に送信するコマンドです。`-u origin main` は「`origin`（GitHub）の `main` ブランチに送って、以降はここをデフォルトにする」という意味です。
 
-現在のブランチを確認します。
+[screenshot: git push の実行結果]
 
-```bash
-git branch --show-current
-```
+### GitHub でリポジトリを確認する
 
-`feature/setup` と表示されれば成功です。
+ブラウザで GitHub（<https://github.com>）を開き、自分のアカウントに `todos` リポジトリが作成されていることを確認してください。
 
-[screenshot: feature/setup ブランチに切り替わっている様子]
+[screenshot: GitHub 上に todos リポジトリが作成されている様子]
 
 ### 確認ポイント
 
 - [ ] `git log --oneline` で `create-next-app` による初回コミットが表示される
 - [ ] `.gitignore` に `node_modules` が含まれている
-- [ ] CLAUDE.md にブランチ命名規則が追記されている
-- [ ] CLAUDE.md の変更がコミットされている（`git log --oneline` で 2 件目のコミットが表示される）
-- [ ] `git branch --show-current` で `feature/setup` と表示される
-- [ ] `git status` で `nothing to commit` と表示される
-
-> **`git status`（ギット ステータス）とは?** 現在の変更状況を確認するコマンドです。「どのファイルが変更されているか」「コミット待ちのファイルはあるか」がわかります。
+- [ ] GitHub 上に `todos` リポジトリが作成されている
+- [ ] `git push` が正常に完了している
 
 ---
 
-## Step 3: 動作確認（20分）
+## Step 3: /init で CLAUDE.md を作成（10分）
+
+### `/init` コマンドとは
+
+`/init`（スラッシュ イニット）は、Claude Code にプロジェクトの概要を伝えて、CLAUDE.md を自動生成してもらうコマンドです。
+
+> **CLAUDE.md とは?** Claude Code が作業を始める前に必ず読む「引き継ぎメモ」です。「このプロジェクトは TODO アプリを作っているよ」「TypeScript を使っているよ」といった情報を書いておくと、毎回同じことを説明しなくて済みます。詳しくは Chapter 2 を参照してください。
+
+`/init` を使うと、Claude Code がプロジェクトのファイル構造を自動で読み取り、プロジェクトに合った CLAUDE.md を生成してくれます。自分で一から書く必要はありません。
+
+### `/init` を実行する
+
+Claude Code のセッションで、以下を入力してください。
+
+```plaintext
+$ /init WebアプリでTODO管理をしたいです
+```
+
+> **体験ポイント:** 「TODO 管理アプリを作りたい」という一言を添えるだけで、Claude Code がプロジェクトのコンテキスト（文脈）を理解した上で CLAUDE.md を生成してくれます。ファイル構造も自動で読み取るので、ゼロから書く必要がありません。
+
+[screenshot: /init コマンドを入力している様子]
+
+### 生成された CLAUDE.md を確認する
+
+`/init` が完了すると、プロジェクトルート（`todos/` 直下）に `CLAUDE.md` が生成されます。内容を確認してみましょう。
+
+```bash
+cat CLAUDE.md
+```
+
+プロジェクトの技術スタック（Next.js、TypeScript、Tailwind CSS など）や目的（TODO 管理アプリ）がまとまった内容が生成されているはずです。
+
+[screenshot: 生成された CLAUDE.md の内容]
+
+> **注意:** 生成された内容が意図と異なる場合は、Claude Code に直接指示して修正できます。「CLAUDE.md の目的の説明をもっと具体的にして」のように頼むと対応してくれます。
+
+### 確認ポイント
+
+- [ ] `CLAUDE.md` がプロジェクトルートに生成されている
+- [ ] プロジェクトの技術スタックや目的が記載されている
+
+---
+
+## Step 4: コミット & プッシュ（5分）
+
+### Claude Code にコミットを指示する
+
+`/init` で CLAUDE.md が生成されましたが、まだコミット（変更の保存）はされていません。Claude Code に以下のように指示してください。
+
+> コミットして
+
+Claude Code はコミットメッセージを自動で考えて、実行してくれます。
+
+> **Conventional Commits（コンベンショナル コミッツ）とは?** コミットメッセージを「種類: 説明」の形式で書くルールです。主なプレフィックスは以下のとおりです。
+>
+> | プレフィックス | 意味 | 使用例 |
+> |--------------|------|--------|
+> | `feat:` | 新しい機能を追加 | `feat: add todo list component` |
+> | `fix:` | バグを修正 | `fix: resolve login error` |
+> | `docs:` | ドキュメントを変更 | `docs: update README` |
+> | `chore:` | ビルドや設定ファイルの変更 | `chore: update dependencies` |
+>
+> Claude Code はこのルールを知っているので、「コミットして」と頼むだけで適切な形式のメッセージを自動で作成してくれます。
+
+期待される出力の例:
+
+```bash
+git add CLAUDE.md
+git commit -m "docs: add CLAUDE.md for project context"
+```
+
+> **体験ポイント:** コミットメッセージの書き方を覚えなくても、Claude Code が「よしなに」考えてくれます。ベストプラクティスに沿ったメッセージが自動で生成されるのが体感できます。
+
+[screenshot: Claude Code がコミットを実行している様子]
+
+### GitHub にプッシュして確認する
+
+コミットが完了したら、GitHub に反映させます。
+
+```bash
+git push
+```
+
+ブラウザで GitHub の `todos` リポジトリを開き、`CLAUDE.md` が追加されていることを確認してください。
+
+[screenshot: GitHub に CLAUDE.md がプッシュされた様子]
+
+### 確認ポイント
+
+- [ ] `git log --oneline` で CLAUDE.md のコミットが表示される
+- [ ] GitHub の `todos` リポジトリに `CLAUDE.md` が表示されている
+
+---
+
+## Step 5: 動作確認（15分）
 
 ### ローカルサーバーを起動する
 
 > **ローカルサーバーとは?** 自分のパソコンの中だけで動くウェブサーバーのことです。インターネットには公開されておらず、自分のブラウザからだけアクセスできます。「自分のパソコンの中でアプリを動かして確認する」ための仕組みです。
-
+>
 > **注意:** 開発サーバーの起動はターミナルで直接実行します。Claude Code から起動すると、Claude Code のセッションが占有されてしまい、Claude Code に話しかけられなくなります。
 
 新しいターミナルウィンドウを開いて、プロジェクトフォルダに移動してから以下を実行します。
@@ -275,7 +309,7 @@ npm run dev
 
 以下のような出力が表示されれば成功です。
 
-```
+```text
 ▲ Next.js 15.x.x
 - Local:        http://localhost:3000
 - Ready in 2.1s
@@ -307,7 +341,7 @@ Claude Code からは以下のような応答が期待されます。
 
 **期待される応答の概要:**
 
-```
+```text
 src/ ディレクトリには Next.js App Router の主要ファイルが含まれています。
 
 app/layout.tsx
@@ -336,9 +370,9 @@ app/globals.css
 時間があれば、以下の質問も試してみてください。Claude Code がプロジェクトのことをどれだけ理解しているか体感できます。
 
 > このプロジェクトで TODO アプリを作るとしたら、どんなファイルを作ればいい?
-
+>
 > layout.tsx と page.tsx の違いを教えて
-
+>
 > Tailwind CSS で青いボタンを作るにはどう書けばいい?
 
 Claude Code がプロジェクトのコンテキスト（文脈）を踏まえて回答してくれることを確認してください。
@@ -358,8 +392,8 @@ Claude Code がプロジェクトのコンテキスト（文脈）を踏まえ�
 
 - [ ] `src/app/page.tsx` が存在する
 - [ ] `git log --oneline` で `create-next-app` による初回コミットが確認できる
-- [ ] 現在のブランチが `feature/setup` になっている
-- [ ] CLAUDE.md にブランチ命名規則が追記されている
+- [ ] GitHub 上に `todos` リポジトリが作成されている
+- [ ] `CLAUDE.md` がプロジェクトルートに存在し、GitHub にも反映されている
 - [ ] `http://localhost:3000` でページが表示される
 - [ ] Claude Code にプロジェクト構造を説明してもらう体験ができた
 
@@ -378,6 +412,18 @@ node --version
 # npm を最新版に更新
 npm install -g npm@latest
 ```
+
+### `gh` コマンドが見つからない
+
+GitHub CLI がインストールされていない可能性があります。Chapter 0 の手順を参照してインストールしてください。
+
+インストール後、GitHub アカウントとの連携が必要です。
+
+```bash
+gh auth login
+```
+
+画面の指示に従い、ブラウザで認証を完了してください。
 
 ### `npm run dev` でエラーが出る
 
@@ -408,11 +454,12 @@ npx next dev -p 3001
 
 このチャプターでは、アプリ開発の「土台」を作りました。
 
-- **Next.js スキャフォールド**: 日本語で指示するだけで、Claude Code がアプリの骨格を一括生成しました
+- **Next.js スキャフォールド**: ターミナルから `npx create-next-app todos` を実行するだけで、アプリの骨格が一括生成されました
 - **Git の発見**: `create-next-app` がすでに Git の初期化と初回コミットを済ませてくれていたことを確認しました。ツールが「よしなに」準備してくれる体験です
-- **ブランチ戦略**: CLAUDE.md にルールを書くことで、Claude Code が自動的にブランチ管理を守るようになりました
+- **GitHub へのプッシュ**: `gh` コマンドでターミナルから直接 GitHub リポジトリを作成し、コードをプッシュしました
+- **`/init` で CLAUDE.md 生成**: `/init` コマンドで Claude Code がプロジェクトを読み取り、CLAUDE.md を自動生成しました。引き継ぎメモが一瞬で完成しました
 - **動作確認**: ブラウザで `http://localhost:3000` にアクセスし、アプリが実際に動くことを確認しました
 
-次の Chapter 4 では、Supabase のデータベースを立ち上げて、作成した Next.js アプリから実際に接続できるようにします。「データを保存・取得できるアプリ」への第一歩です。
+次の Chapter 3 では、Supabase のデータベースを立ち上げて、作成した Next.js アプリから実際に接続できるようにします。「データを保存・取得できるアプリ」への第一歩です。
 
-> **Chapter 4 に進む前に:** 開発サーバーを停止してください。ターミナルで `Ctrl + C` を押すと停止できます。
+> **Chapter 3 に進む前に:** 開発サーバーを停止してください。ターミナルで `Ctrl + C` を押すと停止できます。
