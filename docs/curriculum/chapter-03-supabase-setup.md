@@ -41,11 +41,6 @@ Supabase（スーパーベース）は、データを安全に保管してくれ
 2. 右上の「Start your project」または「Sign Up」ボタンをクリック
 3. 「Continue with GitHub」を選択（GitHub アカウントがある場合は推奨）。
    または、メールアドレスとパスワードで登録する
-
-[screenshot: supabase.com のトップページ。右上に「Start your project」ボタンが見えている]
-
-[screenshot: サインアップ画面。「Continue with GitHub」ボタンが中央に表示されている]
-
 4. GitHub 連携の場合は「Authorize supabase」をクリックして認証を完了させる
 
 > **なぜ GitHub 連携が便利なの？** 別のパスワードを覚える必要がなく、すでに使っている GitHub アカウントでログインできます。サービス間の連携がスムーズになるため推奨です。
@@ -61,9 +56,6 @@ Supabase（スーパーベース）は、データを安全に保管してくれ
 ダッシュボードが表示されたら、新しいプロジェクトを作成します。
 
 1. ダッシュボード左上の「New project」ボタンをクリック
-
-[screenshot: Supabase ダッシュボード。「New project」ボタンが左上に表示されている]
-
 2. プロジェクトの設定を入力する
 
 | 項目 | 入力内容 |
@@ -76,13 +68,9 @@ Supabase（スーパーベース）は、データを安全に保管してくれ
 
 > **Database Password について**: データベースに直接アクセスするための鍵です。今後使う場面があるため、パスワード管理ツールやメモ帳に必ず記録しておいてください。
 
-[screenshot: 新規プロジェクト作成フォーム。Name、Password、Region の入力欄が並んでいる]
-
 3. 「Create new project」ボタンをクリック
 
 > **注意:** データベースのセットアップには 1〜2 分かかります。「Setting up your project...」という表示が消えるまで待ってください。
-
-[screenshot: プロジェクト作成中のローディング画面]
 
 **確認ポイント**
 
@@ -115,8 +103,6 @@ Supabase プラグインを使うには、まず Supabase の「Personal Access 
 > **注意:** トークンは一度しか表示されません。ページを閉じると二度と確認できないため、必ずこの時点でコピーしてメモ帳やパスワード管理ツールに保存してください。
 >
 > **Personal Access Token とは？** Supabase が「このアクセスは本人からのものです」と確認するための鍵です。この鍵を使って Claude Code が Supabase にアクセスできるようになります。
-
-[screenshot: Supabase の Access tokens ページ。「Generate new token」ボタンと生成されたトークンが表示されている]
 
 ---
 
@@ -228,14 +214,9 @@ CREATE POLICY "Users can delete their own todos"
 
 1. Supabase ダッシュボードの左サイドバーの「Table Editor」をクリック
 2. `todos` テーブルが一覧に表示されていることを確認する
-
-[screenshot: Table Editor の画面に「todos」テーブルが表示されている様子]
-
 3. `todos` テーブルをクリックして、カラムの構成を確認する
 
 > **カラム（列）とは？** 表でいう「列」にあたるものです。Excel でいえば「氏名」「年齢」「住所」といった列の見出しのような概念です。
-
-[screenshot: todos テーブルの詳細画面。id, title, completed, created_at, user_id の各カラムが表示されている]
 
 **確認ポイント**
 

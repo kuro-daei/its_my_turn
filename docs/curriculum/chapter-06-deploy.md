@@ -70,13 +70,8 @@ $ git branch --show-current
 1. ブラウザで `https://vercel.com` を開く
 2. 右上の「Sign Up」をクリックする
 3. 「Continue with GitHub」を選択する
-
-[screenshot: Vercel のサインアップ画面で「Continue with GitHub」を選択している様子]
-
 4. GitHub のアカウントでログインする（GitHub アカウントがない場合は先に `https://github.com` でアカウントを作成してください）
 5. Vercel の利用規約に同意して、アカウントの作成を完了する
-
-[screenshot: Vercel のダッシュボードにログインできた様子]
 
 > **注意:** Vercel の無料プラン（Hobby）で、このカリキュラムの内容はすべて動作します。有料プランへのアップグレードを促すメッセージが表示されますが、スキップしてください。
 
@@ -118,9 +113,6 @@ Vercel は GitHub と連携して動作します。まず GitHub にリポジト
 2. 「Repository name」に `todos`（またはプロジェクト名）を入力する
 3. Public または Private を選択する（どちらでも動作します）
 4. 「Create repository」をクリックする
-
-[screenshot: GitHub の新規リポジトリ作成画面]
-
 5. 表示された URL（`https://github.com/あなたのユーザー名/todos.git`）をメモしておく
 
 ### 1-4. GitHub にコードを push する
@@ -152,20 +144,12 @@ git push -u origin main
 >
 > **注意:** `feature/vercel-deploy` ブランチで作業している場合は、先に main にマージしてから push するか、Vercel にはブランチを直接連携することもできます。メンターに確認してください。
 
-[screenshot: ターミナルで git push が成功した様子]
-
 ### 1-5. Vercel と GitHub を連携する
 
 1. Vercel ダッシュボード（`https://vercel.com/dashboard`）を開く
 2. 「Add New Project」をクリックする
-
-[screenshot: Vercel ダッシュボードの「Add New Project」ボタン]
-
 3. 「Import Git Repository」のセクションに、先ほど作成した GitHub リポジトリが表示されているはずです
 4. 「Import」をクリックする
-
-[screenshot: Vercel のリポジトリ選択画面に GitHub リポジトリが表示されている様子]
-
 5. プロジェクトの設定画面が表示される。現時点では「Deploy」ボタンは押さず、次のステップに進む
 
 > **体験:** Claude Code に「Vercel にデプロイする準備をして」と依頼してみましょう。必要な手順や設定ファイルを確認してくれます。
@@ -234,16 +218,11 @@ Vercel のプロジェクト設定画面で環境変数を登録します。
 
 1. Step 1 で開いたプロジェクト設定画面を使う
 2. 「Environment Variables」セクションを展開する
-
-[screenshot: Vercel のプロジェクト設定画面の「Environment Variables」セクション]
-
 3. 「Name」と「Value」を入力する:
    - Name: `NEXT_PUBLIC_SUPABASE_URL`
    - Value: `.env.local` の `NEXT_PUBLIC_SUPABASE_URL` の値
 4. 「Add」をクリックする
 5. 同様に `NEXT_PUBLIC_SUPABASE_ANON_KEY` も追加する
-
-[screenshot: Vercel に NEXT_PUBLIC_SUPABASE_URL と NEXT_PUBLIC_SUPABASE_ANON_KEY が追加された様子]
 
 **方法 B: 既存プロジェクトの設定画面から**
 
@@ -251,8 +230,6 @@ Vercel のプロジェクト設定画面で環境変数を登録します。
 2. 「Settings」タブをクリックする
 3. 左メニューの「Environment Variables」を選択する
 4. 同様に値を追加する
-
-[screenshot: Vercel の Settings > Environment Variables 画面]
 
 > **注意:** 環境変数を追加・変更した場合は、再デプロイが必要です。設定後に「Redeploy」ボタンを押すか、新たに `git push` を行ってください。
 
@@ -263,8 +240,6 @@ Vercel のプロジェクト設定画面で環境変数を登録します。
 **方法 A: Vercel ダッシュボードから（初回推奨）**
 
 プロジェクト設定画面の「Deploy」ボタンをクリックします。
-
-[screenshot: Vercel のプロジェクト設定画面の「Deploy」ボタン]
 
 **方法 B: Vercel CLI から**
 
@@ -300,15 +275,11 @@ Claude Code はまず `npm run build` でビルドが通るかを確認し、問
 
 > **ビルドとは？** プログラムのソースコードを、サーバーで動かせる形式に変換する処理です。料理でいえば「レシピ（コード）をもとに実際の料理（動くアプリ）を作る」工程です。
 
-[screenshot: Claude Code がビルドチェックを行い、デプロイを提案している様子]
-
 ### 2-4. ビルドログを確認する
 
 デプロイが始まると、Vercel ダッシュボードにビルドログが表示されます。
 
 > **ビルドログとは？** デプロイ中に何が起きているかを記録したメッセージの一覧です。うまくいけば最後に成功メッセージが表示されます。エラーが起きれば、ここに原因が書かれています。
-
-[screenshot: Vercel のビルドログ画面でデプロイが進行している様子]
 
 ログの最後に以下のような表示が出れば成功です。
 
@@ -337,8 +308,6 @@ Claude Code はまず `npm run build` でビルドが通るかを確認し、問
 
 Vercel ダッシュボードに表示された公開 URL（`https://プロジェクト名.vercel.app`）をブラウザで開きます。
 
-[screenshot: 公開 URL でブラウザに TODO アプリが表示されている様子]
-
 以下のチェックリストで動作を確認します。
 
 - [ ] サインアップできる
@@ -361,9 +330,6 @@ Supabase の認証機能は、デフォルトで `localhost:3000`（自分のパ
 2. プロジェクトを選択する
 3. 左メニューの「Authentication」をクリックする
 4. 「URL Configuration」を選択する
-
-[screenshot: Supabase ダッシュボードの Authentication > URL Configuration 画面]
-
 5. 「Site URL」を本番 URL に更新する:
 
    ```plaintext
@@ -375,8 +341,6 @@ Supabase の認証機能は、デフォルトで `localhost:3000`（自分のパ
    ```plaintext
    https://プロジェクト名.vercel.app/**
    ```
-
-[screenshot: Supabase の Redirect URLs に本番 URL が追加された様子]
 
 7. 「Save」をクリックして保存する
 
@@ -406,8 +370,6 @@ Claude Code が起動したら、以下を入力してください。
 ```plaintext
 $ TODO リストのスタイルを少し改善して、feature/style-tweak ブランチを作ってコミットして push して
 ```
-
-[screenshot: GitHub への push 後、Vercel が自動デプロイしている様子]
 
 ---
 
@@ -508,8 +470,6 @@ Vercel にデプロイしてもアプリが Supabase に繋がらない場合:
 1. Vercel ダッシュボード → プロジェクト → 「Settings」→「Environment Variables」で値が正しく入力されているか確認する
 2. 環境変数の変数名に `NEXT_PUBLIC_` が付いているか確認する（ブラウザから読める変数には必須です）
 3. 環境変数を変更したら「Redeploy」が必要
-
-[screenshot: Vercel の Settings > Environment Variables で値を確認している様子]
 
 ```bash
 # 環境変数の確認（ローカル）
