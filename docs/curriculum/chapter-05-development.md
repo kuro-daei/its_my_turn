@@ -1,44 +1,44 @@
 ---
-title: "Chapter 5: 初期開発"
+title: "Chapter 5: Vibe Coding で TODO アプリを作る"
 parent: カリキュラム
 nav_order: 5
 ---
 
-# Chapter 5: 初期開発
+# Chapter 5: Vibe Coding で TODO アプリを作る
 
 **所要時間**: 約 3 時間
-**ゴール**: TODO アプリが一通り動く状態にする（CRUD + ログイン認証）
-**学ぶ Claude Code 機能**: 統合的な指示、エージェント活用、タスク分解、環境変数管理
+**ゴール**: TODO アプリが一通り動く状態にする（UI + CRUD + Google ログイン）
+**学ぶ Claude Code 機能**: Plan Mode、プラグイン・スキル、マルチファイル生成、統合的な指示、タスク分解
 
 ---
 
 ## このチャプターで学ぶこと
 
-- 「追加・表示・完了切り替え・削除」の CRUD 操作を UI と DB 同時に実装する
-- エージェント機能を使って大きなタスクを分解しながら進める
-- Supabase Auth でログイン認証を組み込む
-- RLS（Row Level Security）を設定して「自分の TODO だけ見える」状態にする
-- 完成したアプリを通しで動作確認してコミットする
+- Vibe Coding という開発スタイルを実感する
+- Claude Code の Plan Mode を使って「作る前に設計する」習慣を身につける
+- プラグイン・スキルで Claude Code をパワーアップする
+- 1 つの指示で複数のファイルを同時に生成する体験をする
+- 1 つの指示で CRUD（追加・表示・完了切り替え・削除）を一気に実装する
+- Google ログインによる認証を組み込み、自分だけの TODO アプリを完成させる
+- RLS でデータを守る重要性を実例から学ぶ
 
-全部終わったら、ログインした自分だけが操作できる TODO アプリが動く状態になります。
+全部終わったら、Google でログインした自分だけが操作できる TODO アプリが動く状態になります。
 
 ---
 
-このチャプターでは「画面とデータベースを一気につなぐ」体験をします。
+## Vibe Coding って何だろう？
 
-これまでのチャプターで Next.js アプリと Supabase が接続され、UI（ユーザーインターフェース。画面のこと）のモックコンポーネント（見た目だけのパーツ）が揃っています。Chapter 5 では、それらに「本物のデータと認証」を一気に繋ぎこみます。
+「Vibe Coding（バイブ コーディング）」という言葉を聞いたことがありますか？
 
-> **CRUD（クラッド）とは？** Create（作る）・Read（読む）・Update（更新する）・Delete（消す）の頭文字を取った言葉です。TODO アプリの基本操作「追加・表示・完了切り替え・削除」がちょうどこの 4 つにあたります。
+これは 2025 年に流行した言葉で、あの Collins Dictionary（イギリスの老舗辞書）の「Word of the Year 2025」に選ばれるほど話題になりました。
 
-**3つのステップの流れ:**
+> **Vibe Coding とは？** AI に自然言語（普通の言葉）で指示するだけで、アプリやウェブサイトを作る開発スタイルのことです。「なんとなく（vibe）」の感覚で、コーディングの専門知識がなくても形にできる、という意味が込められています。
 
-```
-Step 1: TODO の CRUD を UI と DB 同時に作る（1.5時間）
-Step 2: SPA 認証を組み込む（1時間）
-Step 3: 通し確認 & 初期開発コミット（30分）
-```
+「え、それって私がずっとやってきたことでは？」と思ったなら、その通りです。このカリキュラムで体験してきたことがまさに Vibe Coding です。
 
-> **体験:** 「AddTodoForm にフォームを作って」「Supabase に保存して」と別々に指示するのではなく、「AddTodoForm から TODO を追加して Supabase に保存できるようにして」と一度に指示します。これが「統合的な指示」です。画面とデータベースをまたぐ指示でも、Claude Code はコンテキスト（文脈）を保ちながら両方を同時に実装します。
+料理のたとえでいえば、「パスタが食べたい。トマトベースで」と言えば、シェフ（Claude Code）が献立を考え、材料を揃え、調理してくれる、そんな感覚です。細かいレシピを知らなくても、食べたいものを言葉にするだけでいい。
+
+このチャプターでは Vibe Coding をフルに活用して、TODO アプリを「UI の作成」から「データベース接続」「Google ログイン」まで一気に仕上げます。
 
 間違えても大丈夫です。途中でわからなくなったら、すぐメンターに声をかけてください。
 
@@ -51,7 +51,7 @@ Step 3: 通し確認 & 初期開発コミット（30分）
 - [ ] Chapter 0〜4 が完了している
 - [ ] Supabase の `todos` テーブルが作成済みである
 - [ ] `.env.local` に Supabase の URL と ANON KEY が設定済みである
-- [ ] `src/components/` に `Header.tsx`、`TodoList.tsx`、`TodoItem.tsx`、`AddTodoForm.tsx` が存在する
+- [ ] Google アカウントを持っている
 - [ ] 現在のブランチを確認する
 
 ```bash
@@ -61,238 +61,345 @@ git branch --show-current
 > **注意:** `main` と表示された場合は、以下のコマンドで作業ブランチを作成してから進めてください。`main` ブランチは「完成品の棚」のようなもので、直接触るのはルール上禁止されています。
 
 ```bash
-git checkout -b feature/initial-development
+git checkout -b feature/todo-app
 ```
 
 ---
 
-## Step 1: TODO CRUD を UI と DB 同時に作る（1.5時間）
+## Step 1: Vibe Coding とは & Plan Mode で設計する（20分）
 
 ### このステップの目的
 
-「TODO を追加する」「一覧を表示する」「完了を切り替える」「削除する」という 4 つの CRUD 操作を、UI（React。画面側）と DB（Supabase。データ保存側）を分けずに機能単位で一気に実装します。
-
-> **体験:** 従来の開発では「まず API を作る」「次に画面を繋ぐ」と分割して進めていました。Claude Code では「この機能を動くようにして」という一言で、画面とデータベースの両方を同時に実装できます。
+Claude Code の **Plan Mode**（プラン モード）を使って、TODO アプリの設計図を先に作ります。「まず図面を引いてから家を建てる」感覚で、実装前に全体像を確認します。
 
 ---
 
-### Phase A: 追加機能（TODO を作る）
+### Plan Mode って何？
 
-#### Claude Code への指示
+通常、Claude Code に指示すると、すぐにコードを書き始めます。Plan Mode はその前に「実装計画を提案して、確認を取ってから実装する」モードです。
 
-> AddTodoForm から新しい TODO を追加できるようにして。テキストを入力して送信すると、Supabase の todos テーブルに保存されて、フォームがリセットされるようにして
+**建築のたとえ:** 家を建てるとき、いきなり柱を立て始める職人はいません。まず設計図（間取り図）を作って、住む人に確認してもらいます。OK が出てから工事を始める。Plan Mode はまさにこの「設計図の確認ステップ」です。
 
-[screenshot: Claude Code がコードを生成している様子。AddTodoForm.tsx と Supabase の操作が同時に行われている]
+設計が間違っていたら実装前に修正できるので、後で大幅に作り直すという手戻りが減ります。
 
-#### 実装で変わるファイルの概要
+---
 
-Claude Code は主に以下の変更を加えます。
+### Plan Mode の起動方法
 
-**`src/components/AddTodoForm.tsx`**
+Claude Code のチャット画面で、**`Shift` キーを押しながら `Tab` キーを 2 回押す**と Plan Mode に切り替わります。
 
-- `useState`（ステートを管理する仕組み）でフォームの入力値を管理する state を追加
-- Supabase クライアントをインポートして `insert`（挿入）操作を追加
-- フォーム送信時に Supabase へデータを保存し、フォームをリセットする
+入力欄の横や上部に「Plan Mode」と表示されれば切り替え成功です。
 
-```tsx
-// AddTodoForm.tsx のイメージ（実際のコードは Claude Code が生成します）
-"use client";
-import { useState } from "react";
-import { createClient } from "@/lib/supabase/client";
+[screenshot: Claude Code の Plan Mode が有効になっている様子。入力欄に「Plan Mode」と表示されている]
 
-export default function AddTodoForm() {
-  const [text, setText] = useState("");
+> **体験:** Plan Mode はいつでも切り替えられます。通常モードに戻すには、再度 `Shift+Tab` × 2 を押してください。
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!text.trim()) return;
-    const supabase = createClient();
-    await supabase.from("todos").insert({ title: text });
-    setText("");
-  };
+---
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <input value={text} onChange={(e) => setText(e.target.value)} />
-      <button type="submit">追加</button>
-    </form>
-  );
-}
+### Plan Mode で TODO アプリの設計を依頼する
+
+Plan Mode に切り替えたら、以下の指示を入力してください。
+
+> TODO アプリの画面構成と必要なコンポーネントを設計して。ヘッダー、TODO 追加フォーム、TODO リスト（各アイテムにチェックボックスと削除ボタン）を含めて。Tailwind CSS を使う前提で
+
+Claude Code から以下のような設計案が返ってきます。
+
+---
+
+**期待される応答の概要:**
+
+```
+TODO アプリの構成を提案します。
+
+## コンポーネント設計
+
+src/
+  components/
+    Header.tsx        — アプリタイトル + ログアウトボタン
+    AddTodoForm.tsx   — テキスト入力 + 追加ボタン
+    TodoItem.tsx      — チェックボックス + タスク名 + 削除ボタン
+    TodoList.tsx      — TodoItem の一覧表示
+  app/
+    page.tsx          — 全コンポーネントを組み合わせたトップページ
+    login/
+      page.tsx        — Google ログインボタンのみのシンプルな画面
+
+## 実装の順番
+
+1. まず各コンポーネントをダミーデータで作成
+2. Supabase と接続して CRUD を実装
+3. Google 認証を追加
+
+この方針で進めてよいですか？
 ```
 
-> **注意:** 上記はイメージコードです。Claude Code が生成した実際のコードをそのまま使ってください。カラム名（`title` など）は、Chapter 4 で作成した `todos` テーブルの構造に合わせて変わります。
+---
 
-#### 動作確認方法
+> **体験:** Claude Code が実装前に「こういう構成で進めようと思うけど、いいですか？」と確認してきました。チームメンバーと相談するような感覚で使えます。
 
-1. ブラウザで `http://localhost:3000` を開く
-2. テキスト欄に「テスト TODO」と入力して「追加」ボタンを押す
-3. Supabase のダッシュボード（`Table Editor` → `todos`）を開いて行が追加されていることを確認する
+[screenshot: Claude Code が設計案を提示して承認を求めている様子]
 
-[screenshot: Supabase の Table Editor に「テスト TODO」の行が追加されている様子]
+### 設計を確認して承認する
+
+提示された設計を確認して、問題なければ「OK」「進めて」などと返信します。変更したい点があれば「ヘッダーにはログイン中のメールアドレスも表示したい」のように追加指示できます。
+
+> **ポイント:** 承認する前に一度立ち止まって、「この構成で TODO アプリが作れるか」をイメージしてみてください。修正は今のうちにするのが一番コストが低いです。
+
+### 確認ポイント
+
+- [ ] Plan Mode に切り替えられた（`Shift+Tab` × 2）
+- [ ] Claude Code から設計案が提示された
+- [ ] 設計内容を確認して承認した
+
+---
+
+## Step 2: プラグインで強化して UI を一気に作る（50分）
+
+### このステップの目的
+
+まず Claude Code をパワーアップするプラグイン・スキルをインストールします。その後、1 行の指示で TODO アプリの画面パーツ（コンポーネント）を一気に生成します。この時点ではデータベースには接続せず、ダミーデータ（仮のデータ）で表示確認します。
+
+---
+
+### Claude Code をパワーアップする（15分）
+
+スマートフォンにアプリをインストールして機能を増やせるように、Claude Code にも「スキル」を追加することができます。
+
+> **スキルとは？** 特定の作業が得意になる知識パックです。インストールするだけで、その分野の高品質な出力が自動で適用されます。たとえば「Tailwind CSS を使った UI 作成」が得意なスキルをインストールすると、以降の指示すべてにその知識が活かされます。
+
+スキルは `skills.sh`（スキルズ ドット エスエイチ）というサイトで公開・共有されています。コミュニティのメンバーや企業の公式チームが作ったスキルを検索して使えます。
+
+---
+
+#### まず「スキルの検索ツール」をインストールする
+
+スマホを買ったとき、最初に App Store（アップ ストア）をセットアップしてから、そこで欲しいアプリを探しますよね。スキルのインストールも同じ考え方です。まず「スキルを探すためのスキル」を入れてから、そこで必要なスキルを探します。
+
+Vercel（バーセル。Next.js の開発元）が提供する `find-skills`（ファインド スキルズ）というスキルがその役割を担います。週間 279,000 件インストールの人気スキルで、これを入れると `npx skills find` コマンドでスキルを検索できるようになります。
+
+Claude Code の入力欄に、先頭に `!` をつけて以下のコマンドを入力してください。`!` をつけると、Claude Code の入力欄からコマンドを直接実行できます。
+
+```bash
+! npx skills add https://github.com/vercel-labs/skills --skill find-skills
+```
+
+> **注意:** スキルのインストール後は、Claude Code の再起動が必要です。`/exit` で一度終了してから、再度 `claude` コマンドで起動してください。再起動しないとインストールしたスキルが反映されません。
+
+[screenshot: find-skills がインストールされた様子]
+
+---
+
+#### TODO アプリに役立つスキルを探す
+
+`find-skills` がインストールできたら、早速スキルを探してみましょう。Claude Code に以下のように指示してください。
+
+> TODO アプリ開発に役立つスキルを探して。Tailwind CSS、Next.js、Supabase を使うよ
+
+Claude Code が `npx skills find` を使って検索し、おすすめのスキルを提案してくれます。以下のようなスキルが見つかります。
+
+> **注意:** スキルは誰でも作って公開できるため、中には危険なもの（悪意のあるコードを含むもの）も存在します。スキルを選ぶときは以下の点に注意してください。
+>
+> 1. **公式であること** — `vercel-labs`、`supabase` など、サービスの開発元が公開しているスキルを優先する
+> 2. **インストール数が多いこと** — 多くの人が使っているスキルは、問題があれば報告されやすい
+>
+> スマホのアプリと同じで、「知らない開発者の評価ゼロのアプリ」より「公式アプリストアで高評価のアプリ」を選ぶ方が安全です。ポイントを押さえれば、安心して使えます。
+
+| スキル | インストール数 | 概要 |
+|---|---|---|
+| `vercel-react-best-practices` | 約 152,000 | Vercel 公式の React / Next.js パフォーマンス最適化ガイドライン |
+| `web-design-guidelines` | 約 115,000 | Vercel 公式のウェブデザインガイドライン。美しく使いやすい UI の原則 |
+| `supabase-postgres-best-practices` | 約 21,500 | Supabase 公式のデータベース操作ベストプラクティス |
+
+Claude Code がインストールを提案してきたら、承認してください。インストールが完了すると、以降のすべての指示にこれらのスキルの知識が自動で活かされます。
+
+[screenshot: Claude Code がスキルを検索・提案してインストールしている様子]
+
+> **体験:** コマンドを丸暗記しなくても大丈夫です。「TODO アプリに役立つスキルを探して」と Claude Code に聞くだけで、必要なスキルを見つけてインストールまでやってくれます。「自分で探して → 選んで → 入れる」という体験そのものが、スキルの使いこなし方の基本です。
+>
+> `skills.sh` にはほかにもたくさんのスキルが公開されています。気になるものがあれば、いつでも同じように Claude Code に聞いてみてください。
+
+---
+
+#### インストールしたスキルの安全性をチェックする
+
+スキルをインストールしたら、安全性をチェックしておくと安心です。Cisco（シスコ）が提供する **Skill Scanner**（スキル スキャナー）は、インストール済みスキルの中身を自動で検査して、プロンプトインジェクション（AIを騙す攻撃）やデータ流出などの危険なパターンがないかを検出するツールです。
+
+インストール（Python 3.10 以上が必要）:
+
+```bash
+pip install cisco-ai-skill-scanner
+```
+
+スキャンの実行:
+
+```bash
+skill-scanner scan スキルのパス
+```
+
+GitHub: https://github.com/cisco-ai-defense/skill-scanner
+
+> **補足:** Skill Scanner は「ベストエフォート」の検出ツールです。スキャン結果が「問題なし」でも完全な安全性を保証するものではありません。公式スキル + 高インストール数 + スキャンの3点セットで安全性を高めましょう。
 
 #### 確認ポイント
 
-- [ ] フォームにテキストを入力して送信できる
-- [ ] 送信後にフォームがリセットされる（入力欄が空になる）
-- [ ] Supabase の `todos` テーブルにデータが追加されている
-- [ ] 空のテキストを送信してもデータが追加されない
+- [ ] find-skills スキルがインストールされた
+- [ ] vercel-react-best-practices スキルがインストールされた
+- [ ] web-design-guidelines スキルがインストールされた
+- [ ] supabase-postgres-best-practices スキルがインストールされた
 
-#### トラブルシュート
+---
 
-**送信しても Supabase にデータが入らない場合:**
+### UI 生成を依頼する（35分）
+
+プラグインとスキルの準備ができたら、UI を作ります。
+
+Plan Mode を解除して（`Shift` キーを押しながら `Tab` キーを 2 回押すと通常モードに戻ります）、以下の指示を入力してください。
+
+> TODO アプリの UI を作って。ヘッダー（アプリタイトル + ログアウトボタン）、TODO 追加フォーム（テキスト入力 + 追加ボタン）、TODO リスト（各アイテムにチェックボックス + テキスト + 削除ボタン）を含めて。まずはダミーデータで表示して。Tailwind CSS でスタイリングして
+
+[screenshot: Claude Code が複数のファイルを同時に生成している様子]
+
+> **体験:** 1 行の指示で複数のファイルが同時に生成される驚きを体感してください。さらに、先ほどインストールしたスキルが自動で活かされ、デザインが整った UI になります。これが Vibe Coding の醍醐味です。
+
+---
+
+### 生成されるファイル構成
+
+Claude Code は以下のファイルを作成・更新します。
+
+```
+src/
+  components/
+    Header.tsx        （作成）
+    AddTodoForm.tsx   （作成）
+    TodoItem.tsx      （作成）
+    TodoList.tsx      （作成）
+  app/
+    page.tsx          （更新: 全コンポーネントを組み合わせ）
+```
+
+それぞれのファイルの役割は以下の通りです。
+
+| ファイル | 役割 |
+|---------|------|
+| `Header.tsx` | アプリタイトルとログアウトボタンを表示する |
+| `AddTodoForm.tsx` | テキスト入力欄と「追加」ボタンを持つフォーム |
+| `TodoItem.tsx` | 1 件の TODO（チェックボックス + テキスト + 削除ボタン） |
+| `TodoList.tsx` | TodoItem を並べて一覧表示する |
+| `page.tsx` | 全パーツを組み合わせたトップページ |
+
+---
+
+### 動作確認方法
+
+ファイルが生成されたら、ブラウザで `http://localhost:3000` を確認します。
+
+> **注意:** 開発サーバーが起動していない場合は、Claude Code のターミナルとは**別のターミナル**で `npm run dev` を実行してください。
+
+以下のような画面が表示されれば成功です。
+
+```
+┌────────────────────────────────────┐
+│  TODO アプリ           [ログアウト] │
+├────────────────────────────────────┤
+│  [タスクを入力...]       [追加]     │
+├────────────────────────────────────┤
+│  □ 買い物に行く              [削除] │
+│  ☑ メールを返す              [削除] │
+│  □ 本を読む                  [削除] │
+└────────────────────────────────────┘
+```
+
+[screenshot: ブラウザに TODO アプリの UI が表示されている様子。ダミーデータで TODO が 3 件表示されている]
+
+### 確認ポイント
+
+- [ ] `src/components/` に 4 つのファイル（Header.tsx, AddTodoForm.tsx, TodoItem.tsx, TodoList.tsx）が作成された
+- [ ] ブラウザでダミーの TODO リストが表示される
+- [ ] フォームの入力欄と追加ボタンが見える
+- [ ] ヘッダーにアプリタイトルが表示される
+- [ ] 各 TODO にチェックボックスと削除ボタンがある
+
+### トラブルシュート
+
+**ブラウザに何も表示されない、またはエラーになる場合:**
+
+```bash
+# 開発サーバーが起動しているか確認
+# 別ターミナルで実行
+npm run dev
+```
 
 Claude Code に以下のように聞いてみてください。
 
-> AddTodoForm の送信処理でエラーが出ていないか確認して。Supabase のエラーレスポンスをコンソールに出力して
+> ブラウザで localhost:3000 を開いたらエラーになった。ターミナルのエラーメッセージを確認して修正して
+
+**Tailwind CSS のスタイルが当たっていない場合:**
+
+> Tailwind CSS のスタイルが反映されていない。tailwind.config.ts の設定を確認して
+
+---
+
+## Step 3: Supabase と繋いで動くようにする（30分）
+
+### このステップの目的
+
+Step 2 で作ったダミー UI を、Supabase のデータベースに接続して「本物のデータ」で動くようにします。
+
+> **CRUD（クラッド）とは？** Create（作る）・Read（読む）・Update（更新する）・Delete（消す）の頭文字を取った言葉です。TODO アプリの基本操作「追加・表示・完了切り替え・削除」がちょうどこの 4 つにあたります。
+
+---
+
+### 1 つの指示で一気に繋ぐ
+
+Vibe Coding では、操作ひとつひとつを個別に指示する必要はありません。「追加・表示・完了切り替え・削除」をまとめて 1 回の指示で実装させましょう。
+
+> TODO アプリの画面を Supabase に接続して。TODO の追加、一覧表示、完了の切り替え、削除がすべて動くようにして
+
+[screenshot: Claude Code が複数のコンポーネントとデータベース接続を同時に実装している様子]
+
+> **体験:** 「画面とデータベースを同時につないで」という指示でも、Claude Code はコンテキスト（文脈）を保ちながら複数のファイルを同時に実装します。操作を 1 つずつ順番に指示する必要はありません。これが「統合的な指示」の力です。
+
+---
+
+### 動作確認
+
+4 つの操作がすべて動くことを確認します。
+
+- [ ] テキストを入力して「追加」ボタンを押すと、Supabase の `todos` テーブルに行が追加される
+- [ ] ページを開いたとき（またはリロード後）、保存済みの TODO が一覧に表示される
+- [ ] チェックボックスをクリックすると完了状態が切り替わり、Supabase 側の `completed` カラムも更新される
+- [ ] 削除ボタンをクリックすると一覧から消え、Supabase 側の行も削除される
+
+---
+
+### トラブルシュート
+
+**Supabase にデータが入らない、または一覧が表示されない場合:**
+
+Claude Code に以下のように聞いてみてください。
+
+> Supabase との接続でエラーが起きているかもしれない。各操作（追加・取得・更新・削除）のエラーをコンソールに出力して確認して
 
 ブラウザの開発者ツール（F12 → Console タブ）でエラーメッセージを確認します。
 
-**よくあるエラーとその原因:**
-
-```
-Error: Invalid API key
-```
-
-`.env.local` の `NEXT_PUBLIC_SUPABASE_ANON_KEY` が正しくない可能性があります。Supabase ダッシュボード（Settings → API）で確認してください。
-
-```
-Error: relation "todos" does not exist
-```
-
-`todos` テーブルが作成されていないか、テーブル名が間違っています。Chapter 4 に戻って確認してください。
-
 ---
 
-### Phase B: 一覧表示機能（TODO を読む）
+### ビルドチェック
 
-#### Claude Code への指示
+4 つの機能が揃ったら、ビルドエラーがないか確認します。
 
-> TodoList で Supabase から todos を取得して表示して。ページを開いたときに自動で読み込まれるようにして
+> **ビルドって何？** 開発用のコードを「本番公開できる形」に変換する作業です。エラーが出ずに完了すれば、コードに問題がないことが確認できます。料理でたとえると、「試作品を実際にお客さんに出せる品質か最終チェックする」工程です。
 
-[screenshot: Claude Code が TodoList.tsx を編集している様子]
-
-#### 実装で変わるファイルの概要
-
-**`src/components/TodoList.tsx`**
-
-- `useEffect`（コンポーネントが表示されたときに処理を実行する仕組み）を使ってマウント時に Supabase から `todos` を取得
-- 取得したデータを `useState` で管理して画面に表示
-
-**`src/app/page.tsx`（または親コンポーネント）**
-
-- `TodoList` に todos データを渡す props（コンポーネント間でデータを渡す仕組み）の調整（実装パターンによる）
-
-#### リアルタイム更新 vs ページリロード
-
-Claude Code がリアルタイム更新（Supabase Realtime。データが変わると自動で画面も更新される機能）を実装するか、手動リフレッシュを選ぶかはプロンプトによって変わります。このチャプターでは「追加後に一覧が更新される」動作を優先します。
-
-追加後に一覧を更新するには、以下を追加で指示します。
-
-> TODO を追加した後、TodoList の一覧が自動で更新されるようにして
-
-#### 動作確認方法
-
-1. ブラウザで `http://localhost:3000` を開く
-2. Phase A で追加した「テスト TODO」が一覧に表示されていることを確認する
-3. 新しい TODO を追加して、一覧に即座に反映されることを確認する
-
-[screenshot: TodoList に複数の TODO が表示されている様子]
-
-#### 確認ポイント
-
-- [ ] ページを開いたときに既存の todos が表示される
-- [ ] 新しい TODO を追加すると一覧に反映される
-- [ ] todos が 0 件のときに「TODO はまだありません」などのメッセージが表示される
-- [ ] ローディング中に読み込み中のインジケーターが表示される（任意）
-
-#### トラブルシュート
-
-**一覧が空になる（データが取れない）場合:**
-
-> TodoList で Supabase から取得したデータをコンソールに出力して、何が返ってきているか確認して
-
-Supabase ダッシュボードで RLS（Row Level Security。Chapter 4 で設定したセキュリティ機能）が有効になっていて、かつ認証なしでは読めないポリシーが設定されている場合は Step 2 の認証実装後に再確認します。
-
----
-
-### Phase C: 完了切り替え機能（TODO を更新する）
-
-#### Claude Code への指示
-
-> TodoItem のチェックボックスをクリックすると completed の状態が切り替わるようにして。Supabase の todos テーブルも更新されるようにして
-
-#### 実装で変わるファイルの概要
-
-**`src/components/TodoItem.tsx`**
-
-- チェックボックスの `onChange` ハンドラ（変更を検知する仕組み）で Supabase の `update` を呼び出す
-- `completed`（完了済みかどうか）が `true` のときはテキストに打ち消し線を表示する
-
-```tsx
-// TodoItem.tsx のイメージ（実際のコードは Claude Code が生成します）
-const handleToggle = async () => {
-  const supabase = createClient();
-  await supabase
-    .from("todos")
-    .update({ completed: !todo.completed })
-    .eq("id", todo.id);
-};
+```bash
+npm run build
 ```
 
-#### 動作確認方法
-
-1. 一覧に表示された TODO のチェックボックスをクリックする
-2. チェックが入り、テキストに打ち消し線が表示されることを確認する
-3. Supabase の `todos` テーブルで `completed` カラムが `true` に変わっていることを確認する
-4. もう一度クリックすると元に戻ることを確認する
-
-[screenshot: チェック済みの TODO がグレーアウトされ、打ち消し線が表示されている様子]
+> **注意:** ビルドエラーが出た場合は、Claude Code に以下のように指示してください。
+>
+> `npm run build` でエラーが出た。エラーメッセージを読んで修正して
 
 #### 確認ポイント
-
-- [ ] チェックボックスをクリックすると視覚的に変化する（打ち消し線など）
-- [ ] Supabase の `completed` カラムが更新される
-- [ ] ページをリロードしても完了状態が保持されている
-
----
-
-### Phase D: 削除機能（TODO を消す）
-
-#### Claude Code への指示
-
-> TodoItem の削除ボタンをクリックすると、その TODO が Supabase から削除されて一覧からも消えるようにして
-
-#### 実装で変わるファイルの概要
-
-**`src/components/TodoItem.tsx`**
-
-- 削除ボタンの `onClick` ハンドラで Supabase の `delete` を呼び出す
-- 削除後に親コンポーネントに通知して一覧を更新する（コールバック props）
-
-```tsx
-// TodoItem.tsx のイメージ（実際のコードは Claude Code が生成します）
-const handleDelete = async () => {
-  const supabase = createClient();
-  await supabase.from("todos").delete().eq("id", todo.id);
-  onDelete(todo.id); // 親コンポーネントに通知
-};
-```
-
-#### 動作確認方法
-
-1. 削除ボタンをクリックする
-2. 該当の TODO が一覧から消えることを確認する
-3. Supabase の `todos` テーブルから行が削除されていることを確認する
-
-[screenshot: 削除ボタンをクリックした後、一覧から TODO が消えた様子]
-
-#### 確認ポイント
-
-- [ ] 削除ボタンをクリックすると一覧からリアルタイムに消える
-- [ ] Supabase の `todos` テーブルから行が削除されている
-- [ ] 削除後も他の TODO は影響を受けない
-
-#### Step 1 完了時の確認ポイント
 
 - [ ] TODO の追加が動作する
 - [ ] TODO の一覧表示が動作する
@@ -300,29 +407,25 @@ const handleDelete = async () => {
 - [ ] TODO の削除が動作する
 - [ ] `npm run build` がエラーなく完了する
 
-```bash
-npm run build
-```
-
 ---
 
-## Step 2: SPA 認証を組み込む（1時間）
+## Step 4: Google ログインを組み込む（40分）
 
 ### このステップの目的
 
-「誰でも TODO を見られる」状態から「ログインしたユーザーだけが自分の TODO を操作できる」状態に変えます。
+「誰でも TODO を操作できる」状態から「Google ログインした自分だけが操作できる」状態に変えます。認証（誰がアクセスしているかの確認）は Google ログインのみに絞ります。
 
-> **SPA（エスパー）とは？** Single Page Application の略です。ページ遷移のたびに画面全体を読み込み直すのではなく、必要な部分だけを動的に更新するアプリの仕組みです。現代のウェブアプリのほとんどがこの方式を採用しています。
+> **なぜ認証が必要なの？** 今のアプリは「鍵のかかっていない家」の状態です。誰でも入れて、他の人のデータを見たり削除したりできてしまいます。Google ログインを組み込むことで「この人は本当に自分のアカウントの持ち主か」を確認できるようになります。
 
-> **体験:** ここでは Claude Code の「エージェント（Task tool）」機能を使います。「SPA 認証を実装して」という大きな指示を出すと、Claude Code が内部でタスクを分解してサブエージェントを使いながら実装を進めます。最初に手順を確認してみましょう。
+> **なぜ Google ログインを選ぶの？** パスワードを別途管理する必要がなく、ほとんどの人が既に使っている Google アカウントでそのままログインできます。「Google でログイン」ボタン 1 つでいい、という体験のシンプルさが非エンジニアにとっても最も馴染みがあります。
 
 ---
 
-### Phase A: 計画を立てる（エージェント活用）
+### Phase A: Claude Code に計画を立てさせる
 
-まず Claude Code に「まず何をすべき？」と聞いてみます。
+まず Claude Code に「まず何をすべきか」を聞いてみます。タスクを分解して手順を提示する体験です。
 
-> Supabase Auth で SPA ベースのログイン認証を実装したい。まず何をすべきか手順を教えて
+> Supabase Auth で Google ログインを実装したい。まず何をすべきか手順を教えて
 
 Claude Code から以下のような計画が返ってきます。
 
@@ -331,50 +434,104 @@ Claude Code から以下のような計画が返ってきます。
 **期待される応答の概要:**
 
 ```
-Supabase Auth の SPA 認証を実装するには、以下の手順が必要です。
+Google ログインを実装するには、以下の手順が必要です。
 
-1. @supabase/ssr パッケージのインストール
-2. Supabase クライアントの設定（ブラウザ用・サーバー用）
-3. ログイン・サインアップ画面の作成
-4. 認証状態に基づくリダイレクト処理（Middleware）
-5. ログアウト機能の追加
-6. RLS（Row Level Security）の設定（自分の TODO のみ操作可能に）
+1. Supabase ダッシュボードで Google Provider を有効化
+2. @supabase/ssr パッケージのインストール
+3. Supabase クライアントの設定（ブラウザ用・サーバー用）
+4. ログイン画面の作成（Google でログインボタンのみ）
+5. 認証状態に基づくリダイレクト処理（Middleware）
+6. OAuth コールバック処理の実装
+7. RLS の設定（自分の TODO のみ操作可能に）
 
-まず @supabase/ssr をインストールしてよいですか？
+まず Supabase ダッシュボードの設定から始めましょうか？
 ```
 
 ---
 
-> **体験:** Claude Code が大きなタスクを小さなステップに分解しました。「まず何をすべきか」と聞くことで、実装前に全体の見通しを立てることができます。チームメンバーに相談するような感覚で使えます。
+> **体験:** Claude Code が大きなタスクを小さなステップに分解しました。「まず何をすべきか」と聞くことで、全体の見通しを立ててから進めることができます。
 
-[screenshot: Claude Code がタスクを段階的に説明している様子]
+[screenshot: Claude Code がタスクを段階的に提示している様子]
 
 ---
 
-### Phase B: パッケージインストール
+### Phase B: Supabase で Google Provider を有効化
 
-#### Claude Code への指示
+Google ログインを使えるようにするには、Supabase 側で「Google を使ったログインを許可する」設定が必要です。
 
-> @supabase/ssr をインストールして
+#### 手順
 
-```bash
-# Claude Code が実行するコマンド
-npm install @supabase/ssr
+1. Supabase ダッシュボード（`https://supabase.com/dashboard`）を開く
+2. 左サイドバーの「Authentication」をクリック
+3. 「Providers」タブを選択
+4. 「Google」を見つけてクリックして展開する
+
+[screenshot: Supabase の Authentication → Providers 画面。Google の行が見えている]
+
+5. 「Enable Sign in with Google」のトグルをオンにする
+
+[screenshot: Google Provider が有効化されている様子]
+
+6. 「Redirect URLs」の欄に以下を追加する
+
+```
+http://localhost:3000/auth/callback
 ```
 
-> **`@supabase/ssr` って何？** SSR（サーバーサイドレンダリング）対応の Supabase ライブラリです。Next.js の App Router は「サーバー側でも動く」という特性があり、通常の Supabase クライアントではうまく認証情報を扱えません。このパッケージがその問題を解決してくれます。
+> **Redirect URL（リダイレクト URL）って何？** Google でログインが完了したあと、「どの URL に戻るか」を指定する設定です。今は開発環境なので `localhost:3000` を指定しています。
+
+7. 「Save」ボタンをクリックして保存する
+
+> **補足:** Supabase は「Supabase OAuth」というデフォルトの設定を提供しています。Google Cloud Console で自前の OAuth クライアントを取得する必要はなく、この設定だけで Google ログインが使えます（Supabase が仲介してくれます）。
 
 #### 確認ポイント
 
-- [ ] `package.json` の dependencies に `@supabase/ssr` が追加されている
+- [ ] Supabase の Authentication → Providers で Google が有効になっている
+- [ ] Redirect URL に `http://localhost:3000/auth/callback` が追加されている
+
+#### Google ログインの全体の流れ
+
+「Google でログイン」ボタンを押してからアプリに戻るまでの流れは以下の通りです。
+
+1. アプリの「Google でログイン」ボタンをクリックする
+2. Google のサイトに自動で移動する
+3. Google アカウントを選んで「許可」する
+4. 自動でアプリに戻ってくる（`/auth/callback` を経由）
+5. ログイン完了 → TODO リスト画面が表示される
+
+この流れを実現するために、Phase C で認証フローのコードを作ります。
 
 ---
 
-### Phase C: 認証フローの実装
+### Phase C: @supabase/ssr のインストールと認証フロー実装
 
-#### Claude Code への指示
+#### @supabase/ssr って何？
 
-> Supabase Auth で SPA ベースのログイン認証を実装して。メールアドレスとパスワードでログイン・サインアップできるようにして。未ログインの場合は /login にリダイレクトして
+> **`@supabase/ssr` とは？** Next.js のような「サーバー側でも動く」フレームワークに対応した Supabase の認証ライブラリです。
+>
+> 旧バージョンの `@supabase/auth-helpers` は 2025 年 1 月に廃止されました。`@supabase/ssr` がその後継パッケージで、2025 年以降の推奨パターンです。
+>
+> この新しいライブラリは「Cookie ベース認証」を採用しています。Cookie（クッキー）とはブラウザが保存する小さなメモのようなもので、「このユーザーはログイン済み」という情報をページをまたいで保持するために使われます。
+
+#### パッケージのインストール
+
+Claude Code に以下を指示します。
+
+> @supabase/ssr をインストールして
+
+Claude Code がターミナルで自動実行します。自分でコマンドを入力する必要はありません。
+
+Claude Code が以下のコマンドを実行します。
+
+```bash
+npm install @supabase/ssr
+```
+
+#### 認証フローの実装
+
+続けて以下を指示します。
+
+> Supabase Auth の Google ログインを実装して。@supabase/ssr を使って。未ログインの場合は /login にリダイレクトして
 
 [screenshot: Claude Code が複数のファイルを同時に生成・編集している様子]
 
@@ -388,64 +545,42 @@ Claude Code は以下のファイルを作成・更新します。
 
 **`src/lib/supabase/server.ts`（作成）**
 
-サーバーサイド（Server Components、Route Handlers）用の Supabase クライアント。
+サーバーサイド用の Supabase クライアント。Cookie から認証情報を読み取る。
 
 **`src/middleware.ts`（作成）**
 
 > **Middleware（ミドルウェア）って何？** リクエストが来るたびに「まず通る関所」のようなものです。ユーザーがどのページを開こうとしても、まずここを通ります。「ログインしていますか？していなければログイン画面へどうぞ」という判断をここで行います。
 
-```typescript
-// middleware.ts のイメージ（実際のコードは Claude Code が生成します）
-import { createServerClient } from "@supabase/ssr";
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-
-export async function middleware(request: NextRequest) {
-  // セッションを確認して未認証なら /login にリダイレクト
-}
-
-export const config = {
-  matcher: ["/((?!login|_next/static|_next/image|favicon.ico).*)"],
-};
-```
+Middleware がないと、未ログインのユーザーが直接 `http://localhost:3000` にアクセスしてメイン画面を開けてしまいます。関所がなければ誰でも素通りできる、という状態です。
 
 **`src/app/login/page.tsx`（作成）**
 
-ログイン・サインアップ画面。
-
-**`src/app/auth/callback/route.ts`（作成）**
-
-OAuth（外部サービスを使ったログイン）や Magic Link（メールのリンクでログインする方式）の認証コールバックを処理するルート。
-
-#### ログイン・サインアップ画面の構成
-
-ログイン画面には以下の要素が含まれます。
+ログイン画面。「Google でログイン」ボタンのみのシンプルな構成。
 
 ```
 ┌─────────────────────────┐
+│                         │
 │       TODO アプリ        │
 │                         │
-│  メールアドレス           │
-│  [___________________]  │
+│  [G]  Google でログイン  │
 │                         │
-│  パスワード              │
-│  [___________________]  │
-│                         │
-│  [    ログイン    ]      │
-│                         │
-│  アカウントをお持ちでない方 │
-│  [  サインアップ  ]      │
 └─────────────────────────┘
 ```
 
-[screenshot: ブラウザに表示されたログイン画面]
+**`src/app/auth/callback/route.ts`（作成）**
+
+Google ログイン完了後の処理を受け取るルート。
+
+[screenshot: ブラウザに表示されたログイン画面。「Google でログイン」ボタンだけが中央にある]
 
 #### 確認ポイント
 
-- [ ] `http://localhost:3000` にアクセスすると `/login` にリダイレクトされる
-- [ ] ログイン画面にメールアドレスとパスワードの入力欄がある
+- [ ] `package.json` に `@supabase/ssr` が追加されている
 - [ ] `src/middleware.ts` が作成されている
 - [ ] `src/app/login/page.tsx` が作成されている
+- [ ] `src/app/auth/callback/route.ts` が作成されている
+- [ ] `http://localhost:3000` にアクセスすると `/login` にリダイレクトされる
+- [ ] ログイン画面に「Google でログイン」ボタンが表示されている
 
 #### トラブルシュート
 
@@ -455,105 +590,33 @@ Middleware のマッチャー設定で `/login` 自体が対象になってい�
 
 > middleware.ts の matcher が /login を除外しているか確認して。無限リダイレクトが起きている
 
----
+**Google ログインボタンを押しても何も起きない場合:**
 
-### Phase D: 認証状態管理とログアウト機能
-
-#### Claude Code への指示
-
-> ログインしたら TODO リスト画面が表示されるようにして。ヘッダーにログアウトボタンを追加して、クリックするとログアウトしてログイン画面に戻るようにして
-
-#### 実装で変わるファイルの概要
-
-**`src/components/Header.tsx`（更新）**
-
-- ログアウトボタンを追加
-- ログインユーザーのメールアドレスを表示（任意）
-
-**`src/app/page.tsx`（更新）**
-
-- 認証済みユーザーの情報を取得。未認証の場合は Middleware がリダイレクトを担当するため、ページ自体はシンプルに保つ
-
-```tsx
-// Header.tsx のイメージ（実際のコードは Claude Code が生成します）
-"use client";
-import { createClient } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
-
-export default function Header() {
-  const router = useRouter();
-  const supabase = createClient();
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.push("/login");
-  };
-
-  return (
-    <header>
-      <h1>TODO アプリ</h1>
-      <button onClick={handleLogout}>ログアウト</button>
-    </header>
-  );
-}
-```
-
-#### 確認ポイント
-
-- [ ] ログイン後に TODO リスト画面が表示される
-- [ ] ヘッダーにログアウトボタンがある
-- [ ] ログアウトボタンをクリックするとログイン画面に戻る
-- [ ] ログアウト後に TODO リスト画面（`/`）に直接アクセスすると `/login` にリダイレクトされる
+> /auth/callback/route.ts のコードを確認して。OAuth のコールバック処理が正しく実装されているか確認して
 
 ---
 
-### Phase E: RLS（Row Level Security）の設定
+### Phase D: RLS の設定
 
-#### このフェーズの目的
+#### なぜ RLS が重要なのか — 実際の事例
 
-現在の状態では、ログインしていれば全ユーザーの TODO が見えてしまいます。RLS を設定することで「自分の TODO だけが見える」ようにします。
+2025 年、RLS（Row Level Security。行レベルのセキュリティ）の設定が不十分だったことが原因で、170 以上のアプリが情報漏洩を起こしたという報告があります。「ログインさえしていれば、他人のデータも読めてしまう」という状態が放置されていたのです。
 
-> **改めて RLS のイメージ:** マンションのポストのようなものです。101号室の住人は自分のポスト（101）にしかアクセスできない。他の部屋のポストは見えない・触れない。これが RLS です。
+RLS はデータベースの「内側の鍵」です。
 
-> **体験:** セキュリティの設定も Claude Code に頼めます。「自分の TODO だけ見えるようにして」という要件を伝えるだけで、Supabase の RLS ポリシーの SQL を生成してくれます。
+- ドア（Google ログイン）だけでは「家の中には入れない」ことは保証できます
+- でも家の中の「どの部屋に入れるか」は RLS が制御します
+- RLS がなければ、ログインした全員が全員のデータを読み書きできてしまいます
+
+> **マンションのたとえ:** ログイン認証は「マンションの玄関オートロック」です。RLS は「各部屋のドアの鍵」です。玄関を通れても、自分の部屋（101 号室）以外の部屋は開けられない、という仕組みが RLS です。
 
 #### Claude Code への指示
 
-> Supabase の todos テーブルに RLS を設定して。ログインしているユーザーが自分の TODO だけ作成・読み取り・更新・削除できるようにして
+> todos テーブルに RLS を設定して。ログインユーザーが自分の TODO だけ操作できるようにして
 
-#### 期待される SQL ポリシー
+Claude Code が「SELECT / INSERT / UPDATE / DELETE」それぞれのポリシーを含む SQL を生成します。生成された SQL を Supabase の SQL Editor にコピーして実行するよう指示されます。
 
-Claude Code は以下のような SQL を生成します。Supabase の SQL Editor で実行するよう指示されます。
-
-```sql
--- RLS を有効化
-ALTER TABLE todos ENABLE ROW LEVEL SECURITY;
-
--- todos テーブルに user_id カラムを追加（未追加の場合）
-ALTER TABLE todos ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES auth.users(id);
-
--- SELECT ポリシー: 自分の TODO のみ読み取り可能
-CREATE POLICY "Users can view their own todos"
-  ON todos FOR SELECT
-  USING (auth.uid() = user_id);
-
--- INSERT ポリシー: 自分の user_id で TODO を追加可能
-CREATE POLICY "Users can insert their own todos"
-  ON todos FOR INSERT
-  WITH CHECK (auth.uid() = user_id);
-
--- UPDATE ポリシー: 自分の TODO のみ更新可能
-CREATE POLICY "Users can update their own todos"
-  ON todos FOR UPDATE
-  USING (auth.uid() = user_id);
-
--- DELETE ポリシー: 自分の TODO のみ削除可能
-CREATE POLICY "Users can delete their own todos"
-  ON todos FOR DELETE
-  USING (auth.uid() = user_id);
-```
-
-> **注意:** 上記の SQL はイメージです。Claude Code が生成した SQL をそのまま使ってください。`todos` テーブルに `user_id` カラムがすでに存在する場合は `ADD COLUMN` の行は不要です。
+> **`auth.uid()`（オース ユーアイディー）って何？** Supabase がログイン中のユーザーの ID を返す関数です。「このリクエストを送ってきたのは誰か」を Supabase が管理するので、クライアント（ブラウザ）から送られてきた `user_id` を信用する必要がありません。なぜなら、悪意のある人がブラウザで値を書き換えて「自分は別の人です」と偽ることを防げるからです。`auth.uid()` はサーバー側で管理されているため、ブラウザからは書き換えられません。これが重要なセキュリティポイントです。
 
 [screenshot: Supabase の SQL Editor に RLS ポリシーの SQL が入力されている様子]
 
@@ -566,77 +629,57 @@ CREATE POLICY "Users can delete their own todos"
 
 [screenshot: Supabase の SQL Editor でポリシーが正常に実行された様子]
 
-#### user_id を保存するように AddTodoForm を更新する
+#### TODO 追加時に user_id を保存するよう更新する
 
-RLS を設定したら、TODO 追加時に `user_id`（ユーザーを識別する番号）を保存するよう修正が必要です。
+Chapter 4 で `todos` テーブルを作ったとき、`user_id` というカラム（「誰のデータか」を記録する列）も一緒に作っていましたね。ここでようやくそのカラムが活躍します。TODO を追加するときに、ログインユーザーの `user_id` も一緒に保存するよう修正します。
 
 > AddTodoForm で TODO を追加するとき、ログインユーザーの user_id も一緒に保存するようにして
-
-```tsx
-// AddTodoForm.tsx のイメージ（実際のコードは Claude Code が生成します）
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  const supabase = createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  await supabase.from("todos").insert({
-    title: text,
-    user_id: user?.id,
-  });
-  setText("");
-};
-```
 
 #### 確認ポイント
 
 - [ ] Supabase の `todos` テーブルで RLS が有効になっている
 - [ ] Supabase の Authentication → Policies で 4 つのポリシーが表示されている
 - [ ] TODO 追加時に `user_id` が保存されている
-- [ ] 別のユーザーでログインすると、それぞれ自分の TODO だけが表示される（Step 3 で確認）
+- [ ] ログイン → TODO 追加 → ログアウト → 再ログインしても自分の TODO だけ表示される
 
 #### トラブルシュート
 
 **RLS 設定後に TODO が表示されなくなった場合:**
 
-RLS が有効になったことで、`user_id` が設定されていない古い todos が取得できなくなっている可能性があります。Supabase の Table Editor で古い todos を削除するか、`user_id` を設定してください。また、SELECT ポリシーが正しく設定されているか確認します。
+RLS が有効になったことで、`user_id` が設定されていない古い todos が取得できなくなっています。Supabase の Table Editor で古いデータを削除するか、`user_id` を手動で設定してください。
 
 > Supabase の todos テーブルで RLS 設定後にデータが取れなくなった。SELECT ポリシーが正しいか確認して
 
 **「permission denied for table todos」エラーが出る場合:**
 
-RLS が有効なのにポリシーが設定されていない状態です。上記の SQL を Supabase の SQL Editor で実行してください。
+RLS が有効なのにポリシーが設定されていない状態です。Claude Code が生成した SQL を Supabase の SQL Editor で実行してください。
 
 ---
 
-## Step 3: 通し確認 & 初期開発コミット（30分）
+## Step 5: 通し確認 & コミット（20分）
 
 ### テストシナリオ
 
-以下のチェックリストを上から順番に実行して、アプリが正常に動作することを確認します。
+以下の 8 つのシナリオを上から順番に実行して、アプリが正常に動作することを確認します。
 
-> **注意:** 開発サーバーが起動していない場合は、別のターミナルで `npm run dev` を実行してください。Claude Code のターミナルとは別のターミナルを使うことを推奨します。
-
----
-
-#### シナリオ 1: サインアップで新規ユーザーを作成する
-
-- [ ] `http://localhost:3000` にアクセスする → `/login` にリダイレクトされる
-- [ ] 「サインアップ」ボタンまたはリンクをクリックする
-- [ ] 新しいメールアドレスとパスワード（8文字以上）を入力して送信する
-- [ ] サインアップ確認メールが届く（または自動ログインされる）
-
-[screenshot: サインアップ成功後の画面。または確認メールの案内が表示されている様子]
-
-> **注意:** Supabase のデフォルト設定では「メール確認」が必要です。確認メールのリンクをクリックしてから次のステップに進んでください。
->
-> 開発中にメール確認を無効にする場合: Supabase ダッシュボード → Authentication → Settings → 「Confirm email」をオフ
+> **注意:** 開発サーバーが起動していない場合は、別のターミナルで `npm run dev` を実行してください。
 
 ---
 
-#### シナリオ 2: ログインする
+#### シナリオ 1: 未ログイン状態でリダイレクトされる
 
-- [ ] メールアドレスとパスワードを入力して「ログイン」をクリックする
-- [ ] TODO リスト画面（`http://localhost:3000`）に遷移する
-- [ ] ヘッダーにログアウトボタンが表示されている
+- [ ] `http://localhost:3000` にアクセスすると `/login` にリダイレクトされる
+- [ ] ログイン画面に「Google でログイン」ボタンが表示されている
+
+[screenshot: /login ページに「Google でログイン」ボタンだけが表示されている様子]
+
+---
+
+#### シナリオ 2: Google でログインする
+
+- [ ] 「Google でログイン」ボタンをクリックすると Google の認証画面が開く
+- [ ] Google アカウントを選択してログインすると TODO リスト画面に遷移する
+- [ ] ヘッダーにアプリタイトルとログアウトボタンが表示されている
 
 [screenshot: ログイン後の TODO リスト画面。ヘッダーにログアウトボタンが表示されている]
 
@@ -669,6 +712,7 @@ RLS が有効なのにポリシーが設定されていない状態です。上�
 
 - [ ] 「買い物に行く」の削除ボタンをクリックする
 - [ ] 一覧から「買い物に行く」が消える
+- [ ] Supabase の `todos` テーブルからも行が削除されている
 
 ---
 
@@ -680,13 +724,24 @@ RLS が有効なのにポリシーが設定されていない状態です。上�
 
 ---
 
-#### シナリオ 8: 再ログインで TODO が残っている
+#### シナリオ 8: 再ログインで TODO が保持されている
 
-- [ ] 同じメールアドレスとパスワードで再ログインする
-- [ ] シナリオ 3 で追加した TODO は削除したので、一覧が空になっている（正常）
-- [ ] 新しい TODO を追加して、ログアウト → ログインを繰り返してもデータが保持されることを確認する
+- [ ] 同じ Google アカウントで再ログインする
+- [ ] 以前追加した TODO が表示されている（削除した TODO は表示されない）
 
-[screenshot: 再ログイン後に TODO が表示されている様子]
+[screenshot: 再ログイン後に TODO が保持されている様子]
+
+---
+
+#### シナリオ 9: 別のアカウントで確認する（余裕があれば）
+
+別の Google アカウントでログインして、先ほど追加した TODO が見えないことを確認しましょう。
+
+- [ ] 別の Google アカウントでログインする（別のブラウザまたはシークレットウィンドウを使う）
+- [ ] 先ほど追加した TODO が表示されないことを確認する
+- [ ] 別アカウントで新しい TODO を追加しても、元のアカウントには表示されないことを確認する
+
+> **体験:** これが RLS の効果です。同じアプリを使っていても、自分のデータしか見えません。マンションの各部屋の鍵がしっかりかかっていることを確認できました。
 
 ---
 
@@ -708,7 +763,8 @@ npm run build
 
 Route (app)                  Size     First Load JS
 ┌ ○ /                        ...
-└ ○ /login                   ...
+├ ○ /login                   ...
+└ ○ /auth/callback            ...
 ```
 
 > **注意:** ビルドエラーが出た場合は、Claude Code に以下のように指示してください。
@@ -721,6 +777,15 @@ Route (app)                  Size     First Load JS
 
 テストとビルドが通ったら、作業内容をコミットします。
 
+#### 事前確認
+
+```bash
+# main ブランチにいないことを確認する
+git branch --show-current
+```
+
+`feature/todo-app`（または作業ブランチ名）と表示されれば OK です。`main` と表示された場合はメンターに声をかけてください。
+
 #### Claude Code への指示
 
 > 今回の変更をコミットして。Conventional Commits 形式で
@@ -731,14 +796,14 @@ Claude Code は以下のような手順でコミットを行います。
 # 変更ファイルを確認
 git status
 
-# 変更をステージング
-git add .
+# 変更をステージング（.env.local は含めない）
+git add src/ package.json package-lock.json
 
 # コミット（Claude Code がメッセージを自動生成）
-git commit -m "feat: implement todo CRUD and Supabase Auth with RLS"
+git commit -m "feat: implement todo app with CRUD and Google authentication"
 ```
 
-> **Conventional Commits って何？** コミットメッセージの「書き方のルール」です。`feat:`（新機能）、`fix:`（バグ修正）、`docs:`（ドキュメント）など、変更の種類をプレフィックス（先頭の文字列）で表現します。例: `feat: ログイン機能を追加`
+> **Conventional Commits って何？** コミットメッセージの「書き方のルール」です。`feat:`（新機能）、`fix:`（バグ修正）、`docs:`（ドキュメント）など、変更の種類をプレフィックス（先頭の文字列）で表現します。
 
 > **体験:** 「コミットして」と一言指示するだけで、Claude Code は変更内容を把握した上で適切な Conventional Commits 形式のメッセージを生成します。何をコミットするかの説明を別途書く必要はありません。
 
@@ -748,7 +813,19 @@ git commit -m "feat: implement todo CRUD and Supabase Auth with RLS"
 
 - [ ] `git log --oneline` でコミットが記録されている
 - [ ] コミットメッセージが `feat:` で始まる Conventional Commits 形式になっている
-- [ ] `git branch --show-current` で `feature/initial-development` ブランチにいることを確認
+- [ ] `git branch --show-current` で `feature/todo-app` ブランチにいることを確認
+
+---
+
+### CLAUDE.md の随時追記セクションを更新する
+
+このチャプターで行った作業を CLAUDE.md の「随時追記」セクションに記録しましょう。Claude Code に以下のように指示します。
+
+> CLAUDE.md の随時追記セクションに、以下を追記して:
+> - `@supabase/ssr` を使って Google ログインを実装した
+> - RLS ポリシーを設定した（自分の TODO のみ操作可能）
+
+> **体験:** プロジェクトを進めるたびに気づいたことを CLAUDE.md に記録する習慣が、Claude Code を「育てる」コツです。次に作業するとき、Claude Code はこの記録を読んで文脈を理解してくれます。
 
 ---
 
@@ -756,12 +833,15 @@ git commit -m "feat: implement todo CRUD and Supabase Auth with RLS"
 
 このチャプターの全作業が終わったら、以下をまとめて確認してください。
 
-- [ ] TODO の追加・一覧表示・完了切り替え・削除がすべて動作する
-- [ ] ログイン・サインアップ・ログアウトが動作する
-- [ ] 未認証の場合に `/login` にリダイレクトされる
+- [ ] Plan Mode で設計を確認してから実装を始めた
+- [ ] プラグイン・スキルをインストールして Claude Code をパワーアップした
+- [ ] 1 行の指示で複数のコンポーネントファイルが生成された
+- [ ] 1 つの指示で TODO の追加・表示・完了切り替え・削除がすべて動作する
+- [ ] `http://localhost:3000` にアクセスすると `/login` にリダイレクトされる
+- [ ] Google でログイン・ログアウトが動作する
 - [ ] RLS が設定されており、自分の TODO のみ操作できる
 - [ ] `npm run build` がエラーなく完了する
-- [ ] `feature/initial-development` ブランチでコミットされている
+- [ ] `feature/todo-app` ブランチでコミットされている
 
 ---
 
@@ -769,16 +849,14 @@ git commit -m "feat: implement todo CRUD and Supabase Auth with RLS"
 
 | 機能 | 体験した内容 |
 |------|-------------|
-| **統合的な指示** | 「画面とデータベースを同時に実装して」という指示で、UI と DB 操作を一気に実装できることを体験した |
-| **エージェント活用** | 「まず何をすべき？」と聞くことで、Claude Code がタスクを分解して手順を提示することを体験した |
-| **タスク分解** | 大きな実装タスク（SPA 認証）を Claude Code が自動的に段階に分解して進めることを体験した |
-| **環境変数管理** | `.env.local` の Supabase 設定を活用して、認証フローが動くことを体験した |
-| **RLS 設定** | SQL を直接書かなくても、要件を伝えるだけで Supabase のセキュリティポリシーを設定できることを体験した |
+| **Vibe Coding** | AI に自然言語で指示するだけでアプリが形になることを実感した。これがまさに今やっていることだと気づいた |
+| **Plan Mode** | `Shift+Tab × 2` で設計図を先に作り、確認してから実装する習慣を身につけた |
+| **プラグイン・スキル** | skills.sh から実際のスキルをインストールして Claude Code を強化し、Supabase 公式やコミュニティの知識を活用した |
+| **マルチファイル生成** | 1 行の指示で複数のコンポーネントが同時に生成されることを体験した |
+| **統合的な指示** | 「CRUD をまとめて実装して」という 1 つの指示で、追加・表示・完了・削除を一気に実装できることを体験した |
+| **タスク分解** | 「まず何をすべき？」と聞くことで、Claude Code が大きなタスクを段階的に分解することを体験した |
+| **RLS** | 2025 年の実際の漏洩事例を通じて、データセキュリティの重要性を実感した |
 
 ---
 
-## 次のチャプターへ
-
-初期開発が完成しました。TODO アプリとして一通りの機能が動く状態になっています。
-
-次の **Chapter 6: Git ワークフロー** では、「動くアプリをさらに良くする」プロセスを体験します。Claude Code にコードのレビューをしてもらい、問題点を修正したり、見た目を改善したりします。ブランチを使った安全な開発の進め方も身につきます。
+次のチャプターへ: [Chapter 6: 修正・改善](./chapter-06-git-workflow.md)
