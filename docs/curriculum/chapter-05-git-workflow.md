@@ -1,9 +1,3 @@
----
-title: "Chapter 5: Issue とワークツリー"
-parent: カリキュラム
-nav_order: 5
----
-
 # Chapter 5: Issue とワークツリー — 修正・改善を習慣にする
 
 **所要時間**: 約 1.5 時間
@@ -26,12 +20,12 @@ nav_order: 5
 現実のプロジェクトでは、アプリが動き始めた後も「ここを直したい」「これを改善したい」というアイデアが次々と出てきます。それを思いつくたびに直すのではなく、「Issue（イシュー）に記録してから、安全な場所で直してから取り込む」という一定のサイクルを回すことが大切です。
 
 > **Issue（イシュー）って何？** GitHub に備わっている「やること・気になること・バグ」を記録する付箋のようなものです。タスク管理ツールの「チケット」に近い概念です。Issue に番号が自動でつくため、どの修正がどのタスクに対応しているかを後からたどれます。
-
+>
 > **ワークツリーって何？** 「別の机を用意して、そこだけで作業する」仕組みです。`claude -w` というオプションをつけて Claude Code を起動すると、新しい机（ワークツリー）が自動で用意され、その机の上で Claude Code が動き始めます。本体（main ブランチ）の机には一切触れず、完成したら本体に取り込みます。
 
 **4 つのステップの流れ:**
 
-```
+```text
 Step 1: Claude Code で Issue を立てる             （15分）
 Step 2: ワークツリーを作って作業場所を分離する      （15分）
 Step 3: ワークツリー内で修正してコミットする        （40分）
@@ -53,12 +47,12 @@ Step 4: PR を作ってレビューしてマージする          （30分）
 ターミナルで以下を実行して、ログイン状態を確認してください。
 
 ```bash
-% gh auth status
+gh auth status
 ```
 
 期待される出力例（ログイン済みの場合）:
 
-```
+```text
 github.com
   ✓ Logged in to github.com as yourname (keyring)
   ✓ Git operations for github.com configured to use https protocol.
@@ -69,7 +63,7 @@ github.com
 ログインしていない場合:
 
 ```bash
-% gh auth login
+gh auth login
 ```
 
 指示に従ってブラウザで認証してください。わからなければメンターに声をかけてください。
@@ -77,7 +71,7 @@ github.com
 確認できたら、Claude Code を起動します。
 
 ```bash
-% claude
+claude
 ```
 
 ---
@@ -96,7 +90,7 @@ github.com
 
 Claude Code のチャット画面に、自分が直したいことを入力してください。以下はその例です。
 
-```
+```plaintext
 $ GitHub に Issue を立てて。タイトルは「例: ○○のとき△△が起きる」、内容は「[修正したい内容と理由を具体的に書く]」にして
 ```
 
@@ -108,7 +102,7 @@ $ GitHub に Issue を立てて。タイトルは「例: ○○のとき△△�
 
 Claude Code は以下のようなコマンドを自動で実行します。
 
-```
+```bash
 gh issue create \
   --title "[修正したいこと]" \
   --body "[詳細と理由]"
@@ -116,7 +110,7 @@ gh issue create \
 
 Issue が作成されると、URL と Issue 番号が表示されます。
 
-```
+```text
 https://github.com/yourname/yourrepo/issues/1
 ```
 
@@ -126,19 +120,19 @@ https://github.com/yourname/yourrepo/issues/1
 
 Claude Code を一度終了します。
 
-```
+```plaintext
 $ /exit
 ```
 
 ターミナルに戻ったら、以下を実行して Issue が作成されているか確認してください。
 
 ```bash
-% gh issue list
+gh issue list
 ```
 
 期待される出力例:
 
-```
+```text
 #1  [立てた Issue のタイトル]  about now
 ```
 
@@ -169,7 +163,7 @@ Git のワークツリーも同じです。main ブランチの内容はその�
 Claude Code を起動します。
 
 ```bash
-% claude -w fix_issue_1
+claude -w fix_issue_1
 ```
 
 > **`-w` オプションとは？** `--worktree` の略です。`claude -w fix_issue_1` と実行すると、`.claude/worktrees/fix_issue_1/` というフォルダが自動で作成され、その中で Claude Code が起動します。名前（`fix_issue_1` の部分）は自分でわかりやすい名前をつけてください。
@@ -178,13 +172,13 @@ Claude Code を起動します。
 
 Claude Code が起動したら、現在どの作業場所にいるかを確認しましょう。
 
-```
+```plaintext
 $ git branch --show-current
 ```
 
 期待される出力例:
 
-```
+```text
 fix_issue_1
 ```
 
@@ -194,19 +188,19 @@ fix_issue_1
 
 Claude Code を一度終了して、ターミナルからワークツリーの一覧を確認します。
 
-```
+```plaintext
 $ /exit
 ```
 
 ターミナルに戻ったら、以下を実行してください。
 
 ```bash
-% git worktree list
+git worktree list
 ```
 
 期待される出力例:
 
-```
+```text
 /home/yourname/myproject                                    abc1234 [main]
 /home/yourname/myproject/.claude/worktrees/fix_issue_1     def5678 [fix_issue_1]
 ```
@@ -214,7 +208,7 @@ $ /exit
 [screenshot: git worktree list の出力。メインと新しいワークツリーが並んでいる様子]
 
 > **2 つの机が並んでいる:** main（元の机）と fix_issue_1（作業用の新しい机）が同時に存在しています。それぞれ独立しているため、片方での変更がもう片方に影響することはありません。
-
+>
 > **注意:** `.claude/worktrees/` は Claude Code が自動で管理するフォルダです。直接触ったり削除したりしないようにしてください。
 
 #### 確認ポイント
@@ -232,18 +226,18 @@ $ /exit
 ここからは、ワークツリー内の Claude Code で作業します。先ほど `/exit` で終了した場合は、再度起動してください。
 
 ```bash
-% claude -w fix_issue_1
+claude -w fix_issue_1
 ```
 
 `claude -w fix_issue_1` で起動した Claude Code は、最初からワークツリー（新しい机）の上で動いています。元のプロジェクトフォルダ（main ブランチの机）には一切触れません。「今どの机で作業しているか」は以下で確認できます。
 
-```
+```plaintext
 $ git branch --show-current
 ```
 
 期待される出力:
 
-```
+```text
 fix_issue_1
 ```
 
@@ -257,7 +251,7 @@ fix_issue_1
 
 Issue #1 の内容に沿って修正を進めます。Claude Code に指示を出します。
 
-```
+```plaintext
 $ Issue #1 の修正をして。[修正してほしい内容を具体的に書く]
 ```
 
@@ -276,18 +270,19 @@ Claude Code がコードを修正します。
 修正が終わったら、ブラウザでアプリを開いて意図した通りに動くか確認します。
 
 確認ポイント:
+
 - [ ] 修正した機能が期待通りに動いている
 - [ ] 既存の機能が壊れていない
 
 確認できたらコミットします。
 
-```
+```plaintext
 $ 今の変更をコミットして。コミットメッセージは「fix: [修正内容を日本語で書く] (#1)」にして
 ```
 
 Claude Code は以下のようなコマンドを自動で実行します。
 
-```
+```bash
 git add .
 git commit -m "fix: [修正内容を日本語で書く] (#1)"
 ```
@@ -302,15 +297,16 @@ git commit -m "fix: [修正内容を日本語で書く] (#1)"
 
 追加で改善タスクがある場合は、引き続き同じワークツリー内で修正します。
 
-```
+```plaintext
 $ [追加で修正したい内容を書く]
 ```
 
 確認ポイント:
+
 - [ ] 修正した機能が期待通りに動いている
 - [ ] 既存の機能が壊れていない
 
-```
+```plaintext
 $ 今の変更をコミットして。コミットメッセージは「fix: [追加の修正内容を日本語で書く] (#1)」にして
 ```
 
@@ -320,13 +316,13 @@ $ 今の変更をコミットして。コミットメッセージは「fix: [追
 
 コミット履歴を確認します。
 
-```
+```plaintext
 $ git log --oneline
 ```
 
 期待される出力例:
 
-```
+```text
 a3f2c1d fix: [追加の修正内容] (#1)
 b8e4d2a fix: [最初の修正内容] (#1)
 c9f1b3e feat: [前のチャプターまでのコミット]
@@ -357,13 +353,13 @@ PR（プルリクエスト）は「この修正を本体（main ブランチ）�
 
 ワークツリー内の Claude Code で以下を入力します。
 
-```
+```plaintext
 $ ワークツリーの変更を push して、PR を作って。タイトルは「fix: [修正内容を日本語で書く]」、Issue #1 をクローズする形にして
 ```
 
 Claude Code は以下の操作を自動で行います。
 
-```
+```bash
 git push -u origin fix_issue_1
 
 gh pr create \
@@ -380,7 +376,7 @@ Closes #1"
 
 PR が作成されると URL が表示されます。
 
-```
+```text
 https://github.com/yourname/yourrepo/pull/2
 ```
 
@@ -390,19 +386,19 @@ https://github.com/yourname/yourrepo/pull/2
 
 PR の URL が表示されたら、Claude Code を一度終了してターミナルで確認します。
 
-```
+```plaintext
 $ /exit
 ```
 
 ターミナルに戻ったら、以下を実行してください。
 
 ```bash
-% gh pr list
+gh pr list
 ```
 
 期待される出力例:
 
-```
+```text
 #2  fix: [修正内容]  fix_issue_1  about now
 ```
 
@@ -417,8 +413,8 @@ PR を作ったら、すぐマージするのではなく、まず「意図し�
 ターミナルで以下を実行します。
 
 ```bash
-% gh pr view 2
-% gh pr diff 2
+gh pr view 2
+gh pr diff 2
 ```
 
 > **`gh pr diff` とは？** PR に含まれる変更の「前後の差分」を表示するコマンドです。`+`（追加された行）と `-`（削除された行）で変更内容が一覧できます。「意図した修正だけが含まれているか」をこの差分で確認します。
@@ -429,7 +425,7 @@ PR を作ったら、すぐマージするのではなく、まず「意図し�
 
 PR の URL をブラウザで開くと、GitHub の画面上でも差分を視覚的に確認できます。
 
-```
+```text
 https://github.com/yourname/yourrepo/pull/2
 ```
 
@@ -463,20 +459,20 @@ GitHub の「Files changed」タブをクリックすると、変更されたフ
 Claude Code を起動します。
 
 ```bash
-% claude -w fix_issue_1
+claude -w fix_issue_1
 ```
 
 > **`-w` で再起動しても大丈夫:** すでに `fix_issue_1` ワークツリーが存在する場合、同じ名前で `claude -w fix_issue_1` を実行すると既存のワークツリーで Claude Code が起動します。作業内容は消えていません。
 
 **2. 指摘内容を Claude Code に伝えて修正を依頼する**
 
-```
+```plaintext
 $ PR のレビューで「[指摘された内容]」を指摘されたので修正して
 ```
 
 例えば次のように伝えます：
 
-```
+```plaintext
 $ PR のレビューで「エラー時にもローディング表示が残ったままになる」と指摘されたので修正して
 ```
 
@@ -489,13 +485,13 @@ Claude Code がコードを修正します。
 - [ ] ブラウザでアプリを開き、指摘箇所が修正されていることを確認した
 - [ ] 既存の機能が壊れていない
 
-```
+```plaintext
 $ 今の変更をコミットして。コミットメッセージは「fix: [修正した内容] (#1)」にして
 ```
 
 **4. push すると同じ PR に自動で追加される**
 
-```
+```plaintext
 $ 修正を push して
 ```
 
@@ -515,13 +511,13 @@ push すると、追加コミットが自動的に PR #2 に反映されます�
 
 レビューで問題がなければ、ワークツリー内の Claude Code から main ブランチに取り込みます。
 
-```
+```plaintext
 $ PR #2 をマージして
 ```
 
 Claude Code は以下のコマンドを自動で実行します。
 
-```
+```bash
 gh pr merge 2 --merge
 ```
 
@@ -535,18 +531,18 @@ gh pr merge 2 --merge
 
 マージが完了したら、Claude Code を終了してターミナルで確認します。
 
-```
+```plaintext
 $ /exit
 ```
 
 ターミナルに戻ったら、以下を実行してください。
 
 ```bash
-% gh pr list
-% gh issue list
-% git checkout main
-% git pull
-% git log --oneline
+gh pr list
+gh issue list
+git checkout main
+git pull
+git log --oneline
 ```
 
 - [ ] PR がマージされている（`gh pr list` で表示されなくなっているか、ステータスが merged）
@@ -555,7 +551,7 @@ $ /exit
 
 期待される出力例:
 
-```
+```text
 e5f1a2b Merge pull request #2 from yourname/fix_issue_1
 a3f2c1d fix: [追加の修正内容] (#1)
 b8e4d2a fix: [最初の修正内容] (#1)
@@ -571,19 +567,19 @@ b8e4d2a fix: [最初の修正内容] (#1)
 マージが終わったワークツリーは不要になります。ターミナルで以下を実行して片付けます。
 
 ```bash
-% git worktree remove .claude/worktrees/fix_issue_1
-% git branch -d fix_issue_1
+git worktree remove .claude/worktrees/fix_issue_1
+git branch -d fix_issue_1
 ```
 
 片付いたか確認します。
 
 ```bash
-% git worktree list
+git worktree list
 ```
 
 期待される出力:
 
-```
+```text
 /home/yourname/myproject  abc1234 [main]
 ```
 
@@ -599,7 +595,7 @@ b8e4d2a fix: [最初の修正内容] (#1)
 
 ```bash
 # 再度ログインする
-% gh auth login
+gh auth login
 ```
 
 ブラウザで認証を求められます。「GitHub.com」→「HTTPS」→「Login with a web browser」を選択して進んでください。
@@ -610,10 +606,10 @@ b8e4d2a fix: [最初の修正内容] (#1)
 
 ```bash
 # 既存のワークツリー一覧を確認する
-% git worktree list
+git worktree list
 
 # 使われなくなった古いワークツリー情報を整理する
-% git worktree prune
+git worktree prune
 ```
 
 それでも解決しない場合はメンターに声をかけてください。
@@ -622,15 +618,15 @@ b8e4d2a fix: [最初の修正内容] (#1)
 
 ```bash
 # main ブランチを最新状態に更新する
-% git checkout main
-% git pull origin main
+git checkout main
+git pull origin main
 ```
 
 **コミットメッセージを間違えた場合:**
 
 まだ push していない場合は修正できます。ワークツリー内の Claude Code で以下を入力します。
 
-```
+```plaintext
 $ さっきのコミットメッセージを修正して。正しいメッセージは「fix: [正しい修正内容] (#1)」にして
 ```
 
@@ -644,7 +640,7 @@ Claude Code が `git commit --amend` で修正します。
 
 ### 週次サイクルのイメージ
 
-```
+```text
 月曜日: 気になることを Issue に記録する（5分）
          「ボタンの色が地味」「エラー時に画面が固まる」など
 
@@ -657,35 +653,35 @@ Claude Code が `git commit --amend` で修正します。
 
 **Issue を立てるとき（Claude Code 内で）:**
 
-```
+```plaintext
 $ GitHub に Issue を立てて。タイトルは「[修正したいこと]」、内容は「[詳細と理由]」にして
 ```
 
 **ワークツリーを作って作業を始めるとき（ターミナルで実行）:**
 
 ```bash
-% claude -w fix_issue_[番号]
+claude -w fix_issue_[番号]
 ```
 
 このコマンドひとつで「新しい机の用意」と「その机での Claude Code 起動」が完了します。
 
 **起動した Claude Code 内で修正を依頼するとき:**
 
-```
+```plaintext
 $ Issue #[番号] の修正をして。[修正内容の説明]
 ```
 
 **PR を作るとき（ワークツリーの Claude Code 内で）:**
 
-```
+```plaintext
 $ ワークツリーの変更を push して PR を作って。Issue #[番号] をクローズする形にして
 ```
 
 **片付けるとき（PR マージ後、ターミナルで実行）:**
 
 ```bash
-% git worktree remove .claude/worktrees/fix_issue_[番号]
-% git branch -d fix_issue_[番号]
+git worktree remove .claude/worktrees/fix_issue_[番号]
+git branch -d fix_issue_[番号]
 ```
 
 > **習慣化のコツ:** Issue を「大きなバグだけ立てるもの」と思う必要はありません。「ボタンの文字が読みにくい」「ローディング中に何も表示されない」といった小さな気づきもどんどん Issue に記録しましょう。記録することで「直すべきことの一覧」が育っていきます。

@@ -1,9 +1,3 @@
----
-title: "Chapter 2: Claude Code を整える"
-parent: カリキュラム
-nav_order: 2
----
-
 # Chapter 2: Claude Code を整える
 
 Chapter 1 でプロジェクトを作成し、GitHub にプッシュした状態から始めます。
@@ -74,7 +68,7 @@ CLAUDE.md（クロード・エムディー）は Claude Code が作業を始め�
 `~/.claude/` ディレクトリを作成し、CLAUDE.md を新規作成します。
 
 ```bash
-% mkdir -p ~/.claude
+mkdir -p ~/.claude
 ```
 
 `~/.claude/CLAUDE.md` をテキストエディタで開き（なければ新規作成）、以下の内容を書き込みます。
@@ -94,7 +88,7 @@ CLAUDE.md（クロード・エムディー）は Claude Code が作業を始め�
 プロジェクトルートでターミナルを開き、以下を入力します。
 
 ```bash
-% claude
+claude
 ```
 
 [screenshot: ターミナルで `claude` を入力してインタラクティブモードが起動した画面]
@@ -134,7 +128,7 @@ TODO アプリ。ユーザーがタスクを追加・完了・削除できる We
 
 Claude Code のプロンプトで以下を入力します。
 
-```
+```plaintext
 $ このプロジェクトは何のためのアプリですか？概要を教えてください。
 ```
 
@@ -151,7 +145,7 @@ $ このプロジェクトは何のためのアプリですか？概要を教え
 
 Step 1 が完了したら、Claude Code を終了します。
 
-```
+```plaintext
 $ /exit
 ```
 
@@ -170,15 +164,15 @@ $ /exit
 プラグインのインストールはターミナルで行います。Claude Code を終了した状態で、以下のコマンドを順番に実行してください。
 
 ```bash
-% claude plugin install claude-md-management
-% claude plugin install commit-commands
-% claude plugin install context7
+claude plugin install claude-md-management
+claude plugin install commit-commands
+claude plugin install context7
 ```
 
 インストールが完了したら、ターミナルで以下を実行して 3 つとも表示されることを確認しましょう。
 
 ```bash
-% claude plugin list
+claude plugin list
 ```
 
 ### インストールしたプラグインの紹介
@@ -192,7 +186,7 @@ $ /exit
 
 インストール後、Claude Code のプロンプトで以下のコマンドを試してみましょう。
 
-```
+```plaintext
 $ /claude-md-management:revise-claude-md
 ```
 
@@ -226,7 +220,7 @@ $ /claude-md-management:revise-claude-md
 
 インストール後は、Claude Code に普通に質問するだけで自動的に最新ドキュメントを参照します。
 
-```
+```plaintext
 $ Next.js の App Router について教えてください
 ```
 
@@ -244,7 +238,7 @@ $ Next.js の App Router について教えてください
 Claude Code を再起動します。
 
 ```bash
-% claude
+claude
 ```
 
 ### エージェントとは何か
@@ -259,7 +253,7 @@ Claude Code を再起動します。
 
 Claude Code のプロンプトで以下を入力します。
 
-```
+```plaintext
 $ /agents
 ```
 
@@ -312,7 +306,7 @@ tools:
 Claude Code を起動して、基本的な操作方法を確認しましょう。
 
 ```bash
-% claude
+claude
 ```
 
 ### 履歴の呼び出し
@@ -334,7 +328,7 @@ Claude Code のプロンプトでは、キーボードの上下矢印キー（�
 
 Claude Code のプロンプト内から、先頭に `!` をつけるとターミナルコマンドを直接実行できます。Claude Code を終了せずにコマンドを打てるので便利です。
 
-```
+```plaintext
 $ ! git status
 ```
 
@@ -342,7 +336,7 @@ $ ! git status
 
 試してみましょう:
 
-```
+```plaintext
 $ ! ls src/app/
 ```
 
@@ -352,7 +346,7 @@ $ ! ls src/app/
 
 Claude Code への指示の中で `@ファイル名` と書くと、そのファイルの内容を明示的に Claude Code に読み込ませることができます。
 
-```
+```plaintext
 $ @CLAUDE.md の内容を要約して
 ```
 
@@ -360,7 +354,7 @@ $ @CLAUDE.md の内容を要約して
 
 もう1つ試してみましょう:
 
-```
+```plaintext
 $ @package.json にはどんな依存パッケージが入っている？
 ```
 
@@ -379,7 +373,7 @@ $ @package.json にはどんな依存パッケージが入っている？
 
 Claude Code が起動している状態で、以下を入力してください。
 
-```
+```plaintext
 $ この章で追加・変更したファイルをすべてコミットして
 ```
 
@@ -387,7 +381,7 @@ Claude Code が変更を確認し、適切なコミットメッセージを作�
 
 コミットが完了したら、プッシュします。
 
-```
+```plaintext
 $ push して
 ```
 
@@ -415,7 +409,7 @@ $ push して
 
 ## ファイル構成（完了後）
 
-```
+```text
 ~/.claude/
 └── CLAUDE.md                          # ユーザースコープ（全プロジェクト共通の自分ルール）
 
@@ -436,13 +430,13 @@ $ push して
 
 ```bash
 # インストールの確認
-% npm list -g @anthropic-ai/claude-code
+npm list -g @anthropic-ai/claude-code
 
 # 再インストール
-% npm install -g @anthropic-ai/claude-code
+npm install -g @anthropic-ai/claude-code
 
 # バージョン確認
-% claude --version
+claude --version
 ```
 
 ### プラグインがインストールできない

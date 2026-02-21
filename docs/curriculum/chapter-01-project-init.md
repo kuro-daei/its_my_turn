@@ -1,9 +1,3 @@
----
-title: "Chapter 1: プロジェクト初期化"
-parent: カリキュラム
-nav_order: 1
----
-
 # Chapter 1: プロジェクト初期化
 
 **所要時間**: 約 1 時間
@@ -41,7 +35,7 @@ Claude Code を起動する前に、まずターミナルで Next.js プロジ�
 ターミナルを開いて、以下のコマンドを実行してください。
 
 ```bash
-% npx create-next-app todos
+npx create-next-app@latest todos --typescript --eslint --tailwind --src-dir --app --import-alias "@/*"
 ```
 
 > **`npx`（エヌピーエックス）とは?** Node.js に付属するコマンドで、パッケージを一時的にダウンロードして実行するツールです。`create-next-app` を事前にインストールしなくても、このコマンドだけで最新版を使えます。
@@ -78,8 +72,8 @@ Next.js の最新のページ管理方式です。`src/app/` フォルダの中�
 スキャフォールドが完了したら、生成されたフォルダに移動して Claude Code を起動します。
 
 ```bash
-% cd todos
-% claude
+cd todos
+claude
 ```
 
 > **`cd`（シーディー）とは?** Change Directory の略で、「ディレクトリ（フォルダ）を移動する」コマンドです。`cd todos` と実行すると、`todos` フォルダの中に入った状態になります。
@@ -90,7 +84,7 @@ Next.js の最新のページ管理方式です。`src/app/` フォルダの中�
 
 スキャフォールド後、主要なファイルは以下のようになります。
 
-```
+```text
 todos/
 ├── src/
 │   └── app/
@@ -105,7 +99,7 @@ todos/
 ```
 
 > **注意:** `node_modules/` フォルダが自動生成されますが、中に大量のファイルが入っています。Git には登録しないので心配しなくて大丈夫です（`.gitignore` で自動的に除外されます）。
-
+>
 > **`node_modules/` とは?** アプリが動くために必要な「材料（ライブラリ）」が入ったフォルダです。数千〜数万個のファイルが入ることもありますが、`package.json` があれば `npm install` コマンドで自動再生成できるので、Git には含めません。
 
 ### 確認ポイント
@@ -126,14 +120,14 @@ todos/
 確認してみましょう。Claude Code のセッション内で、あるいは別ターミナルからプロジェクトフォルダで以下を実行してください。
 
 ```bash
-% git log --oneline
+git log --oneline
 ```
 
 > **`git log --oneline`（ギット ログ）とは?** これまでの変更履歴（コミット）を一行ずつコンパクトに表示するコマンドです。「いつ、どんな変更があったか」の記録帳を見るイメージです。
 
 以下のように、すでにコミットが 1 件表示されるはずです。
 
-```
+```text
 a1b2c3d Initial commit
 ```
 
@@ -146,11 +140,11 @@ a1b2c3d Initial commit
 次に、`.gitignore`（ドット ギット イグノア）が正しく設定されているか確認します。
 
 ```bash
-% cat .gitignore
+cat .gitignore
 ```
 
 > **`.gitignore` とは?** Git に「このファイルは管理しなくていいよ」と伝えるリストです。たとえば `node_modules/`（大量の材料ファイル）は、リストに書いておけば Git の管理から外せます。
-
+>
 > **`cat`（キャット）コマンドとは?** ファイルの中身を画面に表示するコマンドです。`cat ファイル名` で中身を確認できます。
 
 `node_modules` や `.env.local` などが記載されていることを確認してください。`create-next-app` が自動生成する `.gitignore` には通常これらが含まれています。
@@ -168,7 +162,7 @@ Git はローカル（自分のパソコン）でバージョン管理するツ�
 以下のコマンドを実行してください。
 
 ```bash
-% gh repo create todos --private --source=. --remote=origin
+gh repo create todos --private --source=. --remote=origin
 ```
 
 | オプション | 意味 |
@@ -183,7 +177,7 @@ Git はローカル（自分のパソコン）でバージョン管理するツ�
 リポジトリが作成できたら、コードを GitHub に送ります。
 
 ```bash
-% git push -u origin main
+git push -u origin main
 ```
 
 > **`git push`（ギット プッシュ）とは?** ローカルの変更を GitHub に送信するコマンドです。`-u origin main` は「`origin`（GitHub）の `main` ブランチに送って、以降はここをデフォルトにする」という意味です。
@@ -192,7 +186,7 @@ Git はローカル（自分のパソコン）でバージョン管理するツ�
 
 ### GitHub でリポジトリを確認する
 
-ブラウザで GitHub（https://github.com）を開き、自分のアカウントに `todos` リポジトリが作成されていることを確認してください。
+ブラウザで GitHub（<https://github.com>）を開き、自分のアカウントに `todos` リポジトリが作成されていることを確認してください。
 
 [screenshot: GitHub 上に todos リポジトリが作成されている様子]
 
@@ -219,7 +213,7 @@ Git はローカル（自分のパソコン）でバージョン管理するツ�
 
 Claude Code のセッションで、以下を入力してください。
 
-```
+```plaintext
 $ /init WebアプリでTODO管理をしたいです
 ```
 
@@ -232,7 +226,7 @@ $ /init WebアプリでTODO管理をしたいです
 `/init` が完了すると、プロジェクトルート（`todos/` 直下）に `CLAUDE.md` が生成されます。内容を確認してみましょう。
 
 ```bash
-% cat CLAUDE.md
+cat CLAUDE.md
 ```
 
 プロジェクトの技術スタック（Next.js、TypeScript、Tailwind CSS など）や目的（TODO 管理アプリ）がまとまった内容が生成されているはずです。
@@ -272,8 +266,8 @@ Claude Code はコミットメッセージを自動で考えて、実行して�
 期待される出力の例:
 
 ```bash
-% git add CLAUDE.md
-% git commit -m "docs: add CLAUDE.md for project context"
+git add CLAUDE.md
+git commit -m "docs: add CLAUDE.md for project context"
 ```
 
 > **体験ポイント:** コミットメッセージの書き方を覚えなくても、Claude Code が「よしなに」考えてくれます。ベストプラクティスに沿ったメッセージが自動で生成されるのが体感できます。
@@ -285,7 +279,7 @@ Claude Code はコミットメッセージを自動で考えて、実行して�
 コミットが完了したら、GitHub に反映させます。
 
 ```bash
-% git push
+git push
 ```
 
 ブラウザで GitHub の `todos` リポジトリを開き、`CLAUDE.md` が追加されていることを確認してください。
@@ -304,18 +298,18 @@ Claude Code はコミットメッセージを自動で考えて、実行して�
 ### ローカルサーバーを起動する
 
 > **ローカルサーバーとは?** 自分のパソコンの中だけで動くウェブサーバーのことです。インターネットには公開されておらず、自分のブラウザからだけアクセスできます。「自分のパソコンの中でアプリを動かして確認する」ための仕組みです。
-
+>
 > **注意:** 開発サーバーの起動はターミナルで直接実行します。Claude Code から起動すると、Claude Code のセッションが占有されてしまい、Claude Code に話しかけられなくなります。
 
 新しいターミナルウィンドウを開いて、プロジェクトフォルダに移動してから以下を実行します。
 
 ```bash
-% npm run dev
+npm run dev
 ```
 
 以下のような出力が表示されれば成功です。
 
-```
+```text
 ▲ Next.js 15.x.x
 - Local:        http://localhost:3000
 - Ready in 2.1s
@@ -347,7 +341,7 @@ Claude Code からは以下のような応答が期待されます。
 
 **期待される応答の概要:**
 
-```
+```text
 src/ ディレクトリには Next.js App Router の主要ファイルが含まれています。
 
 app/layout.tsx
@@ -376,9 +370,9 @@ app/globals.css
 時間があれば、以下の質問も試してみてください。Claude Code がプロジェクトのことをどれだけ理解しているか体感できます。
 
 > このプロジェクトで TODO アプリを作るとしたら、どんなファイルを作ればいい?
-
+>
 > layout.tsx と page.tsx の違いを教えて
-
+>
 > Tailwind CSS で青いボタンを作るにはどう書けばいい?
 
 Claude Code がプロジェクトのコンテキスト（文脈）を踏まえて回答してくれることを確認してください。
@@ -413,10 +407,10 @@ Claude Code がプロジェクトのコンテキスト（文脈）を踏まえ�
 
 ```bash
 # Node.js のバージョンを確認（v18 以上が必要）
-% node --version
+node --version
 
 # npm を最新版に更新
-% npm install -g npm@latest
+npm install -g npm@latest
 ```
 
 ### `gh` コマンドが見つからない
@@ -426,7 +420,7 @@ GitHub CLI がインストールされていない可能性があります。Cha
 インストール後、GitHub アカウントとの連携が必要です。
 
 ```bash
-% gh auth login
+gh auth login
 ```
 
 画面の指示に従い、ブラウザで認証を完了してください。
@@ -435,8 +429,8 @@ GitHub CLI がインストールされていない可能性があります。Cha
 
 ```bash
 # node_modules を再インストール
-% rm -rf node_modules
-% npm install
+rm -rf node_modules
+npm install
 ```
 
 > **`rm -rf node_modules`（アールエム）とは?** `node_modules` フォルダを削除するコマンドです。その後 `npm install` を実行すると、`package.json` の内容を元に再生成されます。エラーが出たときの「おまじない」として覚えておいてください。
@@ -445,7 +439,7 @@ GitHub CLI がインストールされていない可能性があります。Cha
 
 ```bash
 # 別のポートで起動
-% npx next dev -p 3001
+npx next dev -p 3001
 ```
 
 ### Claude Code が `git` コマンドを実行しない

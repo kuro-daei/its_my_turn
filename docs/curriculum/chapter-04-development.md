@@ -1,8 +1,3 @@
----
-title: "Chapter 4: Vibe Coding で TODO アプリを作る"
-parent: カリキュラム
-nav_order: 4
----
 
 # Chapter 4: Vibe Coding で TODO アプリを作る
 
@@ -14,11 +9,9 @@ nav_order: 4
 
 ## このチャプターで学ぶこと
 
-- Vibe Coding という開発スタイルを実感する
-- Claude Code の Plan Mode を使って「作る前に設計する」習慣を身につける
-- プラグイン・スキルで Claude Code をパワーアップする
-- 1 つの指示で複数のファイルを同時に生成する体験をする
-- 1 つの指示で CRUD（追加・表示・完了切り替え・削除）を一気に実装する
+- Claude Code のスキルをインストールして、出力品質をパワーアップする
+- Plan Mode を使って「作る前に設計する」習慣を身につける
+- 1 つの指示で Supabase に接続した TODO アプリの UI と CRUD をまとめて実装する
 - Google ログインによる認証を組み込み、自分だけの TODO アプリを完成させる
 - RLS でデータを守る重要性を実例から学ぶ
 
@@ -52,124 +45,26 @@ nav_order: 4
 - [ ] Supabase の `todos` テーブルが作成済みである
 - [ ] `.env.local` に Supabase の URL と ANON KEY が設定済みである
 - [ ] Google アカウントを持っている
-- [ ] 現在のブランチを確認する
-
-```bash
-% git branch --show-current
-```
-
-> **注意:** `main` と表示された場合は、以下のコマンドで作業ブランチを作成してから進めてください。`main` ブランチは「完成品の棚」のようなもので、直接触るのはルール上禁止されています。
-
-```bash
-% git checkout -b feature/todo-app
-```
 
 確認できたら、Claude Code を起動します。
 
 ```bash
-% claude
+claude
 ```
 
 Claude Code が起動したら、このチャプターの作業を始めます。
 
 ---
 
-## Step 1: Vibe Coding とは & Plan Mode で設計する（20分）
+## Step 1: スキルのインストール（15分）
 
 ### このステップの目的
 
-Claude Code の **Plan Mode**（プラン モード）を使って、TODO アプリの設計図を先に作ります。「まず図面を引いてから家を建てる」感覚で、実装前に全体像を確認します。
+まず Claude Code をパワーアップするスキルをインストールします。スキルを先に入れておくことで、以降の実装ステップで自動的に高品質な出力が得られます。
 
 ---
 
-### Plan Mode って何？
-
-通常、Claude Code に指示すると、すぐにコードを書き始めます。Plan Mode はその前に「実装計画を提案して、確認を取ってから実装する」モードです。
-
-**建築のたとえ:** 家を建てるとき、いきなり柱を立て始める職人はいません。まず設計図（間取り図）を作って、住む人に確認してもらいます。OK が出てから工事を始める。Plan Mode はまさにこの「設計図の確認ステップ」です。
-
-設計が間違っていたら実装前に修正できるので、後で大幅に作り直すという手戻りが減ります。
-
----
-
-### Plan Mode の起動方法
-
-Claude Code のチャット画面で、**`Shift` キーを押しながら `Tab` キーを 2 回押す**と Plan Mode に切り替わります。
-
-入力欄の横や上部に「Plan Mode」と表示されれば切り替え成功です。
-
-[screenshot: Claude Code の Plan Mode が有効になっている様子。入力欄に「Plan Mode」と表示されている]
-
-> **体験:** Plan Mode はいつでも切り替えられます。通常モードに戻すには、再度 `Shift+Tab` × 2 を押してください。
-
----
-
-### Plan Mode で TODO アプリの設計を依頼する
-
-Plan Mode に切り替えたら、以下の指示を入力してください。
-
-> TODO アプリの画面構成と必要なコンポーネントを設計して。ヘッダー、TODO 追加フォーム、TODO リスト（各アイテムにチェックボックスと削除ボタン）を含めて。Tailwind CSS を使う前提で
-
-Claude Code から以下のような設計案が返ってきます。
-
----
-
-**期待される応答の概要:**
-
-```
-TODO アプリの構成を提案します。
-
-## コンポーネント設計
-
-src/
-  components/
-    Header.tsx        — アプリタイトル + ログアウトボタン
-    AddTodoForm.tsx   — テキスト入力 + 追加ボタン
-    TodoItem.tsx      — チェックボックス + タスク名 + 削除ボタン
-    TodoList.tsx      — TodoItem の一覧表示
-  app/
-    page.tsx          — 全コンポーネントを組み合わせたトップページ
-    login/
-      page.tsx        — Google ログインボタンのみのシンプルな画面
-
-## 実装の順番
-
-1. まず各コンポーネントをダミーデータで作成
-2. Supabase と接続して CRUD を実装
-3. Google 認証を追加
-
-この方針で進めてよいですか？
-```
-
----
-
-> **体験:** Claude Code が実装前に「こういう構成で進めようと思うけど、いいですか？」と確認してきました。チームメンバーと相談するような感覚で使えます。
-
-[screenshot: Claude Code が設計案を提示して承認を求めている様子]
-
-### 設計を確認して承認する
-
-提示された設計を確認して、問題なければ「OK」「進めて」などと返信します。変更したい点があれば「ヘッダーにはログイン中のメールアドレスも表示したい」のように追加指示できます。
-
-> **ポイント:** 承認する前に一度立ち止まって、「この構成で TODO アプリが作れるか」をイメージしてみてください。修正は今のうちにするのが一番コストが低いです。
-
-### 確認ポイント
-
-- [ ] Plan Mode に切り替えられた（`Shift+Tab` × 2）
-- [ ] Claude Code から設計案が提示された
-- [ ] 設計内容を確認して承認した
-
----
-
-## Step 2: プラグインで強化して UI を一気に作る（50分）
-
-### このステップの目的
-
-まず Claude Code をパワーアップするプラグイン・スキルをインストールします。その後、1 行の指示で TODO アプリの画面パーツ（コンポーネント）を一気に生成します。この時点ではデータベースには接続せず、ダミーデータ（仮のデータ）で表示確認します。
-
----
-
-### Claude Code をパワーアップする（15分）
+### Claude Code をパワーアップする
 
 スマートフォンにアプリをインストールして機能を増やせるように、Claude Code にも「スキル」を追加することができます。
 
@@ -187,8 +82,8 @@ Vercel（バーセル。Next.js の開発元）が提供する `find-skills`（�
 
 Claude Code の入力欄に、先頭に `!` をつけて以下のコマンドを入力してください。`!` をつけると、Claude Code の入力欄からコマンドを直接実行できます。
 
-```
-$ ! npx skills add https://github.com/vercel-labs/skills --skill find-skills
+```plaintext
+! npx skills add https://github.com/vercel-labs/skills --skill find-skills
 ```
 
 [screenshot: find-skills がインストールされた様子]
@@ -197,14 +92,14 @@ $ ! npx skills add https://github.com/vercel-labs/skills --skill find-skills
 
 Claude Code を一度終了します。
 
-```
+```plaintext
 $ /exit
 ```
 
 ターミナルに戻ったら、以下を実行して Claude Code を再起動してください。
 
 ```bash
-% claude
+claude
 ```
 
 ---
@@ -247,16 +142,16 @@ Claude Code がインストールを提案してきたら、承認してくだ�
 インストール（Python 3.10 以上が必要）:
 
 ```bash
-% pip install cisco-ai-skill-scanner
+pip install cisco-ai-skill-scanner
 ```
 
 スキャンの実行:
 
 ```bash
-% skill-scanner scan スキルのパス
+skill-scanner scan スキルのパス
 ```
 
-GitHub: https://github.com/cisco-ai-defense/skill-scanner
+GitHub: <https://github.com/cisco-ai-defense/skill-scanner>
 
 > **補足:** Skill Scanner は「ベストエフォート」の検出ツールです。スキャン結果が「問題なし」でも完全な安全性を保証するものではありません。公式スキル + 高インストール数 + スキャンの3点セットで安全性を高めましょう。
 
@@ -269,13 +164,109 @@ GitHub: https://github.com/cisco-ai-defense/skill-scanner
 
 ---
 
-### UI 生成を依頼する（35分）
+## Step 2: Plan Mode で設計する（20分）
 
-プラグインとスキルの準備ができたら、UI を作ります。
+### このステップの目的
+
+スキルがインストール済みの状態で設計に入ります。Claude Code の **Plan Mode**（プラン モード）を使って、TODO アプリの設計図を先に作ります。「まず図面を引いてから家を建てる」感覚で、実装前に全体像を確認します。
+
+---
+
+### Plan Mode って何？
+
+通常、Claude Code に指示すると、すぐにコードを書き始めます。Plan Mode はその前に「実装計画を提案して、確認を取ってから実装する」モードです。
+
+**建築のたとえ:** 家を建てるとき、いきなり柱を立て始める職人はいません。まず設計図（間取り図）を作って、住む人に確認してもらいます。OK が出てから工事を始める。Plan Mode はまさにこの「設計図の確認ステップ」です。
+
+設計が間違っていたら実装前に修正できるので、後で大幅に作り直すという手戻りが減ります。
+
+---
+
+### Plan Mode の起動方法
+
+Claude Code のチャット画面で、**`Shift` キーを押しながら `Tab` キーを 2 回押す**と Plan Mode に切り替わります。
+
+入力欄の横や上部に「Plan Mode」と表示されれば切り替え成功です。
+
+[screenshot: Claude Code の Plan Mode が有効になっている様子。入力欄に「Plan Mode」と表示されている]
+
+> **体験:** Plan Mode はいつでも切り替えられます。通常モードに戻すには、再度 `Shift+Tab` × 2 を押してください。
+
+---
+
+### Plan Mode で TODO アプリの設計を依頼する
+
+Plan Mode に切り替えたら、以下の指示を入力してください。
+
+```plaintext
+TODO アプリの画面構成と必要なコンポーネントを設計して。ヘッダー、TODO 追加フォーム、TODO リスト（各アイテムにチェックボックスと削除ボタン）を含めて。Tailwind CSS を使う前提で
+```
+
+Claude Code から以下のような設計案が返ってきます。
+
+---
+
+**期待される応答の概要:**
+
+```plaintext
+TODO アプリの構成を提案します。
+
+## コンポーネント設計
+
+src/
+  components/
+    Header.tsx        — アプリタイトル + ログアウトボタン
+    AddTodoForm.tsx   — テキスト入力 + 追加ボタン
+    TodoItem.tsx      — チェックボックス + タスク名 + 削除ボタン
+    TodoList.tsx      — TodoItem の一覧表示
+  app/
+    page.tsx          — 全コンポーネントを組み合わせたトップページ
+    login/
+      page.tsx        — Google ログインボタンのみのシンプルな画面
+
+## 実装の順番
+
+1. Supabase に接続した状態で UI + CRUD を一気に実装
+2. Google 認証を追加
+
+この方針で進めてよいですか？
+```
+
+---
+
+> **体験:** Claude Code が実装前に「こういう構成で進めようと思うけど、いいですか？」と確認してきました。チームメンバーと相談するような感覚で使えます。
+
+[screenshot: Claude Code が設計案を提示して承認を求めている様子]
+
+### 設計を確認して承認する
+
+提示された設計を確認して、問題なければ「OK」「進めて」などと返信します。変更したい点があれば「ヘッダーにはログイン中のメールアドレスも表示したい」のように追加指示できます。
+
+> **ポイント:** 承認する前に一度立ち止まって、「この構成で TODO アプリが作れるか」をイメージしてみてください。修正は今のうちにするのが一番コストが低いです。
+
+### 確認ポイント
+
+- [ ] Plan Mode に切り替えられた（`Shift+Tab` × 2）
+- [ ] Claude Code から設計案が提示された
+- [ ] 設計内容を確認して承認した
+
+---
+
+## Step 3: TODO アプリを実装する（60分）
+
+### このステップの目的
+
+設計が確定したら、実装に入ります。Plan Mode を解除して、Supabase に接続した状態で UI と CRUD を一気に作ります。
+
+---
+
+### 1 つの指示で UI と CRUD をまとめて作る
+
+Vibe Coding では、操作ひとつひとつを個別に指示する必要はありません。UI の作成と Supabase への接続をまとめて 1 回の指示で実装させましょう。
 
 Plan Mode を解除して（`Shift` キーを押しながら `Tab` キーを 2 回押すと通常モードに戻ります）、以下の指示を入力してください。
 
-> TODO アプリの UI を作って。ヘッダー（アプリタイトル + ログアウトボタン）、TODO 追加フォーム（テキスト入力 + 追加ボタン）、TODO リスト（各アイテムにチェックボックス + テキスト + 削除ボタン）を含めて。まずはダミーデータで表示して。Tailwind CSS でスタイリングして
+> TODO アプリを作って。Supabase の todos テーブルに接続して、TODO の追加・一覧表示・完了の切り替え・削除がすべて動くようにして。ヘッダー、追加フォーム、TODO リストを含めて。Tailwind CSS でスタイリングして
 
 [screenshot: Claude Code が複数のファイルを同時に生成している様子]
 
@@ -287,7 +278,7 @@ Plan Mode を解除して（`Shift` キーを押しながら `Tab` キーを 2 �
 
 Claude Code は以下のファイルを作成・更新します。
 
-```
+```plaintext
 src/
   components/
     Header.tsx        （作成）
@@ -318,7 +309,7 @@ src/
 
 以下のような画面が表示されれば成功です。
 
-```
+```plaintext
 ┌────────────────────────────────────┐
 │  TODO アプリ           [ログアウト] │
 ├────────────────────────────────────┤
@@ -330,61 +321,15 @@ src/
 └────────────────────────────────────┘
 ```
 
-[screenshot: ブラウザに TODO アプリの UI が表示されている様子。ダミーデータで TODO が 3 件表示されている]
-
-### 確認ポイント
-
-- [ ] `src/components/` に 4 つのファイル（Header.tsx, AddTodoForm.tsx, TodoItem.tsx, TodoList.tsx）が作成された
-- [ ] ブラウザでダミーの TODO リストが表示される
-- [ ] フォームの入力欄と追加ボタンが見える
-- [ ] ヘッダーにアプリタイトルが表示される
-- [ ] 各 TODO にチェックボックスと削除ボタンがある
-
-### トラブルシュート
-
-**ブラウザに何も表示されない、またはエラーになる場合:**
-
-```bash
-# 開発サーバーが起動しているか確認
-# 別ターミナルで実行
-% npm run dev
-```
-
-Claude Code に以下のように聞いてみてください。
-
-> ブラウザで localhost:3000 を開いたらエラーになった。ターミナルのエラーメッセージを確認して修正して
-
-**Tailwind CSS のスタイルが当たっていない場合:**
-
-> Tailwind CSS のスタイルが反映されていない。tailwind.config.ts の設定を確認して
-
----
-
-## Step 3: Supabase と繋いで動くようにする（30分）
-
-### このステップの目的
-
-Step 2 で作ったダミー UI を、Supabase のデータベースに接続して「本物のデータ」で動くようにします。
-
-> **CRUD（クラッド）とは？** Create（作る）・Read（読む）・Update（更新する）・Delete（消す）の頭文字を取った言葉です。TODO アプリの基本操作「追加・表示・完了切り替え・削除」がちょうどこの 4 つにあたります。
-
----
-
-### 1 つの指示で一気に繋ぐ
-
-Vibe Coding では、操作ひとつひとつを個別に指示する必要はありません。「追加・表示・完了切り替え・削除」をまとめて 1 回の指示で実装させましょう。
-
-> TODO アプリの画面を Supabase に接続して。TODO の追加、一覧表示、完了の切り替え、削除がすべて動くようにして
-
-[screenshot: Claude Code が複数のコンポーネントとデータベース接続を同時に実装している様子]
-
-> **体験:** 「画面とデータベースを同時につないで」という指示でも、Claude Code はコンテキスト（文脈）を保ちながら複数のファイルを同時に実装します。操作を 1 つずつ順番に指示する必要はありません。これが「統合的な指示」の力です。
+[screenshot: ブラウザに TODO アプリの UI が表示されている様子]
 
 ---
 
 ### 動作確認
 
 4 つの操作がすべて動くことを確認します。
+
+> **CRUD（クラッド）とは？** Create（作る）・Read（読む）・Update（更新する）・Delete（消す）の頭文字を取った言葉です。TODO アプリの基本操作「追加・表示・完了切り替え・削除」がちょうどこの 4 つにあたります。
 
 - [ ] テキストを入力して「追加」ボタンを押すと、Supabase の `todos` テーブルに行が追加される
 - [ ] ページを開いたとき（またはリロード後）、保存済みの TODO が一覧に表示される
@@ -394,6 +339,22 @@ Vibe Coding では、操作ひとつひとつを個別に指示する必要は�
 ---
 
 ### トラブルシュート
+
+**ブラウザに何も表示されない、またはエラーになる場合:**
+
+```bash
+# 開発サーバーが起動しているか確認
+# 別ターミナルで実行
+npm run dev
+```
+
+Claude Code に以下のように聞いてみてください。
+
+> ブラウザで localhost:3000 を開いたらエラーになった。ターミナルのエラーメッセージを確認して修正して
+
+**Tailwind CSS のスタイルが当たっていない場合:**
+
+> Tailwind CSS のスタイルが反映されていない。tailwind.config.ts の設定を確認して
 
 **Supabase にデータが入らない、または一覧が表示されない場合:**
 
@@ -413,28 +374,29 @@ Claude Code に以下のように聞いてみてください。
 
 Claude Code を一度終了します。
 
-```
+```plaintext
 $ /exit
 ```
 
 ターミナルに戻ったら、以下を実行してください。
 
 ```bash
-% npm run build
+npm run build
 ```
 
 > **注意:** ビルドエラーが出た場合は、Claude Code を再起動して以下のように指示してください。
 >
 > ```bash
-> % claude
+> claude
 > ```
 >
-> ```
+> ```plaintext
 > $ `npm run build` でエラーが出た。エラーメッセージを読んで修正して
 > ```
 
 #### 確認ポイント
 
+- [ ] `src/components/` に 4 つのファイル（Header.tsx, AddTodoForm.tsx, TodoItem.tsx, TodoList.tsx）が作成された
 - [ ] TODO の追加が動作する
 - [ ] TODO の一覧表示が動作する
 - [ ] TODO の完了切り替えが動作する
@@ -450,7 +412,7 @@ $ /exit
 「誰でも TODO を操作できる」状態から「Google ログインした自分だけが操作できる」状態に変えます。認証（誰がアクセスしているかの確認）は Google ログインのみに絞ります。
 
 > **なぜ認証が必要なの？** 今のアプリは「鍵のかかっていない家」の状態です。誰でも入れて、他の人のデータを見たり削除したりできてしまいます。Google ログインを組み込むことで「この人は本当に自分のアカウントの持ち主か」を確認できるようになります。
-
+>
 > **なぜ Google ログインを選ぶの？** パスワードを別途管理する必要がなく、ほとんどの人が既に使っている Google アカウントでそのままログインできます。「Google でログイン」ボタン 1 つでいい、という体験のシンプルさが非エンジニアにとっても最も馴染みがあります。
 
 ---
@@ -460,12 +422,12 @@ $ /exit
 Claude Code を起動します。
 
 ```bash
-% claude
+claude
 ```
 
 まず Claude Code に「まず何をすべきか」を聞いてみます。タスクを分解して手順を提示する体験です。
 
-```
+```plaintext
 $ Supabase Auth で Google ログインを実装したい。まず何をすべきか手順を教えて
 ```
 
@@ -475,7 +437,7 @@ Claude Code から以下のような計画が返ってきます。
 
 **期待される応答の概要:**
 
-```
+```plaintext
 Google ログインを実装するには、以下の手順が必要です。
 
 1. Supabase ダッシュボードで Google Provider を有効化
@@ -516,7 +478,7 @@ Google ログインを使えるようにするには、Supabase 側で「Google 
 
 6. 「Redirect URLs」の欄に以下を追加する
 
-```
+```plaintext
 http://localhost:3000/auth/callback
 ```
 
@@ -566,7 +528,7 @@ Claude Code がターミナルで自動実行します。自分でコマンド�
 Claude Code が以下のコマンドを実行します。
 
 ```bash
-% npm install @supabase/ssr
+npm install @supabase/ssr
 ```
 
 #### 認証フローの実装
@@ -599,7 +561,7 @@ Middleware がないと、未ログインのユーザーが直接 `http://localh
 
 ログイン画面。「Google でログイン」ボタンのみのシンプルな構成。
 
-```
+```plaintext
 ┌─────────────────────────┐
 │                         │
 │       TODO アプリ        │
@@ -791,19 +753,19 @@ RLS が有効なのにポリシーが設定されていない状態です。Clau
 
 コミット前に、ビルドエラーがないことを確認します。Claude Code を一度終了してターミナルに戻ります。
 
-```
+```plaintext
 $ /exit
 ```
 
 ターミナルに戻ったら、以下を実行してください。
 
 ```bash
-% npm run build
+npm run build
 ```
 
 以下のような出力が出ればビルド成功です。
 
-```
+```plaintext
 ▲ Next.js 15.x.x
 
 ✓ Compiled successfully
@@ -818,10 +780,10 @@ Route (app)                  Size     First Load JS
 > **注意:** ビルドエラーが出た場合は、Claude Code を再起動して以下のように指示してください。
 >
 > ```bash
-> % claude
+> claude
 > ```
 >
-> ```
+> ```plaintext
 > $ `npm run build` でエラーが出た。エラーメッセージを読んで修正して
 > ```
 >
@@ -833,26 +795,17 @@ Route (app)                  Size     First Load JS
 
 テストとビルドが通ったら、作業内容をコミットします。
 
-#### 事前確認（ターミナルで実行）
-
-```bash
-# main ブランチにいないことを確認する
-% git branch --show-current
-```
-
-`feature/todo-app`（または作業ブランチ名）と表示されれば OK です。`main` と表示された場合はメンターに声をかけてください。
-
 #### Claude Code を起動してコミットを指示する
 
-ブランチを確認できたら、Claude Code を起動します。
+Claude Code を起動します。
 
 ```bash
-% claude
+claude
 ```
 
 Claude Code が起動したら、以下を入力してください。
 
-```
+```plaintext
 $ 今回の変更をコミットして。Conventional Commits 形式で
 ```
 
@@ -860,26 +813,31 @@ Claude Code は以下のような手順でコミットを行います。
 
 ```bash
 # 変更ファイルを確認
-% git status
+git status
 
 # 変更をステージング（.env.local は含めない）
-% git add src/ package.json package-lock.json
+git add src/ package.json package-lock.json
 
 # コミット（Claude Code がメッセージを自動生成）
-% git commit -m "feat: implement todo app with CRUD and Google authentication"
+git commit -m "feat: implement todo app with CRUD and Google authentication"
 ```
 
 > **Conventional Commits って何？** コミットメッセージの「書き方のルール」です。`feat:`（新機能）、`fix:`（バグ修正）、`docs:`（ドキュメント）など、変更の種類をプレフィックス（先頭の文字列）で表現します。
-
+>
 > **体験:** 「コミットして」と一言指示するだけで、Claude Code は変更内容を把握した上で適切な Conventional Commits 形式のメッセージを生成します。何をコミットするかの説明を別途書く必要はありません。
 
 [screenshot: Claude Code がコミットメッセージを自動生成してコミットしている様子]
+
+コミットが完了したら、GitHub に push します。
+
+```plaintext
+$ push して
+```
 
 #### 確認ポイント
 
 - [ ] `git log --oneline` でコミットが記録されている
 - [ ] コミットメッセージが `feat:` で始まる Conventional Commits 形式になっている
-- [ ] `git branch --show-current` で `feature/todo-app` ブランチにいることを確認
 
 ---
 
@@ -888,10 +846,11 @@ Claude Code は以下のような手順でコミットを行います。
 このチャプターで行った作業を CLAUDE.md の「随時追記」セクションに記録しましょう。Claude Code に以下のように指示します。
 
 > CLAUDE.md の随時追記セクションに、以下を追記して:
+>
 > - `@supabase/ssr` を使って Google ログインを実装した
 > - RLS ポリシーを設定した（自分の TODO のみ操作可能）
 
-> **体験:** プロジェクトを進めるたびに気づいたことを CLAUDE.md に記録する習慣が、Claude Code を「育てる」コツです。次に作業するとき、Claude Code はこの記録を読んで文脈を理解してくれます。
+**体験:** プロジェクトを進めるたびに気づいたことを CLAUDE.md に記録する習慣が、Claude Code を「育てる」コツです。次に作業するとき、Claude Code はこの記録を読んで文脈を理解してくれます。
 
 ---
 
@@ -899,15 +858,13 @@ Claude Code は以下のような手順でコミットを行います。
 
 このチャプターの全作業が終わったら、以下をまとめて確認してください。
 
+- [ ] スキルをインストールして Claude Code をパワーアップした
 - [ ] Plan Mode で設計を確認してから実装を始めた
-- [ ] プラグイン・スキルをインストールして Claude Code をパワーアップした
-- [ ] 1 行の指示で複数のコンポーネントファイルが生成された
 - [ ] 1 つの指示で TODO の追加・表示・完了切り替え・削除がすべて動作する
 - [ ] `http://localhost:3000` にアクセスすると `/login` にリダイレクトされる
 - [ ] Google でログイン・ログアウトが動作する
 - [ ] RLS が設定されており、自分の TODO のみ操作できる
 - [ ] `npm run build` がエラーなく完了する
-- [ ] `feature/todo-app` ブランチでコミットされている
 
 ---
 
@@ -916,10 +873,10 @@ Claude Code は以下のような手順でコミットを行います。
 | 機能 | 体験した内容 |
 |------|-------------|
 | **Vibe Coding** | AI に自然言語で指示するだけでアプリが形になることを実感した。これがまさに今やっていることだと気づいた |
-| **Plan Mode** | `Shift+Tab × 2` で設計図を先に作り、確認してから実装する習慣を身につけた |
 | **プラグイン・スキル** | skills.sh から実際のスキルをインストールして Claude Code を強化し、Supabase 公式やコミュニティの知識を活用した |
+| **Plan Mode** | `Shift+Tab × 2` で設計図を先に作り、確認してから実装する習慣を身につけた |
 | **マルチファイル生成** | 1 行の指示で複数のコンポーネントが同時に生成されることを体験した |
-| **統合的な指示** | 「CRUD をまとめて実装して」という 1 つの指示で、追加・表示・完了・削除を一気に実装できることを体験した |
+| **統合的な指示** | 「UI と CRUD をまとめて実装して」という 1 つの指示で、一気に実装できることを体験した |
 | **タスク分解** | 「まず何をすべき？」と聞くことで、Claude Code が大きなタスクを段階的に分解することを体験した |
 | **RLS** | 2025 年の実際の漏洩事例を通じて、データセキュリティの重要性を実感した |
 

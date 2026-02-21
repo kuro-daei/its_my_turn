@@ -1,9 +1,3 @@
----
-title: "Chapter 6: Vercel デプロイ"
-parent: カリキュラム
-nav_order: 6
----
-
 # Chapter 6: Vercel デプロイ
 
 **所要時間**: 約 1 時間
@@ -38,7 +32,7 @@ Chapter 5 まででローカル環境（自分のパソコン）で動く TODO �
 このチャプターで使う **Vercel（ヴァーセル）** は、Next.js アプリを最も手軽に公開できるホスティングサービスです。GitHub と連携することで、コードを push するだけで自動的に最新版がデプロイされる仕組みを構築します。
 
 > **ホスティングサービスとは？** アプリを動かし続けてくれるサーバーを貸してくれるサービスです。自分のパソコンを 24 時間稼働させなくても、Vercel のサーバーが代わりにアプリを動かし続けてくれます。
-
+>
 > **GitHub と連携すると何が嬉しいの？** コードを push（送信）するたびに Vercel が自動で新バージョンをデプロイしてくれます。「変更を保存してアップロードボタンを押す」という手間がなくなります。これを **CI/CD（継続的インテグレーション/継続的デリバリー）** と呼びます。
 
 間違えても大丈夫です。途中でわからなくなったら、すぐメンターに声をかけてください。
@@ -50,17 +44,18 @@ Chapter 5 まででローカル環境（自分のパソコン）で動く TODO �
 Claude Code を起動します。
 
 ```bash
-% claude
+claude
 ```
 
 Claude Code が起動したら、作業を始める前に現在のブランチを確認してください。
 
-```
+```plaintext
 $ git branch --show-current
 ```
 
 > **注意:** `main` と表示された場合は、作業を止めてブランチを作成してください。
-> ```
+>
+> ```plaintext
 > $ git checkout -b feature/vercel-deploy
 > ```
 
@@ -91,20 +86,20 @@ $ git branch --show-current
 
 Vercel CLI のインストールはターミナルで行います。Claude Code を一度終了します。
 
-```
+```plaintext
 $ /exit
 ```
 
 ターミナルに戻ったら、以下を実行してください。
 
 ```bash
-% npm i -g vercel
+npm i -g vercel
 ```
 
 インストールが完了したか確認します。
 
 ```bash
-% vercel --version
+vercel --version
 ```
 
 バージョン番号（例: `39.x.x`）が表示されれば成功です。
@@ -133,10 +128,10 @@ Vercel は GitHub と連携して動作します。まず GitHub にリポジト
 Claude Code を起動して、以下のように依頼します。
 
 ```bash
-% claude
+claude
 ```
 
-```
+```plaintext
 $ GitHub にコードを push する準備をして。リモートリポジトリの URL は `https://github.com/あなたのユーザー名/todos.git`
 ```
 
@@ -144,17 +139,17 @@ $ GitHub にコードを push する準備をして。リモートリポジト�
 
 ```bash
 # リモートリポジトリを登録する
-% git remote add origin https://github.com/あなたのユーザー名/todos.git
+git remote add origin https://github.com/あなたのユーザー名/todos.git
 
 # 現在のブランチを確認する
-% git branch --show-current
+git branch --show-current
 
 # main ブランチに push する（初回のみ -u オプションが必要）
-% git push -u origin main
+git push -u origin main
 ```
 
 > **push とは？** ローカル（自分のパソコン）にあるコードを、GitHub のサーバー（リモート）に送信することです。手元で書いた原稿を出版社に送るイメージです。
-
+>
 > **注意:** `feature/vercel-deploy` ブランチで作業している場合は、先に main にマージしてから push するか、Vercel にはブランチを直接連携することもできます。メンターに確認してください。
 
 [screenshot: ターミナルで git push が成功した様子]
@@ -178,10 +173,10 @@ $ GitHub にコードを push する準備をして。リモートリポジト�
 Claude Code が起動していない場合は起動します。
 
 ```bash
-% claude
+claude
 ```
 
-```
+```plaintext
 $ Vercel にデプロイする準備をして。環境変数に何を設定すればいいか教えて
 ```
 
@@ -212,19 +207,19 @@ Vercel の「環境変数」機能を使って、本番サーバーにも同じ�
 
 ローカルの `.env.local` ファイルを確認して、設定する値を用意します。Claude Code を一度終了します。
 
-```
+```plaintext
 $ /exit
 ```
 
 ターミナルに戻ったら、以下を実行してください。
 
 ```bash
-% cat .env.local
+cat .env.local
 ```
 
 以下の 2 つの値が必要です。
 
-```
+```plaintext
 NEXT_PUBLIC_SUPABASE_URL=https://xxxxxxxxxxxxxx.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciO...（長い文字列）
 ```
@@ -274,12 +269,12 @@ Vercel のプロジェクト設定画面で環境変数を登録します。
 **方法 B: Vercel CLI から**
 
 ```bash
-% vercel
+vercel
 ```
 
 初回実行時は対話形式で設定を聞かれます。
 
-```
+```plaintext
 ? Set up and deploy "~/workspace/todos"? [Y/n] y
 ? Which scope do you want to deploy to? → あなたのアカウント名を選択
 ? Link to existing project? [y/N] n
@@ -292,12 +287,12 @@ Vercel のプロジェクト設定画面で環境変数を登録します。
 Claude Code を起動します。
 
 ```bash
-% claude
+claude
 ```
 
 Claude Code が起動したら、以下を入力してください。
 
-```
+```plaintext
 $ Vercel にデプロイして。デプロイ前に問題がないかビルドを確認して
 ```
 
@@ -317,7 +312,7 @@ Claude Code はまず `npm run build` でビルドが通るかを確認し、問
 
 ログの最後に以下のような表示が出れば成功です。
 
-```
+```plaintext
 ✓ Build completed
 ✓ Deployment completed
 ```
@@ -370,12 +365,14 @@ Supabase の認証機能は、デフォルトで `localhost:3000`（自分のパ
 [screenshot: Supabase ダッシュボードの Authentication > URL Configuration 画面]
 
 5. 「Site URL」を本番 URL に更新する:
-   ```
+
+   ```plaintext
    https://プロジェクト名.vercel.app
    ```
 
 6. 「Redirect URLs」に以下を追加する（「Add URL」をクリック）:
-   ```
+
+   ```plaintext
    https://プロジェクト名.vercel.app/**
    ```
 
@@ -384,7 +381,8 @@ Supabase の認証機能は、デフォルトで `localhost:3000`（自分のパ
 7. 「Save」をクリックして保存する
 
 > **注意:** Site URL を変更すると、`localhost:3000` でのローカル開発時に認証が動作しなくなることがあります。ローカル開発の URL も Redirect URLs に残しておくことを推奨します:
-> ```
+>
+> ```plaintext
 > http://localhost:3000/**
 > https://プロジェクト名.vercel.app/**
 > ```
@@ -394,18 +392,18 @@ Supabase の認証機能は、デフォルトで `localhost:3000`（自分のパ
 GitHub への push で Vercel が自動デプロイされることを体験します。
 
 > **CI/CD とは？** Continuous Integration / Continuous Delivery の略です。「コードを push すると自動でテスト・ビルド・デプロイが走る仕組み」のことです。注文（push）するだけで自動的に届けてくれるデリバリーサービスのイメージです。一度設定すれば、毎回手動でデプロイする必要がなくなります。
-
+>
 > **体験:** Claude Code に「TODO アプリに簡単な改善をして、GitHub に push して」と依頼してみましょう。Claude Code がコードを修正し、commit、push を行います。その後、Vercel が自動的に新バージョンをデプロイするまでの流れを体験します。
 
 Claude Code を起動します。
 
 ```bash
-% claude
+claude
 ```
 
 Claude Code が起動したら、以下を入力してください。
 
-```
+```plaintext
 $ TODO リストのスタイルを少し改善して、feature/style-tweak ブランチを作ってコミットして push して
 ```
 
@@ -480,16 +478,16 @@ $ TODO リストのスタイルを少し改善して、feature/style-tweak ブ�
 Vercel のビルドログにエラーが表示された場合、まずターミナルでローカルビルドを試みます。
 
 ```bash
-% npm run build
+npm run build
 ```
 
 エラーが出た場合は Claude Code を起動して依頼します。
 
 ```bash
-% claude
+claude
 ```
 
-```
+```plaintext
 $ npm run build でエラーが出ています。ログを確認して修正して
 ```
 
@@ -515,7 +513,7 @@ Vercel にデプロイしてもアプリが Supabase に繋がらない場合:
 
 ```bash
 # 環境変数の確認（ローカル）
-% cat .env.local
+cat .env.local
 ```
 
 ---
@@ -535,14 +533,14 @@ Vercel にデプロイしてもアプリが Supabase に繋がらない場合:
 
 ```bash
 # npm のグローバルインストールパスを確認する
-% npm root -g
+npm root -g
 
 # Vercel CLI を再インストールする
-% npm uninstall -g vercel
-% npm install -g vercel
+npm uninstall -g vercel
+npm install -g vercel
 
 # インストール確認
-% vercel --version
+vercel --version
 ```
 
 ---
@@ -558,10 +556,10 @@ Vercel のビルドログにエラーがなくても、ランタイムエラー�
 3. エラーメッセージをメモしてから、Claude Code を起動して原因を調べてもらう
 
 ```bash
-% claude
+claude
 ```
 
-```
+```plaintext
 $ デプロイ後のページが真っ白になります。ブラウザのコンソールに以下のエラーがあります:（エラーメッセージを貼り付ける）
 ```
 
@@ -571,13 +569,13 @@ $ デプロイ後のページが真っ白になります。ブラウザのコン
 
 ```bash
 # リモートリポジトリが登録されているか確認
-% git remote -v
+git remote -v
 
 # 登録されていない場合は追加する
-% git remote add origin https://github.com/あなたのユーザー名/リポジトリ名.git
+git remote add origin https://github.com/あなたのユーザー名/リポジトリ名.git
 
 # push する
-% git push -u origin main
+git push -u origin main
 ```
 
 認証エラーが出る場合は、GitHub の Personal Access Token（個人アクセストークン。GitHub を使うための鍵）が必要なことがあります。GitHub の設定画面（Settings → Developer settings → Personal access tokens）でトークンを生成してください。わからない場合はメンターに声をかけてください。

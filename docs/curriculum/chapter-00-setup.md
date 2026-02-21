@@ -1,9 +1,3 @@
----
-title: "Chapter 0: 環境準備"
-parent: カリキュラム
-nav_order: 0
----
-
 # Chapter 0: 環境準備
 
 > **この資料について**: 事前準備および保守用の参照資料です。ハンズオン当日は、この資料を閲覧できる状態で参加してください。
@@ -44,7 +38,7 @@ Homebrew（ホームブリュー）は Mac 用のパッケージ管理ツール�
 > **ターミナルの開き方**: `Cmd + Space` を押して「ターミナル」と入力し、Enter キーを押します。
 
 ```bash
-% /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
 途中でパスワードを求められたら Mac のログインパスワードを入力してください（入力中は文字が表示されません）。
@@ -52,7 +46,7 @@ Homebrew（ホームブリュー）は Mac 用のパッケージ管理ツール�
 **確認:**
 
 ```bash
-% brew --version
+brew --version
 ```
 
 `Homebrew 4.x.x` のようなバージョン番号が表示されれば OK です。
@@ -60,11 +54,12 @@ Homebrew（ホームブリュー）は Mac 用のパッケージ管理ツール�
 > **Apple Silicon Mac（M1/M2/M3/M4）の場合**: インストール後に以下を実行してください。
 >
 > ```bash
-> % echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
-> % eval "$(/opt/homebrew/bin/brew shellenv)"
+> echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+> eval "$(/opt/homebrew/bin/brew shellenv)"
 > ```
 
 **うまくいかない場合は**
+
 - `curl: command not found` と表示された場合: ターミナルを一度閉じて開き直してから再試行してください。
 - わからない場合はメンターに声をかけてください。
 
@@ -77,7 +72,7 @@ Homebrew（ホームブリュー）は Mac 用のパッケージ管理ツール�
 以下を実行するだけでインストールが完了します。
 
 ```bash
-% curl -fsSL https://claude.ai/install.sh | bash
+curl -fsSL https://claude.ai/install.sh | bash
 ```
 
 インストール後、ブラウザが自動で開きます。Claude.ai のアカウントでログインしてください。
@@ -87,12 +82,13 @@ Homebrew（ホームブリュー）は Mac 用のパッケージ管理ツール�
 **確認:**
 
 ```bash
-% claude --version
+claude --version
 ```
 
 バージョン番号が表示されれば OK です。
 
 **うまくいかない場合は**
+
 - ブラウザが開かない場合: ターミナルに表示された URL を手動でブラウザに貼り付けてください。
 - メンターに声をかけてください。
 
@@ -105,7 +101,7 @@ Homebrew（ホームブリュー）は Mac 用のパッケージ管理ツール�
 Claude Code はホームディレクトリ（`~`）ではなく、専用の作業用フォルダで実行します。
 
 ```bash
-% mkdir ~/projects
+mkdir ~/projects
 ```
 
 > **`mkdir` とは?** 「make directory」の略で、新しいフォルダを作成するコマンドです。`~/projects` は「ホームフォルダの中に projects フォルダを作る」という意味です。
@@ -119,24 +115,24 @@ Claude Code はホームディレクトリ（`~`）ではなく、専用の作�
 Homebrew を使って一括でインストールします。
 
 ```bash
-% brew install git gh nvm uv
+brew install git gh nvm uv
 ```
 
 nvm をターミナルで使えるようにするため、以下を実行してください。これは「ターミナルを開くたびに nvm を自動で読み込む」ための設定です。
 
 ```bash
-% echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.zprofile
-% echo '[ -s "$(brew --prefix)/opt/nvm/nvm.sh" ] && \. "$(brew --prefix)/opt/nvm/nvm.sh"' >> ~/.zprofile
-% source ~/.zprofile
+echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.zprofile
+echo '[ -s "$(brew --prefix)/opt/nvm/nvm.sh" ] && \. "$(brew --prefix)/opt/nvm/nvm.sh"' >> ~/.zprofile
+source ~/.zprofile
 ```
 
 **確認:**
 
 ```bash
-% git --version
-% gh --version
-% nvm --version
-% uv --version
+git --version
+gh --version
+nvm --version
+uv --version
 ```
 
 それぞれバージョン番号が表示されれば OK です。
@@ -153,8 +149,8 @@ nvm をターミナルで使えるようにするため、以下を実行して�
 nvm を使って Node.js をインストールします。
 
 ```bash
-% nvm install --lts
-% nvm use --lts
+nvm install --lts
+nvm use --lts
 ```
 
 > **`--lts` とは?** 「Long Term Support（長期サポート版）」の略で、安定した推奨バージョンを自動で選んでインストールしてくれます。
@@ -162,8 +158,8 @@ nvm を使って Node.js をインストールします。
 **確認:**
 
 ```bash
-% node --version
-% npm --version
+node --version
+npm --version
 ```
 
 バージョン番号が表示されれば OK です。
@@ -177,13 +173,13 @@ nvm を使って Node.js をインストールします。
 uv を使って Python をインストールします。
 
 ```bash
-% uv python install
+uv python install
 ```
 
 **確認:**
 
 ```bash
-% uv python list
+uv python list
 ```
 
 Python のバージョンが表示されれば OK です。
@@ -195,7 +191,7 @@ Python のバージョンが表示されれば OK です。
 ### Step 7: GitHub CLI（gh）の認証
 
 ```bash
-% gh auth login
+gh auth login
 ```
 
 ブラウザが自動で開くので、GitHub アカウントでログインしてください。
@@ -205,7 +201,7 @@ Python のバージョンが表示されれば OK です。
 **確認:**
 
 ```bash
-% gh auth status
+gh auth status
 ```
 
 `Logged in to github.com` のような表示が出れば OK です。
@@ -227,7 +223,7 @@ PowerShell を**管理者として実行**して以下を入力してくださ�
 > **管理者として実行するには**: スタートメニューで「PowerShell」を検索 → 右クリック → 「管理者として実行」
 
 ```powershell
-% winget install Microsoft.WindowsTerminal
+winget install Microsoft.WindowsTerminal
 ```
 
 > **すでにインストール済みの場合**: 「既にインストールされています」と表示されることがあります。その場合はそのまま次に進んでください。
@@ -241,7 +237,7 @@ PowerShell を**管理者として実行**して以下を入力してくださ�
 PowerShell（管理者として実行）で以下を実行してください。
 
 ```powershell
-% wsl --install -d Ubuntu-24.04
+wsl --install -d Ubuntu-24.04
 ```
 
 インストール後、**PC を再起動** してください。
@@ -255,12 +251,13 @@ PowerShell（管理者として実行）で以下を実行してください。
 Windows Terminal を開いて Ubuntu タブを開き:
 
 ```bash
-% uname -a
+uname -a
 ```
 
 `Linux ...` から始まる文字列が表示されれば OK です。
 
 **うまくいかない場合は**
+
 - Windows Update で最新版にアップデートしてから再試行してください。
 - BIOS で仮想化が無効になっている場合は、メンターに確認してください。
 
@@ -275,7 +272,7 @@ Windows Terminal を開いて Ubuntu タブを開き:
 Ubuntu ターミナルで最初に以下を実行してください。
 
 ```bash
-% sudo apt update && sudo apt upgrade -y
+sudo apt update && sudo apt upgrade -y
 ```
 
 > **`sudo` とは?** 「管理者として実行する」という意味です。パスワードを求められたら WSL セットアップ時に設定したパスワードを入力してください。
@@ -285,7 +282,7 @@ Ubuntu ターミナルで最初に以下を実行してください。
 ### Step 4: Claude Code のインストール・認証
 
 ```bash
-% curl -fsSL https://claude.ai/install.sh | bash
+curl -fsSL https://claude.ai/install.sh | bash
 ```
 
 インストール後、ターミナルに URL と認証コードが表示されます。
@@ -299,7 +296,7 @@ Ubuntu ターミナルで最初に以下を実行してください。
 **確認:**
 
 ```bash
-% claude --version
+claude --version
 ```
 
 バージョン番号が表示されれば OK です。
@@ -311,7 +308,7 @@ Ubuntu ターミナルで最初に以下を実行してください。
 ### Step 5: 作業用ディレクトリの作成
 
 ```bash
-% mkdir ~/projects
+mkdir ~/projects
 ```
 
 > **`mkdir` とは?** 「make directory」の略で、新しいフォルダを作成するコマンドです。`~/projects` は「ホームフォルダの中に projects フォルダを作る」という意味です。
@@ -325,22 +322,22 @@ Ubuntu ターミナルで最初に以下を実行してください。
 **git:**
 
 ```bash
-% sudo apt install -y git
+sudo apt install -y git
 ```
 
 **gh（GitHub CLI）:**
 
 ```bash
-% curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-% echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-% sudo apt update && sudo apt install -y gh
+curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+sudo apt update && sudo apt install -y gh
 ```
 
 **確認:**
 
 ```bash
-% git --version
-% gh --version
+git --version
+gh --version
 ```
 
 - [ ] `git --version` でバージョンが表示された
@@ -351,14 +348,14 @@ Ubuntu ターミナルで最初に以下を実行してください。
 ### Step 7: nvm のインストール
 
 ```bash
-% curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-% source ~/.bashrc
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+source ~/.bashrc
 ```
 
 **確認:**
 
 ```bash
-% nvm --version
+nvm --version
 ```
 
 - [ ] `nvm --version` でバージョンが表示された
@@ -368,15 +365,15 @@ Ubuntu ターミナルで最初に以下を実行してください。
 ### Step 8: Node.js のインストール
 
 ```bash
-% nvm install --lts
-% nvm use --lts
+nvm install --lts
+nvm use --lts
 ```
 
 **確認:**
 
 ```bash
-% node --version
-% npm --version
+node --version
+npm --version
 ```
 
 - [ ] `node --version` でバージョン番号が表示された
@@ -386,14 +383,14 @@ Ubuntu ターミナルで最初に以下を実行してください。
 ### Step 9: uv のインストール
 
 ```bash
-% curl -LsSf https://astral.sh/uv/install.sh | sh
-% source ~/.bashrc
+curl -LsSf https://astral.sh/uv/install.sh | sh
+source ~/.bashrc
 ```
 
 **確認:**
 
 ```bash
-% uv --version
+uv --version
 ```
 
 - [ ] `uv --version` でバージョンが表示された
@@ -403,13 +400,13 @@ Ubuntu ターミナルで最初に以下を実行してください。
 ### Step 10: Python のインストール
 
 ```bash
-% uv python install
+uv python install
 ```
 
 **確認:**
 
 ```bash
-% uv python list
+uv python list
 ```
 
 - [ ] Python がインストールされた
@@ -419,7 +416,7 @@ Ubuntu ターミナルで最初に以下を実行してください。
 ### Step 11: gh の認証
 
 ```bash
-% gh auth login
+gh auth login
 ```
 
 ターミナルに URL と認証コードが表示されます。URL を Windows のブラウザで開いて GitHub アカウントでログインし、表示されたコードをターミナルに貼り付けてください。
@@ -427,7 +424,7 @@ Ubuntu ターミナルで最初に以下を実行してください。
 **確認:**
 
 ```bash
-% gh auth status
+gh auth status
 ```
 
 - [ ] `gh auth status` で認証済みと表示された
@@ -439,19 +436,20 @@ Ubuntu ターミナルで最初に以下を実行してください。
 作業用ディレクトリに移動して Claude Code を起動します。
 
 ```bash
-% cd ~/projects
-% claude
+cd ~/projects
+claude
 ```
 
 `>` プロンプトが表示されたら起動成功です。試しに話しかけてみてください。
 
-```
+```plaintext
 $ こんにちは！
 ```
 
 Claude から返答が来れば完璧です。終了するには `/exit` と入力するか `Ctrl + C` を押してください。
 
 **うまくいかない場合は**
+
 - 認証エラーが表示された場合: `claude --version` でインストールを確認してください。
 - それでも解決しない場合は、メンターに声をかけてください。
 
@@ -524,12 +522,12 @@ Chapter 3 で Supabase（データベースと認証を提供するクラウド�
 2. パッケージのインストール（プロジェクトディレクトリで実行）:
 
 ```bash
-% npm install @supabase/supabase-js
+npm install @supabase/supabase-js
 ```
 
 3. Chapter 3 で Supabase プロジェクトを作成した後、`.env.local` に接続情報を設定します:
 
-```bash
+```text
 NEXT_PUBLIC_SUPABASE_URL=your-project-url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 ```
@@ -546,7 +544,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 Chapter 4 で SPA ベースのログイン認証を実装します。以下のパッケージを追加インストールしてください。
 
 ```bash
-% npm install @supabase/ssr
+npm install @supabase/ssr
 ```
 
 `@supabase/ssr` は、Supabase の認証機能を Next.js で使うためのヘルパーパッケージです。
@@ -563,13 +561,13 @@ Chapter 6 でアプリをインターネットに公開（デプロイ）しま�
 2. Vercel CLI（ターミナルから Vercel を操作するツール）をインストール:
 
 ```bash
-% npm install -g vercel
+npm install -g vercel
 ```
 
 3. Vercel にログイン:
 
 ```bash
-% vercel login
+vercel login
 ```
 
 ブラウザが開くので、作成したアカウントでログインしてください。

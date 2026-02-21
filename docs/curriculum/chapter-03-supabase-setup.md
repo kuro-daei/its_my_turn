@@ -1,13 +1,7 @@
----
-title: "Chapter 3: Supabase 初期設定"
-parent: カリキュラム
-nav_order: 3
----
-
 # Chapter 3: Supabase 初期設定
 
-**所要時間**: 約 40 分
-**ゴール**: Supabase プラグインがインストール済み + Supabase のデータベースが立ち上がり、Next.js アプリから接続できる状態にする
+**所要時間**: 約 30 分
+**ゴール**: Supabase プラグインがインストール済み + Supabase のデータベースが立ち上がった状態にする
 **学ぶ Claude Code 機能**: プラグイン（外部サービス連携）、データベース設計の指示、SQL 生成
 
 ---
@@ -23,10 +17,9 @@ nav_order: 3
 - プラグインの認証を完了させ、Claude Code から Supabase を直接操作できる状態にする
 - `todos` テーブルを Claude Code に直接作成させる（SQL のコピー&ペーストは不要）
 - `.env.local` に接続情報を設定する
-- Supabase クライアントの初期化ファイルを Claude Code に作成させる
-- 動作確認（接続テスト）を行い、コミットする
+- コミットする
 
-全部終わったら、Next.js アプリから Supabase のデータベースに接続できる状態になります。
+全部終わったら、Supabase のデータベースが立ち上がり、次のチャプターでアプリと接続できる準備が整います。
 
 ---
 
@@ -120,7 +113,7 @@ Supabase プラグインを使うには、まず Supabase の「Personal Access 
 6. 表示されたトークン（`sbp_` で始まる文字列）を**必ずコピーして安全な場所に保存する**
 
 > **注意:** トークンは一度しか表示されません。ページを閉じると二度と確認できないため、必ずこの時点でコピーしてメモ帳やパスワード管理ツールに保存してください。
-
+>
 > **Personal Access Token とは？** Supabase が「このアクセスは本人からのものです」と確認するための鍵です。この鍵を使って Claude Code が Supabase にアクセスできるようになります。
 
 [screenshot: Supabase の Access tokens ページ。「Generate new token」ボタンと生成されたトークンが表示されている]
@@ -132,13 +125,13 @@ Supabase プラグインを使うには、まず Supabase の「Personal Access 
 Claude Code を起動します。
 
 ```bash
-% cd ~/workspace/todos
-% claude
+cd ~/workspace/todos
+claude
 ```
 
 Claude Code が起動したら、以下を入力してプラグインをインストールします。
 
-```
+```plaintext
 $ /install-plugin supabase @ claude-plugins-official
 ```
 
@@ -150,7 +143,7 @@ $ /install-plugin supabase @ claude-plugins-official
 
 プラグインのインストールが完了したら、続けて以下を入力して接続を確認します。
 
-```
+```plaintext
 $ Supabase のプロジェクト一覧を表示して
 ```
 
@@ -176,7 +169,7 @@ Step 1 で作成した `todos` プロジェクトが表示されれば成功で�
 
 引き続き Claude Code のプロンプトで、以下を入力してください。
 
-```
+```plaintext
 $ Supabase の todos プロジェクトに TODO管理用の `todos` テーブルを作って。
 Row Level Security (RLS) を有効化して。ログインしたユーザーが自分の TODO だけを見れる・作れる・更新できる・削除できるようにして
 ```
@@ -255,11 +248,11 @@ CREATE POLICY "Users can delete their own todos"
 
 ここまでの Step 2〜3 では、**あなた（開発者）として** Supabase に接続していました。Claude Code がプラグインを通じて Supabase にアクセスし、テーブルを作ったりプロジェクト情報を確認しました。
 
-これから行う Step 4〜5 は、**TODO アプリ（プログラム）が** Supabase に接続するための設定です。アプリが実際にデータを読み書きするために必要な接続情報を用意します。
+これから行う Step 4 は、**TODO アプリ（プログラム）が** Supabase に接続するための設定です。アプリが実際にデータを読み書きするために必要な接続情報を用意します。
 
 この 2 つは全く別物です。下の表で整理しておきます。
 
-| | 開発者としての接続（Step 2〜3） | アプリとしての接続（Step 4〜5） |
+| | 開発者としての接続（Step 2〜3） | アプリとしての接続（Step 4） |
 |---|---|---|
 | **誰が接続するか** | あなた（Claude Code 経由） | TODO アプリ |
 | **何のために** | テーブル作成・DB 管理 | データの読み書き |
@@ -276,7 +269,7 @@ CREATE POLICY "Users can delete their own todos"
 
 プラグインがインストールされているので、Claude Code に接続情報の取得を依頼できます。Claude Code のプロンプトで以下を入力してください。
 
-```
+```plaintext
 $ Supabase の todos プロジェクトの URL と anon key を教えて
 ```
 
@@ -284,7 +277,7 @@ Claude Code が値を表示してくれるので、表示された値をメモ�
 
 Claude Code を一度終了します。
 
-```
+```plaintext
 $ /exit
 ```
 
@@ -299,12 +292,12 @@ $ /exit
 ターミナルでプロジェクトルートに移動します（Claude Code を終了した後のターミナルで作業します）。
 
 ```bash
-% cd ~/workspace/todos
+cd ~/workspace/todos
 ```
 
 テキストエディタで `.env.local` ファイルを新規作成して、以下の内容を記述します。`your-url` と `your-anon-key` の部分を先ほど Claude Code が表示した実際の値に置き換えてください。
 
-```bash
+```dotenv
 # .env.local
 NEXT_PUBLIC_SUPABASE_URL=https://xxxxxxxxxx.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
@@ -319,12 +312,12 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 `.env.local` には接続情報が含まれているため、Git に含めてはいけません。プロジェクトルートの `.gitignore`（Git が無視するファイルのリスト）に `.env.local` が含まれていることを確認します。
 
 ```bash
-% cat .gitignore | grep env
+cat .gitignore | grep env
 ```
 
 `.env.local` が出力に含まれていれば OK です。Next.js のデフォルト設定では以下のように記載されているはずです。
 
-```
+```gitignore
 # local env files
 .env*.local
 ```
@@ -339,121 +332,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 ---
 
-## Step 5: Supabase クライアントの初期化（10分）
-
-### 5-1. `@supabase/supabase-js` をインストールする
-
-> **パッケージ（ライブラリ）とは？** 他の人が作った便利な機能のセットです。`@supabase/supabase-js` は「Supabase と通信するための道具箱」で、インストールすることで JavaScript から Supabase のデータベースを簡単に操作できるようになります。
-
-ターミナルで以下を実行します。
-
-```bash
-% cd ~/workspace/todos
-% npm install @supabase/supabase-js
-```
-
-インストールが完了すると、`package.json`（プロジェクトが使うパッケージの一覧ファイル）の `dependencies` に `@supabase/supabase-js` が追加されます。
-
-**確認コマンド:**
-
-```bash
-% cat package.json | grep supabase
-```
-
-`"@supabase/supabase-js": "^x.x.x"` のような行が表示されれば OK です。
-
----
-
-### 5-2. Claude Code にクライアント初期化ファイルを作らせる
-
-> **クライアント初期化ファイルって何？** アプリが Supabase と「最初の握手」をするための設定ファイルです。「このアプリはこの Supabase プロジェクトを使います」という宣言を 1 ファイルにまとめておくことで、他のファイルから使いやすくなります。
-
-Claude Code を起動します。
-
-```bash
-% claude
-```
-
-Claude Code が起動したら、以下を入力してください。
-
-```
-$ Supabase クライアントの初期化ファイルを `src/lib/supabase.ts` に作って。環境変数 `NEXT_PUBLIC_SUPABASE_URL` と `NEXT_PUBLIC_SUPABASE_ANON_KEY` を使って、シングルトンパターンで初期化して
-```
-
-> **体験:** 「どのファイルに」「何のために」「どう実装するか」を日本語で指示するだけでコードが生成されます。「シングルトンパターン」のような技術的なキーワードも理解してくれます。知識がなくても、調べながら指示を出すことで正しいコードが得られます。
-
-### 5-3. 期待されるファイルの内容
-
-Claude Code が生成する `src/lib/supabase.ts` は以下のようになります。
-
-```typescript
-// src/lib/supabase.ts
-import { createClient } from '@supabase/supabase-js'
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
-```
-
-> **注意:** 実際に Claude Code が生成したファイルを使ってください。上記はあくまでイメージです。TypeScript の型定義や追加のオプション設定が含まれる場合があります。
-
----
-
-### 5-4. 動作確認（接続テスト）
-
-Supabase クライアントが正しく動作するか確認するため、Claude Code に一時的なテストコードを書いてもらいます。
-
-```
-$ `src/lib/supabase.ts` の Supabase クライアントを使って、`todos` テーブルからデータを取得するシンプルな接続テストを書いて。`src/app/page.tsx` の中で確認できるようにして（テスト後は削除するのでコメントアウトでも構わない）
-```
-
-テスト用コードが追加されたら、Claude Code を一度終了します。
-
-```
-$ /exit
-```
-
-新しいターミナルウィンドウを開き、開発サーバーを起動して確認します。
-
-```bash
-% cd ~/workspace/todos
-% npm run dev
-```
-
-ブラウザで `http://localhost:3000` を開き、開発者ツール（`F12` キー）を開いて「Console」タブを確認します。
-
-> **ブラウザの開発者ツール（F12）って何？** ウェブサイトの内部状態を確認できる画面です。「Console」タブには、アプリからのメッセージやエラーが表示されます。
-
-[screenshot: ブラウザの開発者ツールの Console タブが開いており、Supabase からのレスポンス（空配列 []）が表示されている様子]
-
-エラーが出ずにレスポンス（テーブルが空であれば `[]`）が表示されれば成功です。
-
-> **`[]` が表示されたら OK？** はい。「Supabase との接続に成功した。ただしテーブルにまだデータが何もない」という意味です。接続自体はうまくいっています。
-
-> **注意:** テスト確認後、追加したテストコードは削除してください。開発サーバーは起動したままにして（`Ctrl + C` で停止しないで）、元のターミナルウィンドウに戻ります。
-
-Claude Code を起動します。
-
-```bash
-% claude
-```
-
-Claude Code が起動したら、以下を入力してください。
-
-```
-$ 追加したテストコードを削除して元に戻して
-```
-
-**確認ポイント**
-
-- [ ] `src/lib/supabase.ts` が作成されている
-- [ ] 開発サーバーがエラーなく起動した
-- [ ] ブラウザの Console にエラーが表示されていない（Supabase への接続が成功している）
-
----
-
-## Step 6: コミット（5分）
+## Step 5: コミット（5分）
 
 確認が取れたら、作業内容をコミットします。
 
@@ -461,7 +340,7 @@ $ 追加したテストコードを削除して元に戻して
 
 Claude Code に日本語で指示するだけでコミットが完了します（Chapter 2 の Step 5 と同じ体験です）。
 
-```
+```plaintext
 $ 今回の作業をコミットして。`.env.local` は絶対に含めないで
 ```
 
@@ -469,7 +348,7 @@ Claude Code がファイルの確認、コミットメッセージの作成、�
 
 コミットが完了したら、GitHub に push します。
 
-```
+```plaintext
 $ push して
 ```
 
@@ -485,7 +364,7 @@ $ push して
 
 Claude Code を終了します。
 
-```
+```plaintext
 $ /exit
 ```
 
@@ -495,14 +374,6 @@ $ /exit
 - [ ] Supabase プラグインがインストールされている
 - [ ] Supabase の Table Editor に `todos` テーブルが存在する
 - [ ] `.env.local` に `NEXT_PUBLIC_SUPABASE_URL` と `NEXT_PUBLIC_SUPABASE_ANON_KEY` が設定されている
-- [ ] `src/lib/supabase.ts` が作成されている
-- [ ] 開発サーバーが正常に起動し、Supabase への接続でエラーが出ない
-- [ ] `npm run build` がエラーなく完了する
-
-```bash
-# ビルドエラーがないか確認
-% npm run build
-```
 
 ---
 
@@ -527,11 +398,11 @@ $ /exit
 まず Claude Code を再起動して、もう一度インストールを試みてください。
 
 ```bash
-% cd ~/workspace/todos
-% claude
+cd ~/workspace/todos
+claude
 ```
 
-```
+```plaintext
 $ /install-plugin supabase @ claude-plugins-official
 ```
 
@@ -547,37 +418,6 @@ $ /install-plugin supabase @ claude-plugins-official
 
 `.env.local` の `NEXT_PUBLIC_SUPABASE_ANON_KEY` を確認してください。`anon` キー（`service_role` キーではない）を設定していること、前後に余分なスペースや改行がないことを確認してください。
 
-**「Failed to fetch」または「Network error」と表示される場合:**
-
-- `.env.local` の `NEXT_PUBLIC_SUPABASE_URL` が正しい形式（`https://xxxxxxxxxx.supabase.co`）か確認してください
-- 開発サーバーを一度停止（`Ctrl + C`）してから再起動してください。`.env.local` の変更は再起動後に反映されます
-
-> **なぜ再起動が必要なの？** 環境変数（`.env.local` の内容）はサーバー起動時に 1 度だけ読み込まれます。ファイルを変更しても、実行中のサーバーには自動では反映されません。電源を入れ直すイメージです。
-
-**「supabaseUrl is required」と表示される場合:**
-
-`src/lib/supabase.ts` の中で `process.env.NEXT_PUBLIC_SUPABASE_URL` が `undefined`（未定義）になっています。`.env.local` のファイル名が正確か（`.env.local` であって `.env` や `.env.local.txt` ではないか）確認してください。
-
----
-
-### `npm install` 時のエラー
-
-**「EACCES: permission denied」と表示される場合（Mac）:**
-
-```bash
-% sudo npm install @supabase/supabase-js
-```
-
-`sudo` を付けて再実行してください。
-
-**「Cannot find module '@supabase/supabase-js'」と表示される場合:**
-
-```bash
-% npm install @supabase/supabase-js
-```
-
-インストールが正常に完了しているか確認してから、開発サーバーを再起動してください。
-
 ---
 
 ## このチャプターで学んだこと
@@ -587,7 +427,6 @@ $ /install-plugin supabase @ claude-plugins-official
 | **プラグイン（外部サービス連携）** | Personal Access Token を取得し `/install-plugin supabase @ claude-plugins-official` で Supabase との接続口を追加した。Claude Code から直接データベースを操作できる状態を作った |
 | **DB 設計指示** | 日本語でテーブル要件を伝えるだけで、適切な SQL（RLS ポリシー含む）をプラグイン経由で直接実行してもらえることを体験した |
 | **SQL 生成** | 複雑なセキュリティ設定（Row Level Security）も「自分の TODO だけ見れるようにして」という自然な指示で生成・実行できることを体験した |
-| **ファイル生成** | 初期化ファイルのような定型的なコードも、配置場所・実装パターンを指示するだけで生成できることを体験した |
 
 ---
 
