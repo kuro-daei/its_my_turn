@@ -8,7 +8,7 @@ nav_order: 5
 
 **所要時間**: 約 3 時間
 **ゴール**: TODO アプリが一通り動く状態にする（UI + CRUD + Google ログイン）
-**学ぶ Claude Code 機能**: Plan Mode、マルチファイル生成、統合的な指示、タスク分解
+**学ぶ Claude Code 機能**: Plan Mode、プラグイン・スキル、マルチファイル生成、統合的な指示、タスク分解
 
 ---
 
@@ -16,8 +16,9 @@ nav_order: 5
 
 - Vibe Coding という開発スタイルを実感する
 - Claude Code の Plan Mode を使って「作る前に設計する」習慣を身につける
+- プラグイン・スキルで Claude Code をパワーアップする
 - 1 つの指示で複数のファイルを同時に生成する体験をする
-- TODO の「追加・表示・完了切り替え・削除」の CRUD 操作を機能単位で実装する
+- 1 つの指示で CRUD（追加・表示・完了切り替え・削除）を一気に実装する
 - Google ログインによる認証を組み込み、自分だけの TODO アプリを完成させる
 - RLS でデータを守る重要性を実例から学ぶ
 
@@ -152,15 +153,105 @@ src/
 
 ---
 
-## Step 2: UI を一気に作る（40分）
+## Step 2: プラグインで強化して UI を一気に作る（50分）
 
 ### このステップの目的
 
-Claude Code に 1 行の指示を出して、TODO アプリの画面パーツ（コンポーネント）を一気に生成します。この時点ではデータベースには接続せず、ダミーデータ（仮のデータ）で表示確認します。
+まず Claude Code をパワーアップするプラグイン・スキルをインストールします。その後、1 行の指示で TODO アプリの画面パーツ（コンポーネント）を一気に生成します。この時点ではデータベースには接続せず、ダミーデータ（仮のデータ）で表示確認します。
 
 ---
 
-### UI 生成を依頼する
+### Claude Code をパワーアップする（15分）
+
+スマートフォンにアプリをインストールして機能を増やせるように、Claude Code にも「スキル」を追加することができます。
+
+> **スキルとは？** 特定の作業が得意になる知識パックです。インストールするだけで、その分野の高品質な出力が自動で適用されます。たとえば「Tailwind CSS を使った UI 作成」が得意なスキルをインストールすると、以降の指示すべてにその知識が活かされます。
+
+スキルは `skills.sh`（スキルズ ドット エスエイチ）というサイトで公開・共有されています。コミュニティのメンバーや企業の公式チームが作ったスキルを検索して使えます。
+
+---
+
+#### まず「スキルの検索ツール」をインストールする
+
+スマホを買ったとき、最初に App Store（アップ ストア）をセットアップしてから、そこで欲しいアプリを探しますよね。スキルのインストールも同じ考え方です。まず「スキルを探すためのスキル」を入れてから、そこで必要なスキルを探します。
+
+Vercel（バーセル。Next.js の開発元）が提供する `find-skills`（ファインド スキルズ）というスキルがその役割を担います。週間 279,000 件インストールの人気スキルで、これを入れると `npx skills find` コマンドでスキルを検索できるようになります。
+
+Claude Code の入力欄に、先頭に `!` をつけて以下のコマンドを入力してください。`!` をつけると、Claude Code の入力欄からコマンドを直接実行できます。
+
+```bash
+! npx skills add https://github.com/vercel-labs/skills --skill find-skills
+```
+
+> **注意:** スキルのインストール後は、Claude Code の再起動が必要です。`/exit` で一度終了してから、再度 `claude` コマンドで起動してください。再起動しないとインストールしたスキルが反映されません。
+
+[screenshot: find-skills がインストールされた様子]
+
+---
+
+#### TODO アプリに役立つスキルを探す
+
+`find-skills` がインストールできたら、早速スキルを探してみましょう。Claude Code に以下のように指示してください。
+
+> TODO アプリ開発に役立つスキルを探して。Tailwind CSS、Next.js、Supabase を使うよ
+
+Claude Code が `npx skills find` を使って検索し、おすすめのスキルを提案してくれます。以下のようなスキルが見つかります。
+
+> **注意:** スキルは誰でも作って公開できるため、中には危険なもの（悪意のあるコードを含むもの）も存在します。スキルを選ぶときは以下の点に注意してください。
+>
+> 1. **公式であること** — `vercel-labs`、`supabase` など、サービスの開発元が公開しているスキルを優先する
+> 2. **インストール数が多いこと** — 多くの人が使っているスキルは、問題があれば報告されやすい
+>
+> スマホのアプリと同じで、「知らない開発者の評価ゼロのアプリ」より「公式アプリストアで高評価のアプリ」を選ぶ方が安全です。ポイントを押さえれば、安心して使えます。
+
+| スキル | インストール数 | 概要 |
+|---|---|---|
+| `vercel-react-best-practices` | 約 152,000 | Vercel 公式の React / Next.js パフォーマンス最適化ガイドライン |
+| `web-design-guidelines` | 約 115,000 | Vercel 公式のウェブデザインガイドライン。美しく使いやすい UI の原則 |
+| `supabase-postgres-best-practices` | 約 21,500 | Supabase 公式のデータベース操作ベストプラクティス |
+
+Claude Code がインストールを提案してきたら、承認してください。インストールが完了すると、以降のすべての指示にこれらのスキルの知識が自動で活かされます。
+
+[screenshot: Claude Code がスキルを検索・提案してインストールしている様子]
+
+> **体験:** コマンドを丸暗記しなくても大丈夫です。「TODO アプリに役立つスキルを探して」と Claude Code に聞くだけで、必要なスキルを見つけてインストールまでやってくれます。「自分で探して → 選んで → 入れる」という体験そのものが、スキルの使いこなし方の基本です。
+>
+> `skills.sh` にはほかにもたくさんのスキルが公開されています。気になるものがあれば、いつでも同じように Claude Code に聞いてみてください。
+
+---
+
+#### インストールしたスキルの安全性をチェックする
+
+スキルをインストールしたら、安全性をチェックしておくと安心です。Cisco（シスコ）が提供する **Skill Scanner**（スキル スキャナー）は、インストール済みスキルの中身を自動で検査して、プロンプトインジェクション（AIを騙す攻撃）やデータ流出などの危険なパターンがないかを検出するツールです。
+
+インストール（Python 3.10 以上が必要）:
+
+```bash
+pip install cisco-ai-skill-scanner
+```
+
+スキャンの実行:
+
+```bash
+skill-scanner scan スキルのパス
+```
+
+GitHub: https://github.com/cisco-ai-defense/skill-scanner
+
+> **補足:** Skill Scanner は「ベストエフォート」の検出ツールです。スキャン結果が「問題なし」でも完全な安全性を保証するものではありません。公式スキル + 高インストール数 + スキャンの3点セットで安全性を高めましょう。
+
+#### 確認ポイント
+
+- [ ] find-skills スキルがインストールされた
+- [ ] vercel-react-best-practices スキルがインストールされた
+- [ ] web-design-guidelines スキルがインストールされた
+- [ ] supabase-postgres-best-practices スキルがインストールされた
+
+---
+
+### UI 生成を依頼する（35分）
+
+プラグインとスキルの準備ができたら、UI を作ります。
 
 Plan Mode を解除して（`Shift` キーを押しながら `Tab` キーを 2 回押すと通常モードに戻ります）、以下の指示を入力してください。
 
@@ -168,7 +259,7 @@ Plan Mode を解除して（`Shift` キーを押しながら `Tab` キーを 2 �
 
 [screenshot: Claude Code が複数のファイルを同時に生成している様子]
 
-> **体験:** 1 行の指示で複数のファイルが同時に生成される驚きを体感してください。デザイナーがいなくても、自然言語で UI の要望を伝えれば形になります。これが Vibe Coding の醍醐味です。
+> **体験:** 1 行の指示で複数のファイルが同時に生成される驚きを体感してください。さらに、先ほどインストールしたスキルが自動で活かされ、デザインが整った UI になります。これが Vibe Coding の醍醐味です。
 
 ---
 
@@ -249,232 +340,54 @@ Claude Code に以下のように聞いてみてください。
 
 ---
 
-## Step 3: CRUD を機能単位で繋ぐ（60分）
+## Step 3: Supabase と繋いで動くようにする（30分）
 
 ### このステップの目的
 
-Step 2 で作ったダミー UI を、Supabase のデータベースに接続して「本物のデータ」で動くようにします。「追加（Create）→ 表示（Read）→ 完了切り替え（Update）→ 削除（Delete）」の順番に、機能ひとつひとつを確認しながら進めます。
-
-この順番には理由があります。まず「追加」がないと表示するデータがない。データがないと「完了切り替え」も「削除」も試せない。だから Create → Read → Update → Delete の順番で進めます。
+Step 2 で作ったダミー UI を、Supabase のデータベースに接続して「本物のデータ」で動くようにします。
 
 > **CRUD（クラッド）とは？** Create（作る）・Read（読む）・Update（更新する）・Delete（消す）の頭文字を取った言葉です。TODO アプリの基本操作「追加・表示・完了切り替え・削除」がちょうどこの 4 つにあたります。
 
-> **体験:** 「AddTodoForm にフォームを作って」「Supabase に保存して」と別々に指示するのではなく、「AddTodoForm から TODO を追加して Supabase に保存できるようにして」と一度に指示します。これが「統合的な指示」です。画面とデータベースをまたぐ指示でも、Claude Code はコンテキスト（文脈）を保ちながら両方を同時に実装します。
+---
+
+### 1 つの指示で一気に繋ぐ
+
+Vibe Coding では、操作ひとつひとつを個別に指示する必要はありません。「追加・表示・完了切り替え・削除」をまとめて 1 回の指示で実装させましょう。
+
+> TODO アプリの画面を Supabase に接続して。TODO の追加、一覧表示、完了の切り替え、削除がすべて動くようにして
+
+[screenshot: Claude Code が複数のコンポーネントとデータベース接続を同時に実装している様子]
+
+> **体験:** 「画面とデータベースを同時につないで」という指示でも、Claude Code はコンテキスト（文脈）を保ちながら複数のファイルを同時に実装します。操作を 1 つずつ順番に指示する必要はありません。これが「統合的な指示」の力です。
 
 ---
 
-### Phase A: 追加機能（Create）
+### 動作確認
 
-#### Claude Code への指示
+4 つの操作がすべて動くことを確認します。
 
-> AddTodoForm から新しい TODO を追加できるようにして。テキストを入力して送信すると、Supabase の todos テーブルに保存されて、フォームがリセットされるようにして
+- [ ] テキストを入力して「追加」ボタンを押すと、Supabase の `todos` テーブルに行が追加される
+- [ ] ページを開いたとき（またはリロード後）、保存済みの TODO が一覧に表示される
+- [ ] チェックボックスをクリックすると完了状態が切り替わり、Supabase 側の `completed` カラムも更新される
+- [ ] 削除ボタンをクリックすると一覧から消え、Supabase 側の行も削除される
 
-[screenshot: Claude Code が AddTodoForm.tsx を編集している様子]
+---
 
-#### 実装で変わるファイルの概要
+### トラブルシュート
 
-Claude Code は主に以下の変更を加えます。
-
-**`src/components/AddTodoForm.tsx`（更新）**
-
-- フォームの入力値を管理する state（ステート。「今この瞬間の値」を保存する仕組み。入力欄に何が書かれているかを覚えておくために使います）を追加
-- Supabase クライアントをインポートして `insert`（挿入）操作を追加
-- フォーム送信時に Supabase へデータを保存し、フォームをリセットする
-
-```tsx
-// AddTodoForm.tsx のイメージ（実際のコードは Claude Code が生成します）
-"use client";
-import { useState } from "react";
-import { createClient } from "@/lib/supabase/client";
-
-export default function AddTodoForm() {
-  const [text, setText] = useState("");
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!text.trim()) return;
-    const supabase = createClient();
-    await supabase.from("todos").insert({ title: text });
-    setText("");
-  };
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <input value={text} onChange={(e) => setText(e.target.value)} />
-      <button type="submit">追加</button>
-    </form>
-  );
-}
-```
-
-> **注意:** 上記はイメージコードです。Claude Code が生成した実際のコードをそのまま使ってください。カラム名（`title` など）は、Chapter 4 で作成した `todos` テーブルの構造に合わせて変わります。
-
-#### 動作確認方法
-
-1. ブラウザで `http://localhost:3000` を開く
-2. テキスト欄に「テスト TODO」と入力して「追加」ボタンを押す
-3. Supabase のダッシュボード（`Table Editor` → `todos`）を開いて行が追加されていることを確認する
-
-[screenshot: Supabase の Table Editor に「テスト TODO」の行が追加されている様子]
-
-#### 確認ポイント
-
-- [ ] フォームにテキストを入力して送信できる
-- [ ] 送信後にフォームがリセットされる（入力欄が空になる）
-- [ ] Supabase の `todos` テーブルにデータが追加されている
-- [ ] 空のテキストを送信してもデータが追加されない
-
-#### トラブルシュート
-
-**送信しても Supabase にデータが入らない場合:**
+**Supabase にデータが入らない、または一覧が表示されない場合:**
 
 Claude Code に以下のように聞いてみてください。
 
-> AddTodoForm の送信処理でエラーが出ていないか確認して。Supabase のエラーレスポンスをコンソールに出力して
+> Supabase との接続でエラーが起きているかもしれない。各操作（追加・取得・更新・削除）のエラーをコンソールに出力して確認して
 
 ブラウザの開発者ツール（F12 → Console タブ）でエラーメッセージを確認します。
 
-**よくあるエラーとその原因:**
-
-```
-Error: Invalid API key
-```
-
-`.env.local` の `NEXT_PUBLIC_SUPABASE_ANON_KEY` が正しくない可能性があります。Supabase ダッシュボード（Settings → API）で確認してください。
-
-```
-Error: relation "todos" does not exist
-```
-
-`todos` テーブルが作成されていないか、テーブル名が間違っています。Chapter 4 に戻って確認してください。
-
 ---
 
-### Phase B: 一覧表示機能（Read）
+### ビルドチェック
 
-#### Claude Code への指示
-
-> TodoList で Supabase から todos を取得して表示して。ページを開いたときに自動で読み込まれるようにして
-
-[screenshot: Claude Code が TodoList.tsx を編集している様子]
-
-#### 実装で変わるファイルの概要
-
-**`src/components/TodoList.tsx`（更新）**
-
-- ページ表示時に Supabase から `todos` を取得する
-- 取得したデータを state で管理して画面に表示する
-
-追加後に一覧を自動更新するには、以下を追加で指示します。
-
-> TODO を追加した後、TodoList の一覧が自動で更新されるようにして
-
-#### 動作確認方法
-
-1. ブラウザで `http://localhost:3000` を開く
-2. Phase A で追加した「テスト TODO」が一覧に表示されていることを確認する
-3. 新しい TODO を追加して、一覧に即座に反映されることを確認する
-
-[screenshot: TodoList に複数の TODO が表示されている様子]
-
-#### 確認ポイント
-
-- [ ] ページを開いたときに既存の todos が表示される
-- [ ] 新しい TODO を追加すると一覧に反映される
-- [ ] todos が 0 件のときに「TODO はまだありません」などのメッセージが表示される
-
-#### トラブルシュート
-
-**一覧が空になる（データが取れない）場合:**
-
-> TodoList で Supabase から取得したデータをコンソールに出力して、何が返ってきているか確認して
-
-> **補足:** この時点で RLS（セキュリティ設定）が有効になっていて認証なしでは読めない場合があります。Step 4 の Google ログイン実装後に改めて確認してください。
-
----
-
-### Phase C: 完了切り替え機能（Update）
-
-#### Claude Code への指示
-
-> TodoItem のチェックボックスをクリックすると completed の状態が切り替わるようにして。Supabase の todos テーブルも更新されるようにして
-
-#### 実装で変わるファイルの概要
-
-**`src/components/TodoItem.tsx`（更新）**
-
-- チェックボックスをクリックした際に Supabase の `update` を呼び出す
-- `completed`（完了済みかどうか）が `true` のときはテキストに打ち消し線を表示する
-
-```tsx
-// TodoItem.tsx のイメージ（実際のコードは Claude Code が生成します）
-const handleToggle = async () => {
-  const supabase = createClient();
-  await supabase
-    .from("todos")
-    .update({ completed: !todo.completed })
-    .eq("id", todo.id);
-};
-```
-
-#### 動作確認方法
-
-1. 一覧に表示された TODO のチェックボックスをクリックする
-2. チェックが入り、テキストに打ち消し線が表示されることを確認する
-3. Supabase の `todos` テーブルで `completed` カラムが `true` に変わっていることを確認する
-4. もう一度クリックすると元に戻ることを確認する
-
-[screenshot: チェック済みの TODO がグレーアウトされ、打ち消し線が表示されている様子]
-
-#### 確認ポイント
-
-- [ ] チェックボックスをクリックすると視覚的に変化する（打ち消し線など）
-- [ ] Supabase の `completed` カラムが更新される
-- [ ] ページをリロードしても完了状態が保持されている
-
----
-
-### Phase D: 削除機能（Delete）
-
-#### Claude Code への指示
-
-> TodoItem の削除ボタンをクリックすると、その TODO が Supabase から削除されて一覧からも消えるようにして
-
-#### 実装で変わるファイルの概要
-
-**`src/components/TodoItem.tsx`（更新）**
-
-- 削除ボタンのクリック時に Supabase の `delete` を呼び出す
-- 削除後に親コンポーネントに通知して一覧を更新する
-
-```tsx
-// TodoItem.tsx のイメージ（実際のコードは Claude Code が生成します）
-const handleDelete = async () => {
-  const supabase = createClient();
-  await supabase.from("todos").delete().eq("id", todo.id);
-  onDelete(todo.id); // 上位の画面（TodoList）に「この TODO は消したよ」と知らせる
-};
-```
-
-#### 動作確認方法
-
-1. 削除ボタンをクリックする
-2. 該当の TODO が一覧から消えることを確認する
-3. Supabase の `todos` テーブルから行が削除されていることを確認する
-
-[screenshot: 削除ボタンをクリックした後、一覧から TODO が消えた様子]
-
-#### 確認ポイント
-
-- [ ] 削除ボタンをクリックすると一覧から消える
-- [ ] Supabase の `todos` テーブルから行が削除されている
-- [ ] 削除後も他の TODO は影響を受けない
-
----
-
-### Step 3 完了時のビルドチェック
-
-CRUD の 4 機能が揃ったら、ビルドエラーがないか確認します。
+4 つの機能が揃ったら、ビルドエラーがないか確認します。
 
 > **ビルドって何？** 開発用のコードを「本番公開できる形」に変換する作業です。エラーが出ずに完了すれば、コードに問題がないことが確認できます。料理でたとえると、「試作品を実際にお客さんに出せる品質か最終チェックする」工程です。
 
@@ -640,21 +553,6 @@ Claude Code は以下のファイルを作成・更新します。
 
 Middleware がないと、未ログインのユーザーが直接 `http://localhost:3000` にアクセスしてメイン画面を開けてしまいます。関所がなければ誰でも素通りできる、という状態です。
 
-```typescript
-// middleware.ts のイメージ（実際のコードは Claude Code が生成します）
-import { createServerClient } from "@supabase/ssr";
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-
-export async function middleware(request: NextRequest) {
-  // セッションを確認して未認証なら /login にリダイレクト
-}
-
-export const config = {
-  matcher: ["/((?!login|_next/static|_next/image|favicon.ico).*)"],
-};
-```
-
 **`src/app/login/page.tsx`（作成）**
 
 ログイン画面。「Google でログイン」ボタンのみのシンプルな構成。
@@ -716,34 +614,7 @@ RLS はデータベースの「内側の鍵」です。
 
 > todos テーブルに RLS を設定して。ログインユーザーが自分の TODO だけ操作できるようにして
 
-#### 期待される SQL ポリシー
-
-Claude Code は以下のような SQL を生成します。Supabase の SQL Editor で実行するよう指示されます。
-
-```sql
--- RLS を有効化（イメージ。実際のコードは Claude Code が生成します）
-ALTER TABLE todos ENABLE ROW LEVEL SECURITY;
-
--- SELECT ポリシー: 自分の TODO のみ読み取り可能
-CREATE POLICY "Users can view their own todos"
-  ON todos FOR SELECT
-  USING (auth.uid() = user_id);
-
--- INSERT ポリシー: 自分の user_id で TODO を追加可能
-CREATE POLICY "Users can insert their own todos"
-  ON todos FOR INSERT
-  WITH CHECK (auth.uid() = user_id);
-
--- UPDATE ポリシー: 自分の TODO のみ更新可能
-CREATE POLICY "Users can update their own todos"
-  ON todos FOR UPDATE
-  USING (auth.uid() = user_id);
-
--- DELETE ポリシー: 自分の TODO のみ削除可能
-CREATE POLICY "Users can delete their own todos"
-  ON todos FOR DELETE
-  USING (auth.uid() = user_id);
-```
+Claude Code が「SELECT / INSERT / UPDATE / DELETE」それぞれのポリシーを含む SQL を生成します。生成された SQL を Supabase の SQL Editor にコピーして実行するよう指示されます。
 
 > **`auth.uid()`（オース ユーアイディー）って何？** Supabase がログイン中のユーザーの ID を返す関数です。「このリクエストを送ってきたのは誰か」を Supabase が管理するので、クライアント（ブラウザ）から送られてきた `user_id` を信用する必要がありません。なぜなら、悪意のある人がブラウザで値を書き換えて「自分は別の人です」と偽ることを防げるからです。`auth.uid()` はサーバー側で管理されているため、ブラウザからは書き換えられません。これが重要なセキュリティポイントです。
 
@@ -764,20 +635,6 @@ Chapter 4 で `todos` テーブルを作ったとき、`user_id` というカラ
 
 > AddTodoForm で TODO を追加するとき、ログインユーザーの user_id も一緒に保存するようにして
 
-```tsx
-// AddTodoForm.tsx のイメージ（実際のコードは Claude Code が生成します）
-const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  const supabase = createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  await supabase.from("todos").insert({
-    title: text,
-    user_id: user?.id,
-  });
-  setText("");
-};
-```
-
 #### 確認ポイント
 
 - [ ] Supabase の `todos` テーブルで RLS が有効になっている
@@ -795,7 +652,7 @@ RLS が有効になったことで、`user_id` が設定されていない古い
 
 **「permission denied for table todos」エラーが出る場合:**
 
-RLS が有効なのにポリシーが設定されていない状態です。上記の SQL を Supabase の SQL Editor で実行してください。
+RLS が有効なのにポリシーが設定されていない状態です。Claude Code が生成した SQL を Supabase の SQL Editor で実行してください。
 
 ---
 
@@ -965,9 +822,8 @@ git commit -m "feat: implement todo app with CRUD and Google authentication"
 このチャプターで行った作業を CLAUDE.md の「随時追記」セクションに記録しましょう。Claude Code に以下のように指示します。
 
 > CLAUDE.md の随時追記セクションに、以下を追記して:
-> - `@supabase/ssr` を追加インストールした
-> - Google ログインを実装した
-> - RLS ポリシーを設定した
+> - `@supabase/ssr` を使って Google ログインを実装した
+> - RLS ポリシーを設定した（自分の TODO のみ操作可能）
 
 > **体験:** プロジェクトを進めるたびに気づいたことを CLAUDE.md に記録する習慣が、Claude Code を「育てる」コツです。次に作業するとき、Claude Code はこの記録を読んで文脈を理解してくれます。
 
@@ -978,8 +834,9 @@ git commit -m "feat: implement todo app with CRUD and Google authentication"
 このチャプターの全作業が終わったら、以下をまとめて確認してください。
 
 - [ ] Plan Mode で設計を確認してから実装を始めた
+- [ ] プラグイン・スキルをインストールして Claude Code をパワーアップした
 - [ ] 1 行の指示で複数のコンポーネントファイルが生成された
-- [ ] TODO の追加・一覧表示・完了切り替え・削除がすべて動作する
+- [ ] 1 つの指示で TODO の追加・表示・完了切り替え・削除がすべて動作する
 - [ ] `http://localhost:3000` にアクセスすると `/login` にリダイレクトされる
 - [ ] Google でログイン・ログアウトが動作する
 - [ ] RLS が設定されており、自分の TODO のみ操作できる
@@ -994,8 +851,9 @@ git commit -m "feat: implement todo app with CRUD and Google authentication"
 |------|-------------|
 | **Vibe Coding** | AI に自然言語で指示するだけでアプリが形になることを実感した。これがまさに今やっていることだと気づいた |
 | **Plan Mode** | `Shift+Tab × 2` で設計図を先に作り、確認してから実装する習慣を身につけた |
+| **プラグイン・スキル** | skills.sh から実際のスキルをインストールして Claude Code を強化し、Supabase 公式やコミュニティの知識を活用した |
 | **マルチファイル生成** | 1 行の指示で複数のコンポーネントが同時に生成されることを体験した |
-| **統合的な指示** | 「画面とデータベースを同時に実装して」という指示で、UI と DB 操作を一気に実装できることを体験した |
+| **統合的な指示** | 「CRUD をまとめて実装して」という 1 つの指示で、追加・表示・完了・削除を一気に実装できることを体験した |
 | **タスク分解** | 「まず何をすべき？」と聞くことで、Claude Code が大きなタスクを段階的に分解することを体験した |
 | **RLS** | 2025 年の実際の漏洩事例を通じて、データセキュリティの重要性を実感した |
 
