@@ -91,7 +91,7 @@ Claude Code の入力欄に、先頭に `!` をつけて以下のコマンドを
 Claude Code を一度終了します。
 
 ```plaintext
-$ /exit
+/exit
 ```
 
 ターミナルに戻ったら、以下を実行して Claude Code を再起動してください。
@@ -107,7 +107,7 @@ claude
 `find-skills` がインストールできたら、早速スキルを探してみましょう。Claude Code に以下のように指示してください。
 
 ```plaintext
-$ TODO アプリ開発に役立つスキルを探して。Tailwind CSS、Next.js、Supabase を使うよ
+TODO アプリ開発に役立つスキルを探して。Tailwind CSS、Next.js、Supabase を使うよ
 ```
 
 Claude Code が `npx skills find` を使って検索し、おすすめのスキルを提案してくれます。以下のようなスキルが見つかります。
@@ -261,7 +261,7 @@ Vibe Coding では、操作ひとつひとつを個別に指示する必要は�
 Plan Mode を解除して（`Shift` キーを押しながら `Tab` キーを 2 回押すと通常モードに戻ります）、以下の指示を入力してください。
 
 ```plaintext
-$ TODO アプリを作って。Supabase の todos テーブルに接続して、TODO の追加・一覧表示・完了の切り替え・削除がすべて動くようにして。ヘッダー、追加フォーム、TODO リストを含めて。Tailwind CSS でスタイリングして
+TODO アプリを作って。Supabase の todos テーブルに接続して、TODO の追加・一覧表示・完了の切り替え・削除がすべて動くようにして。ヘッダー、追加フォーム、TODO リストを含めて。Tailwind CSS でスタイリングして
 ```
 
 > **体験:** 1 行の指示で複数のファイルが同時に生成される驚きを体感してください。さらに、先ほどインストールしたスキルが自動で活かされ、デザインが整った UI になります。これが Vibe Coding の醍醐味です。
@@ -343,13 +343,13 @@ npm run dev
 Claude Code に以下のように聞いてみてください。
 
 ```plaintext
-$ ブラウザで localhost:3000 を開いたらエラーになった。ターミナルのエラーメッセージを確認して修正して
+ブラウザで localhost:3000 を開いたらエラーになった。ターミナルのエラーメッセージを確認して修正して
 ```
 
 **Tailwind CSS のスタイルが当たっていない場合:**
 
 ```plaintext
-$ Tailwind CSS のスタイルが反映されていない。tailwind.config.ts の設定を確認して
+Tailwind CSS のスタイルが反映されていない。tailwind.config.ts の設定を確認して
 ```
 
 **Supabase にデータが入らない、または一覧が表示されない場合:**
@@ -357,7 +357,7 @@ $ Tailwind CSS のスタイルが反映されていない。tailwind.config.ts �
 Claude Code に以下のように聞いてみてください。
 
 ```plaintext
-$ Supabase との接続でエラーが起きているかもしれない。各操作（追加・取得・更新・削除）のエラーをコンソールに出力して確認して
+Supabase との接続でエラーが起きているかもしれない。各操作（追加・取得・更新・削除）のエラーをコンソールに出力して確認して
 ```
 
 ブラウザの開発者ツール（F12 → Console タブ）でエラーメッセージを確認します。
@@ -373,7 +373,7 @@ $ Supabase との接続でエラーが起きているかもしれない。各操
 Claude Code を一度終了します。
 
 ```plaintext
-$ /exit
+/exit
 ```
 
 ターミナルに戻ったら、以下を実行してください。
@@ -389,7 +389,7 @@ npm run build
 > ```
 >
 > ```plaintext
-> $ `npm run build` でエラーが出た。エラーメッセージを読んで修正して
+> `npm run build` でエラーが出た。エラーメッセージを読んで修正して
 > ```
 
 #### 確認ポイント
@@ -426,7 +426,7 @@ claude
 まず Claude Code に「まず何をすべきか」を聞いてみます。タスクを分解して手順を提示する体験です。
 
 ```plaintext
-$ Supabase Auth で Google ログインを実装したい。まず何をすべきか手順を教えて
+Supabase Auth で Google ログインを実装したい。まず何をすべきか手順を教えて
 ```
 
 Claude Code から以下のような計画が返ってきます。
@@ -512,7 +512,7 @@ http://localhost:3000/auth/callback
 Claude Code に以下を指示します。
 
 ```plaintext
-$ @supabase/ssr をインストールして
+@supabase/ssr をインストールして
 ```
 
 Claude Code がターミナルで自動実行します。自分でコマンドを入力する必要はありません。
@@ -528,7 +528,7 @@ npm install @supabase/ssr
 続けて以下を指示します。
 
 ```plaintext
-$ Supabase Auth の Google ログインを実装して。@supabase/ssr を使って。未ログインの場合は /login にリダイレクトして
+Supabase Auth の Google ログインを実装して。@supabase/ssr を使って。未ログインの場合は /login にリダイレクトして
 ```
 
 #### 実装で作られるファイルの概要
@@ -583,13 +583,13 @@ Google ログイン完了後の処理を受け取るルート。
 Middleware のマッチャー設定で `/login` 自体が対象になっている可能性があります。
 
 ```plaintext
-$ middleware.ts の matcher が /login を除外しているか確認して。無限リダイレクトが起きている
+middleware.ts の matcher が /login を除外しているか確認して。無限リダイレクトが起きている
 ```
 
 **Google ログインボタンを押しても何も起きない場合:**
 
 ```plaintext
-$ /auth/callback/route.ts のコードを確認して。OAuth のコールバック処理が正しく実装されているか確認して
+/auth/callback/route.ts のコードを確認して。OAuth のコールバック処理が正しく実装されているか確認して
 ```
 
 ---
@@ -611,7 +611,7 @@ RLS はデータベースの「内側の鍵」です。
 #### Claude Code への指示
 
 ```plaintext
-$ todos テーブルに RLS を設定して。ログインユーザーが自分の TODO だけ操作できるようにして
+todos テーブルに RLS を設定して。ログインユーザーが自分の TODO だけ操作できるようにして
 ```
 
 Claude Code が「SELECT / INSERT / UPDATE / DELETE」それぞれのポリシーを含む SQL を生成します。生成された SQL を Supabase の SQL Editor にコピーして実行するよう指示されます。
@@ -630,7 +630,7 @@ Claude Code が「SELECT / INSERT / UPDATE / DELETE」それぞれのポリシ�
 Chapter 3 で `todos` テーブルを作ったとき、`user_id` というカラム（「誰のデータか」を記録する列）も一緒に作っていましたね。ここでようやくそのカラムが活躍します。TODO を追加するときに、ログインユーザーの `user_id` も一緒に保存するよう修正します。
 
 ```plaintext
-$ AddTodoForm で TODO を追加するとき、ログインユーザーの user_id も一緒に保存するようにして
+AddTodoForm で TODO を追加するとき、ログインユーザーの user_id も一緒に保存するようにして
 ```
 
 #### 確認ポイント
@@ -647,7 +647,7 @@ $ AddTodoForm で TODO を追加するとき、ログインユーザーの user_
 RLS が有効になったことで、`user_id` が設定されていない古い todos が取得できなくなっています。Supabase の Table Editor で古いデータを削除するか、`user_id` を手動で設定してください。
 
 ```plaintext
-$ Supabase の todos テーブルで RLS 設定後にデータが取れなくなった。SELECT ポリシーが正しいか確認して
+Supabase の todos テーブルで RLS 設定後にデータが取れなくなった。SELECT ポリシーが正しいか確認して
 ```
 
 **「permission denied for table todos」エラーが出る場合:**
@@ -744,7 +744,7 @@ RLS が有効なのにポリシーが設定されていない状態です。Clau
 コミット前に、ビルドエラーがないことを確認します。Claude Code を一度終了してターミナルに戻ります。
 
 ```plaintext
-$ /exit
+/exit
 ```
 
 ターミナルに戻ったら、以下を実行してください。
@@ -774,7 +774,7 @@ Route (app)                  Size     First Load JS
 > ```
 >
 > ```plaintext
-> $ `npm run build` でエラーが出た。エラーメッセージを読んで修正して
+> `npm run build` でエラーが出た。エラーメッセージを読んで修正して
 > ```
 >
 > 修正後は再度 `/exit` してターミナルで `npm run build` を確認してください。
@@ -796,7 +796,7 @@ claude
 Claude Code が起動したら、以下を入力してください。
 
 ```plaintext
-$ 今回の変更をコミットして。Conventional Commits 形式で
+今回の変更をコミットして。Conventional Commits 形式で
 ```
 
 Claude Code は以下のような手順でコミットを行います。
@@ -819,7 +819,7 @@ git commit -m "feat: implement todo app with CRUD and Google authentication"
 コミットが完了したら、GitHub に push します。
 
 ```plaintext
-$ push して
+push して
 ```
 
 #### 確認ポイント
@@ -834,7 +834,7 @@ $ push して
 このチャプターで行った作業を CLAUDE.md の「随時追記」セクションに記録しましょう。Claude Code に以下のように指示します。
 
 ```plaintext
-$ CLAUDE.md の随時追記セクションに、以下を追記して:
+CLAUDE.md の随時追記セクションに、以下を追記して:
 - @supabase/ssr を使って Google ログインを実装した
 - RLS ポリシーを設定した（自分の TODO のみ操作可能）
 ```

@@ -118,7 +118,7 @@ claude
 Claude Code が起動したら、以下を入力してプラグインをインストールします。
 
 ```plaintext
-$ /install-plugin supabase @ claude-plugins-official
+/install-plugin supabase @ claude-plugins-official
 ```
 
 インストール中に Supabase のアクセストークンを入力する画面が表示されます。先ほどコピーした `sbp_` で始まるトークンを貼り付けてください。
@@ -130,7 +130,7 @@ $ /install-plugin supabase @ claude-plugins-official
 プラグインのインストールが完了したら、続けて以下を入力して接続を確認します。
 
 ```plaintext
-$ Supabase のプロジェクト一覧を表示して
+Supabase のプロジェクト一覧を表示して
 ```
 
 Step 1 で作成した `todos` プロジェクトが表示されれば成功です。
@@ -156,7 +156,7 @@ Step 1 で作成した `todos` プロジェクトが表示されれば成功で�
 引き続き Claude Code のプロンプトで、以下を入力してください。
 
 ```plaintext
-$ Supabase の todos プロジェクトに TODO管理用の `todos` テーブルを作って。
+Supabase の todos プロジェクトに TODO管理用の `todos` テーブルを作って。
 Row Level Security (RLS) を有効化して。ログインしたユーザーが自分の TODO だけを見れる・作れる・更新できる・削除できるようにして
 ```
 
@@ -251,7 +251,7 @@ CREATE POLICY "Users can delete their own todos"
 プラグインがインストールされているので、Claude Code に接続情報の取得を依頼できます。Claude Code のプロンプトで以下を入力してください。
 
 ```plaintext
-$ Supabase の todos プロジェクトの URL と anon key を教えて
+Supabase の todos プロジェクトの URL と anon key を教えて
 ```
 
 Claude Code が値を表示してくれるので、表示された値をメモしておいてください。
@@ -259,7 +259,7 @@ Claude Code が値を表示してくれるので、表示された値をメモ�
 Claude Code を一度終了します。
 
 ```plaintext
-$ /exit
+/exit
 ```
 
 > **`/exit` とは？** Claude Code を終了してターミナルに戻るコマンドです。
@@ -322,7 +322,7 @@ cat .gitignore | grep env
 Claude Code に日本語で指示するだけでコミットが完了します（Chapter 2 の Step 5 と同じ体験です）。
 
 ```plaintext
-$ 今回の作業をコミットして。`.env.local` は絶対に含めないで
+今回の作業をコミットして。`.env.local` は絶対に含めないで
 ```
 
 Claude Code がファイルの確認、コミットメッセージの作成、コミットまで行ってくれます。
@@ -330,7 +330,7 @@ Claude Code がファイルの確認、コミットメッセージの作成、�
 コミットが完了したら、GitHub に push します。
 
 ```plaintext
-$ push して
+push して
 ```
 
 **確認ポイント**
@@ -346,7 +346,7 @@ $ push して
 Claude Code を終了します。
 
 ```plaintext
-$ /exit
+/exit
 ```
 
 このチャプターの全作業が終わったら、以下をまとめて確認してください。
@@ -384,7 +384,7 @@ claude
 ```
 
 ```plaintext
-$ /install-plugin supabase @ claude-plugins-official
+/install-plugin supabase @ claude-plugins-official
 ```
 
 **「Supabase のプロジェクト一覧を表示して」と言っても何も表示されない場合:**
