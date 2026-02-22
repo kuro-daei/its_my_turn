@@ -37,6 +37,37 @@
 - 非エンジニア視点での品質チェック → `chief`
 - Claude Code の技術解説 → `tech`
 
+## プラグイン（MCP サーバー）
+
+このプロジェクトで利用している MCP プラグイン：
+
+| プラグイン | 用途 |
+|---|---|
+| `Notion` | Notion ワークスペースとの連携（ページ検索・作成・更新） |
+| `context7` | ライブラリドキュメントの検索・参照 |
+| `Slack` | Slack チャンネルへの通知・メッセージ送信 |
+| `Supabase` | Supabase プロジェクトの管理・SQL 実行 |
+
+- プラグインの権限設定は `.claude/settings.local.json` で管理
+- フック（hooks）の設定は `.claude/settings.json` で管理
+
+## スキル
+
+利用可能な主要スキル：
+
+| スキル | 用途 |
+|---|---|
+| `commit` | Git コミットの作成 |
+| `commit-push-pr` | コミット → プッシュ → PR 作成の一連フロー |
+| `brainstorming` | 機能追加・設計前のアイデア整理 |
+| `writing-plans` | 実装計画の作成 |
+| `subagent-driven-development` | 独立タスクの並列実行 |
+| `revise-claude-md` | CLAUDE.md の更新・改善 |
+| `Notion:tasks:build` | Notion ページからタスクを構築 |
+
+- スキルは `/スキル名` で呼び出す（例: `/commit`）
+- 詳細は `/help` で確認可能
+
 ## 作業ルール
 
 - 記事は日本語で書く
