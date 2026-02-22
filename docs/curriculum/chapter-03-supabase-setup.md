@@ -108,10 +108,9 @@ Supabase プラグインを使うには、まず Supabase の「Personal Access 
 
 ### 2-2. プラグインをインストールする
 
-Claude Code を起動します。
+プロジェクトフォルダに移動して、Claude Code を起動します。
 
 ```bash
-cd ~/workspace/todos
 claude
 ```
 
@@ -272,10 +271,6 @@ Claude Code を一度終了します。
 
 ターミナルでプロジェクトルートに移動します（Claude Code を終了した後のターミナルで作業します）。
 
-```bash
-cd ~/workspace/todos
-```
-
 テキストエディタで `.env.local` ファイルを新規作成して、以下の内容を記述します。`your-url` と `your-anon-key` の部分を先ほど Claude Code が表示した実際の値に置き換えてください。
 
 ```dotenv
@@ -379,7 +374,6 @@ Claude Code を終了します。
 まず Claude Code を再起動して、もう一度インストールを試みてください。
 
 ```bash
-cd ~/workspace/todos
 claude
 ```
 
