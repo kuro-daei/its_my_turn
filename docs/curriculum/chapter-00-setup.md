@@ -493,10 +493,9 @@ gh auth status
 
 ## Claude Code の初回起動
 
-作業用ディレクトリに移動して Claude Code を起動します。
+Claude Code を起動します。
 
 ```bash
-cd ~/projects
 claude
 ```
 
