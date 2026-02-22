@@ -50,13 +50,13 @@ claude
 Claude Code が起動したら、作業を始める前に現在のブランチを確認してください。
 
 ```plaintext
-$ git branch --show-current
+git branch --show-current
 ```
 
 > **注意:** `main` と表示された場合は、作業を止めてブランチを作成してください。
 >
 > ```plaintext
-> $ git checkout -b feature/vercel-deploy
+> git checkout -b feature/vercel-deploy
 > ```
 
 ---
@@ -82,7 +82,7 @@ $ git branch --show-current
 Vercel CLI のインストールはターミナルで行います。Claude Code を一度終了します。
 
 ```plaintext
-$ /exit
+/exit
 ```
 
 ターミナルに戻ったら、以下を実行してください。
@@ -124,7 +124,7 @@ claude
 ```
 
 ```plaintext
-$ GitHub にコードを push する準備をして。リモートリポジトリの URL は `https://github.com/あなたのユーザー名/todos.git`
+GitHub にコードを push する準備をして。リモートリポジトリの URL は `https://github.com/あなたのユーザー名/todos.git`
 ```
 
 または、Claude Code を使わずターミナルで直接実行することもできます。
@@ -161,7 +161,7 @@ claude
 ```
 
 ```plaintext
-$ Vercel にデプロイする準備をして。環境変数に何を設定すればいいか教えて
+Vercel にデプロイする準備をして。環境変数に何を設定すればいいか教えて
 ```
 
 ### Step 1 の確認ポイント
@@ -192,7 +192,7 @@ Vercel の「環境変数」機能を使って、本番サーバーにも同じ�
 ローカルの `.env.local` ファイルを確認して、設定する値を用意します。Claude Code を一度終了します。
 
 ```plaintext
-$ /exit
+/exit
 ```
 
 ターミナルに戻ったら、以下を実行してください。
@@ -268,7 +268,7 @@ claude
 Claude Code が起動したら、以下を入力してください。
 
 ```plaintext
-$ Vercel にデプロイして。デプロイ前に問題がないかビルドを確認して
+Vercel にデプロイして。デプロイ前に問題がないかビルドを確認して
 ```
 
 Claude Code はまず `npm run build` でビルドが通るかを確認し、問題があれば修正してからデプロイを提案します。
@@ -368,7 +368,7 @@ claude
 Claude Code が起動したら、以下を入力してください。
 
 ```plaintext
-$ TODO リストのスタイルを少し改善して、feature/style-tweak ブランチを作ってコミットして push して
+TODO リストのスタイルを少し改善して、feature/style-tweak ブランチを作ってコミットして push して
 ```
 
 ---
@@ -450,7 +450,7 @@ claude
 ```
 
 ```plaintext
-$ npm run build でエラーが出ています。ログを確認して修正して
+npm run build でエラーが出ています。ログを確認して修正して
 ```
 
 ビルドエラーの原因として多いもの:
@@ -520,7 +520,7 @@ claude
 ```
 
 ```plaintext
-$ デプロイ後のページが真っ白になります。ブラウザのコンソールに以下のエラーがあります:（エラーメッセージを貼り付ける）
+デプロイ後のページが真っ白になります。ブラウザのコンソールに以下のエラーがあります:（エラーメッセージを貼り付ける）
 ```
 
 ---

@@ -127,7 +127,7 @@ TODO アプリ。ユーザーがタスクを追加・完了・削除できる We
 Claude Code のプロンプトで以下を入力します。
 
 ```plaintext
-$ このプロジェクトは何のためのアプリですか？概要を教えてください。
+このプロジェクトは何のためのアプリですか？概要を教えてください。
 ```
 
 > **体験ポイント:** CLAUDE.md 追記前の回答と比べてみましょう。「業務マニュアル」を渡す前と後で、アシスタントの答えの具体性がまったく変わるはずです。
@@ -142,7 +142,7 @@ $ このプロジェクトは何のためのアプリですか？概要を教え
 Step 1 が完了したら、Claude Code を終了します。
 
 ```plaintext
-$ /exit
+/exit
 ```
 
 ---
@@ -183,7 +183,7 @@ claude plugin list
 インストール後、Claude Code のプロンプトで以下のコマンドを試してみましょう。
 
 ```plaintext
-$ /claude-md-management:revise-claude-md
+/claude-md-management:revise-claude-md
 ```
 
 > **何が起きるか:** Claude Code が現在の CLAUDE.md を読み込み、改善できる点を提案したり、セッション中に判明した情報を追記したりします。
@@ -217,7 +217,7 @@ $ /claude-md-management:revise-claude-md
 インストール後は、Claude Code に普通に質問するだけで自動的に最新ドキュメントを参照します。
 
 ```plaintext
-$ Next.js の App Router について教えてください
+Next.js の App Router について教えてください
 ```
 
 > **体験ポイント:** context7 なしで同じ質問をしたときと比べてみましょう。最新の公式ドキュメントをもとに回答するようになり、情報の正確さが上がります。
@@ -250,7 +250,7 @@ claude
 Claude Code のプロンプトで以下を入力します。
 
 ```plaintext
-$ /agents
+/agents
 ```
 
 > 「Create new agent」→「Project-level」→「Generate with Claude」の順に選択します。
@@ -327,7 +327,7 @@ Claude Code のプロンプトでは、キーボードの上下矢印キー（�
 Claude Code のプロンプト内から、先頭に `!` をつけるとターミナルコマンドを直接実行できます。Claude Code を終了せずにコマンドを打てるので便利です。
 
 ```plaintext
-$ ! git status
+! git status
 ```
 
 > **`!` コマンドとは?** Claude Code の中にいながら、ターミナルのコマンドを実行できる機能です。`/exit` でいちいち抜けなくても、ちょっとしたコマンド確認ができます。
@@ -335,7 +335,7 @@ $ ! git status
 試してみましょう:
 
 ```plaintext
-$ ! ls src/app/
+! ls src/app/
 ```
 
 `src/app/` フォルダの中身が表示されるはずです。
@@ -345,7 +345,7 @@ $ ! ls src/app/
 Claude Code への指示の中で `@ファイル名` と書くと、そのファイルの内容を明示的に Claude Code に読み込ませることができます。
 
 ```plaintext
-$ @CLAUDE.md の内容を要約して
+@CLAUDE.md の内容を要約して
 ```
 
 > **`@` 記号の意味:** 「このファイルを見て」という指示です。Claude Code はプロジェクト全体を理解していますが、`@` をつけることで「特にこのファイルに注目して」と明確に伝えられます。
@@ -353,7 +353,7 @@ $ @CLAUDE.md の内容を要約して
 もう1つ試してみましょう:
 
 ```plaintext
-$ @package.json にはどんな依存パッケージが入っている？
+@package.json にはどんな依存パッケージが入っている？
 ```
 
 ### Step 4 の確認ポイント
@@ -372,7 +372,7 @@ $ @package.json にはどんな依存パッケージが入っている？
 Claude Code が起動している状態で、以下を入力してください。
 
 ```plaintext
-$ この章で追加・変更したファイルをすべてコミットして
+この章で追加・変更したファイルをすべてコミットして
 ```
 
 Claude Code が変更を確認し、適切なコミットメッセージを作成してコミットしてくれます。
@@ -380,7 +380,7 @@ Claude Code が変更を確認し、適切なコミットメッセージを作�
 コミットが完了したら、プッシュします。
 
 ```plaintext
-$ push して
+push して
 ```
 
 > **体験ポイント:** 「コミットして」「push して」と日本語で指示するだけで、Claude Code が `git add`、`git commit`、`git push` を適切に実行してくれます。Git のコマンドを覚えなくても大丈夫です。
