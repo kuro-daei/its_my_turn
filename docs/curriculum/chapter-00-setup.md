@@ -13,6 +13,7 @@
 
 | ツール | 読み方 | 役割 |
 |--------|--------|------|
+| Visual Studio Code | ビジュアル スタジオ コード | コードエディタ。ファイルの閲覧・編集を快適にするツール |
 | Claude Code | クロード コード | 今回の主役。ターミナルから使う AI アシスタント |
 | Git | ギット | ファイルの変更履歴を管理するツール |
 | gh | ジーエイチ | GitHub をターミナルから操作するツール |
@@ -29,7 +30,31 @@
 
 ## Mac の場合
 
-### Step 1: Homebrew のインストール
+### Step 1: Visual Studio Code のインストール
+
+Visual Studio Code（VS Code）は、コードを書いたりファイルを閲覧・編集したりするためのエディタです。高機能なメモ帳のようなもので、Claude Code が生成したファイルをわかりやすく確認するのに役立ちます。
+
+公式サイト <https://code.visualstudio.com/> にアクセスして、macOS 向けのインストーラーをダウンロードしてください。ダウンロードした `.zip` ファイルを展開し、`Visual Studio Code.app` をアプリケーションフォルダに移動したらインストール完了です。
+
+**ターミナルから `code` コマンドを使えるようにする:**
+
+VS Code を起動したら、`Cmd + Shift + P` でコマンドパレットを開き、`Shell Command: Install 'code' command in PATH` を選択して実行してください。これにより、ターミナルから `code` コマンドで VS Code を起動できるようになります。
+
+**確認:**
+
+```bash
+code --version
+```
+
+バージョン番号が表示されれば OK です。
+
+> **Homebrew でもインストールできます**: Homebrew（次のステップでインストール）がすでに入っている場合は、`brew install --cask visual-studio-code` でインストールすることもできます。
+
+- [ ] `code --version` でバージョン番号が表示された
+
+---
+
+### Step 2: Homebrew のインストール
 
 Homebrew（ホームブリュー）は Mac 用のパッケージ管理ツールです。「Mac のアプリストア」のようなもので、コマンド一発でさまざまなソフトウェアをインストールできます。
 
@@ -67,7 +92,7 @@ brew --version
 
 ---
 
-### Step 2: Claude Code のインストール・認証
+### Step 3: Claude Code のインストール・認証
 
 以下を実行するだけでインストールが完了します。
 
@@ -96,7 +121,7 @@ claude --version
 
 ---
 
-### Step 3: 作業用ディレクトリの作成
+### Step 4: 作業用ディレクトリの作成
 
 Claude Code はホームディレクトリ（`~`）ではなく、専用の作業用フォルダで実行します。
 
@@ -110,7 +135,7 @@ mkdir ~/projects
 
 ---
 
-### Step 4: git, gh, nvm, uv のインストール
+### Step 5: git, gh, nvm, uv のインストール
 
 Homebrew を使って一括でインストールします。
 
@@ -144,7 +169,7 @@ uv --version
 
 ---
 
-### Step 5: Node.js のインストール
+### Step 6: Node.js のインストール
 
 nvm を使って Node.js をインストールします。
 
@@ -168,7 +193,7 @@ npm --version
 
 ---
 
-### Step 6: Python のインストール
+### Step 7: Python のインストール
 
 uv を使って Python をインストールします。
 
@@ -188,7 +213,7 @@ Python のバージョンが表示されれば OK です。
 
 ---
 
-### Step 7: GitHub CLI（gh）の認証
+### Step 8: GitHub CLI（gh）の認証
 
 ```bash
 gh auth login
@@ -216,7 +241,42 @@ Windows では **WSL（Windows Subsystem for Linux）** 上の Ubuntu 24 で作�
 
 > **WSL（ダブリュー・エス・エル）とは?** Windows の中で Linux（リナックス）を動かす仕組みです。Web 開発の多くのツールは Linux 向けに作られているため、Mac と同じコマンドが使えるようになります。
 
-### Step 1: Windows Terminal のインストール
+### Step 1: Visual Studio Code のインストール
+
+Visual Studio Code（VS Code）は、コードを書いたりファイルを閲覧・編集したりするためのエディタです。高機能なメモ帳のようなもので、Claude Code が生成したファイルをわかりやすく確認するのに役立ちます。
+
+公式サイト <https://code.visualstudio.com/> にアクセスして、Windows 向けのインストーラーをダウンロードしてください。ダウンロードした `.exe` ファイルを実行し、画面の指示に従ってインストールしてください。
+
+または、PowerShell で以下を実行してもインストールできます。
+
+```powershell
+winget install Microsoft.VisualStudioCode
+```
+
+**WSL 拡張機能のインストール:**
+
+後の手順で WSL 内のファイルを VS Code で開くために、「WSL」拡張機能を入れておきます。
+
+1. VS Code を起動する
+2. 左サイドバーの拡張機能アイコン（四角が4つ並んだアイコン）をクリック
+3. 検索欄に「WSL」と入力
+4. 「WSL」（Microsoft 製）が表示されたら「インストール」をクリック
+
+**確認:**
+
+PowerShell で以下を実行してください。
+
+```powershell
+code --version
+```
+
+バージョン番号が表示されれば OK です。
+
+- [ ] `code --version` でバージョン番号が表示された
+
+---
+
+### Step 2: Windows Terminal のインストール
 
 PowerShell を**管理者として実行**して以下を入力してください。
 
@@ -232,7 +292,7 @@ winget install Microsoft.WindowsTerminal
 
 ---
 
-### Step 2: WSL + Ubuntu 24 のインストール
+### Step 3: WSL + Ubuntu 24 のインストール
 
 PowerShell（管理者として実行）で以下を実行してください。
 
@@ -267,7 +327,7 @@ uname -a
 
 ---
 
-### Step 3: パッケージの更新
+### Step 4: パッケージの更新
 
 Ubuntu ターミナルで最初に以下を実行してください。
 
@@ -279,7 +339,7 @@ sudo apt update && sudo apt upgrade -y
 
 ---
 
-### Step 4: Claude Code のインストール・認証
+### Step 5: Claude Code のインストール・認証
 
 ```bash
 curl -fsSL https://claude.ai/install.sh | bash
@@ -305,7 +365,7 @@ claude --version
 
 ---
 
-### Step 5: 作業用ディレクトリの作成
+### Step 6: 作業用ディレクトリの作成
 
 ```bash
 mkdir ~/projects
@@ -317,7 +377,7 @@ mkdir ~/projects
 
 ---
 
-### Step 6: git, gh のインストール
+### Step 7: git, gh のインストール
 
 **git:**
 
@@ -345,7 +405,7 @@ gh --version
 
 ---
 
-### Step 7: nvm のインストール
+### Step 8: nvm のインストール
 
 ```bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
@@ -362,7 +422,7 @@ nvm --version
 
 ---
 
-### Step 8: Node.js のインストール
+### Step 9: Node.js のインストール
 
 ```bash
 nvm install --lts
@@ -380,7 +440,7 @@ npm --version
 
 ---
 
-### Step 9: uv のインストール
+### Step 10: uv のインストール
 
 ```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -397,7 +457,7 @@ uv --version
 
 ---
 
-### Step 10: Python のインストール
+### Step 11: Python のインストール
 
 ```bash
 uv python install
@@ -413,7 +473,7 @@ uv python list
 
 ---
 
-### Step 11: gh の認証
+### Step 12: gh の認証
 
 ```bash
 gh auth login
@@ -462,6 +522,7 @@ Claude から返答が来れば完璧です。終了するには `/exit` と入�
 
 Chapter 0 が完了したら、以下がすべてチェックできているはずです。
 
+- [ ] `code --version` でバージョン番号が表示される
 - [ ] `claude --version` でバージョン番号が表示される
 - [ ] `claude` コマンドで起動して会話できる
 - [ ] `git --version` でバージョン番号が表示される
@@ -476,6 +537,7 @@ Chapter 0 が完了したら、以下がすべてチェックできているは�
 
 このチャプターでは、Claude Code を使うための環境を整えました。
 
+- **Visual Studio Code** でコードの閲覧・編集ができるようになりました
 - **Claude Code** をネイティブアプリとしてインストール・認証しました
 - **Git（ギット）** で変更履歴の管理ができるようになりました
 - **gh** で GitHub 操作がターミナルからできるようになりました

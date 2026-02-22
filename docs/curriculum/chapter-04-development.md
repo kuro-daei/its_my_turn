@@ -86,8 +86,6 @@ Claude Code の入力欄に、先頭に `!` をつけて以下のコマンドを
 ! npx skills add https://github.com/vercel-labs/skills --skill find-skills
 ```
 
-[screenshot: find-skills がインストールされた様子]
-
 > **注意:** スキルのインストール後は、Claude Code の再起動が必要です。インストールしたスキルを反映するには、一度終了してから再起動する必要があります。
 
 Claude Code を一度終了します。
@@ -108,7 +106,9 @@ claude
 
 `find-skills` がインストールできたら、早速スキルを探してみましょう。Claude Code に以下のように指示してください。
 
-> TODO アプリ開発に役立つスキルを探して。Tailwind CSS、Next.js、Supabase を使うよ
+```plaintext
+$ TODO アプリ開発に役立つスキルを探して。Tailwind CSS、Next.js、Supabase を使うよ
+```
 
 Claude Code が `npx skills find` を使って検索し、おすすめのスキルを提案してくれます。以下のようなスキルが見つかります。
 
@@ -126,8 +126,6 @@ Claude Code が `npx skills find` を使って検索し、おすすめのスキ�
 | `supabase-postgres-best-practices` | 約 21,500 | Supabase 公式のデータベース操作ベストプラクティス |
 
 Claude Code がインストールを提案してきたら、承認してください。インストールが完了すると、以降のすべての指示にこれらのスキルの知識が自動で活かされます。
-
-[screenshot: Claude Code がスキルを検索・提案してインストールしている様子]
 
 > **体験:** コマンドを丸暗記しなくても大丈夫です。「TODO アプリに役立つスキルを探して」と Claude Code に聞くだけで、必要なスキルを見つけてインストールまでやってくれます。「自分で探して → 選んで → 入れる」という体験そのものが、スキルの使いこなし方の基本です。
 >
@@ -188,8 +186,6 @@ Claude Code のチャット画面で、**`Shift` キーを押しながら `Tab` 
 
 入力欄の横や上部に「Plan Mode」と表示されれば切り替え成功です。
 
-[screenshot: Claude Code の Plan Mode が有効になっている様子。入力欄に「Plan Mode」と表示されている]
-
 > **体験:** Plan Mode はいつでも切り替えられます。通常モードに戻すには、再度 `Shift+Tab` × 2 を押してください。
 
 ---
@@ -236,8 +232,6 @@ src/
 
 > **体験:** Claude Code が実装前に「こういう構成で進めようと思うけど、いいですか？」と確認してきました。チームメンバーと相談するような感覚で使えます。
 
-[screenshot: Claude Code が設計案を提示して承認を求めている様子]
-
 ### 設計を確認して承認する
 
 提示された設計を確認して、問題なければ「OK」「進めて」などと返信します。変更したい点があれば「ヘッダーにはログイン中のメールアドレスも表示したい」のように追加指示できます。
@@ -266,9 +260,9 @@ Vibe Coding では、操作ひとつひとつを個別に指示する必要は�
 
 Plan Mode を解除して（`Shift` キーを押しながら `Tab` キーを 2 回押すと通常モードに戻ります）、以下の指示を入力してください。
 
-> TODO アプリを作って。Supabase の todos テーブルに接続して、TODO の追加・一覧表示・完了の切り替え・削除がすべて動くようにして。ヘッダー、追加フォーム、TODO リストを含めて。Tailwind CSS でスタイリングして
-
-[screenshot: Claude Code が複数のファイルを同時に生成している様子]
+```plaintext
+$ TODO アプリを作って。Supabase の todos テーブルに接続して、TODO の追加・一覧表示・完了の切り替え・削除がすべて動くようにして。ヘッダー、追加フォーム、TODO リストを含めて。Tailwind CSS でスタイリングして
+```
 
 > **体験:** 1 行の指示で複数のファイルが同時に生成される驚きを体感してください。さらに、先ほどインストールしたスキルが自動で活かされ、デザインが整った UI になります。これが Vibe Coding の醍醐味です。
 
@@ -321,8 +315,6 @@ src/
 └────────────────────────────────────┘
 ```
 
-[screenshot: ブラウザに TODO アプリの UI が表示されている様子]
-
 ---
 
 ### 動作確認
@@ -350,17 +342,23 @@ npm run dev
 
 Claude Code に以下のように聞いてみてください。
 
-> ブラウザで localhost:3000 を開いたらエラーになった。ターミナルのエラーメッセージを確認して修正して
+```plaintext
+$ ブラウザで localhost:3000 を開いたらエラーになった。ターミナルのエラーメッセージを確認して修正して
+```
 
 **Tailwind CSS のスタイルが当たっていない場合:**
 
-> Tailwind CSS のスタイルが反映されていない。tailwind.config.ts の設定を確認して
+```plaintext
+$ Tailwind CSS のスタイルが反映されていない。tailwind.config.ts の設定を確認して
+```
 
 **Supabase にデータが入らない、または一覧が表示されない場合:**
 
 Claude Code に以下のように聞いてみてください。
 
-> Supabase との接続でエラーが起きているかもしれない。各操作（追加・取得・更新・削除）のエラーをコンソールに出力して確認して
+```plaintext
+$ Supabase との接続でエラーが起きているかもしれない。各操作（追加・取得・更新・削除）のエラーをコンソールに出力して確認して
+```
 
 ブラウザの開発者ツール（F12 → Console タブ）でエラーメッセージを確認します。
 
@@ -455,8 +453,6 @@ Google ログインを実装するには、以下の手順が必要です。
 
 > **体験:** Claude Code が大きなタスクを小さなステップに分解しました。「まず何をすべきか」と聞くことで、全体の見通しを立ててから進めることができます。
 
-[screenshot: Claude Code がタスクを段階的に提示している様子]
-
 ---
 
 ### Phase B: Supabase で Google Provider を有効化
@@ -469,13 +465,7 @@ Google ログインを使えるようにするには、Supabase 側で「Google 
 2. 左サイドバーの「Authentication」をクリック
 3. 「Providers」タブを選択
 4. 「Google」を見つけてクリックして展開する
-
-[screenshot: Supabase の Authentication → Providers 画面。Google の行が見えている]
-
 5. 「Enable Sign in with Google」のトグルをオンにする
-
-[screenshot: Google Provider が有効化されている様子]
-
 6. 「Redirect URLs」の欄に以下を追加する
 
 ```plaintext
@@ -521,7 +511,9 @@ http://localhost:3000/auth/callback
 
 Claude Code に以下を指示します。
 
-> @supabase/ssr をインストールして
+```plaintext
+$ @supabase/ssr をインストールして
+```
 
 Claude Code がターミナルで自動実行します。自分でコマンドを入力する必要はありません。
 
@@ -535,9 +527,9 @@ npm install @supabase/ssr
 
 続けて以下を指示します。
 
-> Supabase Auth の Google ログインを実装して。@supabase/ssr を使って。未ログインの場合は /login にリダイレクトして
-
-[screenshot: Claude Code が複数のファイルを同時に生成・編集している様子]
+```plaintext
+$ Supabase Auth の Google ログインを実装して。@supabase/ssr を使って。未ログインの場合は /login にリダイレクトして
+```
 
 #### 実装で作られるファイルの概要
 
@@ -575,8 +567,6 @@ Middleware がないと、未ログインのユーザーが直接 `http://localh
 
 Google ログイン完了後の処理を受け取るルート。
 
-[screenshot: ブラウザに表示されたログイン画面。「Google でログイン」ボタンだけが中央にある]
-
 #### 確認ポイント
 
 - [ ] `package.json` に `@supabase/ssr` が追加されている
@@ -592,11 +582,15 @@ Google ログイン完了後の処理を受け取るルート。
 
 Middleware のマッチャー設定で `/login` 自体が対象になっている可能性があります。
 
-> middleware.ts の matcher が /login を除外しているか確認して。無限リダイレクトが起きている
+```plaintext
+$ middleware.ts の matcher が /login を除外しているか確認して。無限リダイレクトが起きている
+```
 
 **Google ログインボタンを押しても何も起きない場合:**
 
-> /auth/callback/route.ts のコードを確認して。OAuth のコールバック処理が正しく実装されているか確認して
+```plaintext
+$ /auth/callback/route.ts のコードを確認して。OAuth のコールバック処理が正しく実装されているか確認して
+```
 
 ---
 
@@ -616,13 +610,13 @@ RLS はデータベースの「内側の鍵」です。
 
 #### Claude Code への指示
 
-> todos テーブルに RLS を設定して。ログインユーザーが自分の TODO だけ操作できるようにして
+```plaintext
+$ todos テーブルに RLS を設定して。ログインユーザーが自分の TODO だけ操作できるようにして
+```
 
 Claude Code が「SELECT / INSERT / UPDATE / DELETE」それぞれのポリシーを含む SQL を生成します。生成された SQL を Supabase の SQL Editor にコピーして実行するよう指示されます。
 
 > **`auth.uid()`（オース ユーアイディー）って何？** Supabase がログイン中のユーザーの ID を返す関数です。「このリクエストを送ってきたのは誰か」を Supabase が管理するので、クライアント（ブラウザ）から送られてきた `user_id` を信用する必要がありません。なぜなら、悪意のある人がブラウザで値を書き換えて「自分は別の人です」と偽ることを防げるからです。`auth.uid()` はサーバー側で管理されているため、ブラウザからは書き換えられません。これが重要なセキュリティポイントです。
-
-[screenshot: Supabase の SQL Editor に RLS ポリシーの SQL が入力されている様子]
 
 #### SQL の実行手順（ブラウザで操作）
 
@@ -631,13 +625,13 @@ Claude Code が「SELECT / INSERT / UPDATE / DELETE」それぞれのポリシ�
 3. Claude Code が生成した SQL をコピーして貼り付ける
 4. 「Run」ボタンをクリックして実行する
 
-[screenshot: Supabase の SQL Editor でポリシーが正常に実行された様子]
-
 #### TODO 追加時に user_id を保存するよう更新する
 
 Chapter 3 で `todos` テーブルを作ったとき、`user_id` というカラム（「誰のデータか」を記録する列）も一緒に作っていましたね。ここでようやくそのカラムが活躍します。TODO を追加するときに、ログインユーザーの `user_id` も一緒に保存するよう修正します。
 
-> AddTodoForm で TODO を追加するとき、ログインユーザーの user_id も一緒に保存するようにして
+```plaintext
+$ AddTodoForm で TODO を追加するとき、ログインユーザーの user_id も一緒に保存するようにして
+```
 
 #### 確認ポイント
 
@@ -652,7 +646,9 @@ Chapter 3 で `todos` テーブルを作ったとき、`user_id` というカラ
 
 RLS が有効になったことで、`user_id` が設定されていない古い todos が取得できなくなっています。Supabase の Table Editor で古いデータを削除するか、`user_id` を手動で設定してください。
 
-> Supabase の todos テーブルで RLS 設定後にデータが取れなくなった。SELECT ポリシーが正しいか確認して
+```plaintext
+$ Supabase の todos テーブルで RLS 設定後にデータが取れなくなった。SELECT ポリシーが正しいか確認して
+```
 
 **「permission denied for table todos」エラーが出る場合:**
 
@@ -675,8 +671,6 @@ RLS が有効なのにポリシーが設定されていない状態です。Clau
 - [ ] `http://localhost:3000` にアクセスすると `/login` にリダイレクトされる
 - [ ] ログイン画面に「Google でログイン」ボタンが表示されている
 
-[screenshot: /login ページに「Google でログイン」ボタンだけが表示されている様子]
-
 ---
 
 #### シナリオ 2: Google でログインする
@@ -684,8 +678,6 @@ RLS が有効なのにポリシーが設定されていない状態です。Clau
 - [ ] 「Google でログイン」ボタンをクリックすると Google の認証画面が開く
 - [ ] Google アカウントを選択してログインすると TODO リスト画面に遷移する
 - [ ] ヘッダーにアプリタイトルとログアウトボタンが表示されている
-
-[screenshot: ログイン後の TODO リスト画面。ヘッダーにログアウトボタンが表示されている]
 
 ---
 
@@ -732,8 +724,6 @@ RLS が有効なのにポリシーが設定されていない状態です。Clau
 
 - [ ] 同じ Google アカウントで再ログインする
 - [ ] 以前追加した TODO が表示されている（削除した TODO は表示されない）
-
-[screenshot: 再ログイン後に TODO が保持されている様子]
 
 ---
 
@@ -826,8 +816,6 @@ git commit -m "feat: implement todo app with CRUD and Google authentication"
 >
 > **体験:** 「コミットして」と一言指示するだけで、Claude Code は変更内容を把握した上で適切な Conventional Commits 形式のメッセージを生成します。何をコミットするかの説明を別途書く必要はありません。
 
-[screenshot: Claude Code がコミットメッセージを自動生成してコミットしている様子]
-
 コミットが完了したら、GitHub に push します。
 
 ```plaintext
@@ -845,10 +833,11 @@ $ push して
 
 このチャプターで行った作業を CLAUDE.md の「随時追記」セクションに記録しましょう。Claude Code に以下のように指示します。
 
-> CLAUDE.md の随時追記セクションに、以下を追記して:
->
-> - `@supabase/ssr` を使って Google ログインを実装した
-> - RLS ポリシーを設定した（自分の TODO のみ操作可能）
+```plaintext
+$ CLAUDE.md の随時追記セクションに、以下を追記して:
+- @supabase/ssr を使って Google ログインを実装した
+- RLS ポリシーを設定した（自分の TODO のみ操作可能）
+```
 
 **体験:** プロジェクトを進めるたびに気づいたことを CLAUDE.md に記録する習慣が、Claude Code を「育てる」コツです。次に作業するとき、Claude Code はこの記録を読んで文脈を理解してくれます。
 

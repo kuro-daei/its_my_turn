@@ -53,8 +53,6 @@ yes | npx create-next-app@latest todos --typescript --eslint --tailwind --src-di
 | `--app` | App Router（最新のページ管理の仕組み）を使う |
 | `--import-alias "@/*"` | ファイルの読み込みパスを `@/` で書けるようにする |
 
-[screenshot: create-next-app のセットアップ完了画面（Successfully created と表示されている状態）]
-
 ### 各オプションの意味
 
 **TypeScript（タイプスクリプト）**
@@ -81,8 +79,6 @@ code .
 > **`cd`（シーディー）とは?** Change Directory の略で、「ディレクトリ（フォルダ）を移動する」コマンドです。`cd todos` と実行すると、`todos` フォルダの中に入った状態になります。
 
 VS Code（ビジュアルスタジオコード）でプロジェクトが開きます。左側のエクスプローラー（ファイル一覧）で、生成されたファイルを確認できます。
-
-[screenshot: VS Code でプロジェクトが開かれた様子]
 
 ### 生成されるファイル構成
 
@@ -143,8 +139,6 @@ a1b2c3d Initial commit
 
 > **体験ポイント:** コマンドを一つひとつ覚えて実行しなくても、ツールが「よしなに」やってくれることがあります。「準備はもう終わっていた」という体験が、ここでの発見です。
 
-[screenshot: git log --oneline で初回コミットが表示されている様子]
-
 次に、`.gitignore`（ドット ギット イグノア）が正しく設定されているか確認します。
 
 ```bash
@@ -156,8 +150,6 @@ cat .gitignore
 > **`cat`（キャット）コマンドとは?** ファイルの中身を画面に表示するコマンドです。`cat ファイル名` で中身を確認できます。
 
 `node_modules` や `.env.local` などが記載されていることを確認してください。`create-next-app` が自動生成する `.gitignore` には通常これらが含まれています。
-
-[screenshot: .gitignore の内容が表示されている様子]
 
 ### GitHub にリポジトリを作成してプッシュする
 
@@ -190,13 +182,9 @@ git push -u origin main
 
 > **`git push`（ギット プッシュ）とは?** ローカルの変更を GitHub に送信するコマンドです。`-u origin main` は「`origin`（GitHub）の `main` ブランチに送って、以降はここをデフォルトにする」という意味です。
 
-[screenshot: git push の実行結果]
-
 ### GitHub でリポジトリを確認する
 
 ブラウザで GitHub（<https://github.com>）を開き、自分のアカウントに `todos` リポジトリが作成されていることを確認してください。
-
-[screenshot: GitHub 上に todos リポジトリが作成されている様子]
 
 ### 確認ポイント
 
@@ -237,15 +225,11 @@ Claude Code のセッションで、以下を入力してください。
 
 > **体験ポイント:** 「TODO 管理アプリを作りたい」という一言を添えるだけで、Claude Code がプロジェクトのコンテキスト（文脈）を理解した上で CLAUDE.md を生成してくれます。ファイル構造も自動で読み取るので、ゼロから書く必要がありません。
 
-[screenshot: /init コマンドを入力している様子]
-
 ### 生成された CLAUDE.md を確認する
 
 `/init` が完了すると、プロジェクトルート（`todos/` 直下）に `CLAUDE.md` が生成されます。VS Code に戻ると、エクスプローラーに `CLAUDE.md` が新しく表示されているはずです。クリックして内容を確認してみましょう。
 
 プロジェクトの技術スタック（Next.js、TypeScript、Tailwind CSS など）や目的（TODO 管理アプリ）がまとまった内容が生成されているはずです。
-
-[screenshot: VS Code で CLAUDE.md を開いている様子]
 
 > **注意:** 生成された内容が意図と異なる場合は、Claude Code に直接指示して修正できます。「CLAUDE.md の目的の説明をもっと具体的にして」のように頼むと対応してくれます。
 
@@ -262,8 +246,8 @@ Claude Code のセッションで、以下を入力してください。
 
 `/init` で CLAUDE.md が生成されましたが、まだコミット（変更の保存）はされていません。Claude Code に以下のように指示してください。
 
-```paintext
-コミットして
+```plaintext
+$ コミットして
 ```
 
 Claude Code はコミットメッセージを自動で考えて、実行してくれます。
@@ -277,8 +261,6 @@ git commit -m "docs: add CLAUDE.md for project context"
 
 > **体験ポイント:** コミットメッセージの書き方を覚えなくても、Claude Code が「よしなに」考えてくれます。ベストプラクティスに沿ったメッセージが自動で生成されるのが体感できます。
 
-[screenshot: Claude Code がコミットを実行している様子]
-
 ### GitHub にプッシュして確認する
 
 コミットが完了したら、GitHub に反映させます。
@@ -288,8 +270,6 @@ git commit -m "docs: add CLAUDE.md for project context"
 ```
 
 ブラウザで GitHub の `todos` リポジトリを開き、`CLAUDE.md` が追加されていることを確認してください。
-
-[screenshot: GitHub に CLAUDE.md がプッシュされた様子]
 
 ### 確認ポイント
 
@@ -320,8 +300,6 @@ npm run dev
 - Ready in 2.1s
 ```
 
-[screenshot: npm run dev の実行結果]
-
 ### ブラウザで確認する
 
 ブラウザを開いて `http://localhost:3000` にアクセスしてください。
@@ -330,8 +308,6 @@ npm run dev
 
 Next.js のウェルカムページが表示されれば、アプリが正常に動いています。
 
-[screenshot: ブラウザに Next.js のウェルカムページが表示されている様子]
-
 > **注意:** ポート `3000` が他のアプリで使用中の場合、`3001` や `3002` など別のポートが自動的に使われます。ターミナルの出力を確認してください。
 
 ### Claude Code にプロジェクト構造を説明してもらう
@@ -339,7 +315,7 @@ Next.js のウェルカムページが表示されれば、アプリが正常に
 Claude Code のセッション（別のターミナル）に戻り、以下のように指示します。
 
 ```plaintext
-src/ の中身を説明して
+$ src/ の中身を説明して
 ```
 
 Claude Code からは以下のような応答が期待されます。
@@ -370,17 +346,17 @@ app/globals.css
 
 > **体験ポイント:** Claude Code は自分でファイルを読み込んで、プロジェクト全体の構造を理解しています。「このファイルは何をするの?」「このコードはどういう意味?」と聞くだけで、丁寧に説明してくれます。理解のスタート地点として大いに役立ちます。
 
-[screenshot: Claude Code が src/ の構造を説明している様子]
-
 ### さらに深掘りしてみる（任意）
 
 時間があれば、以下の質問も試してみてください。Claude Code がプロジェクトのことをどれだけ理解しているか体感できます。
 
-> このプロジェクトで TODO アプリを作るとしたら、どんなファイルを作ればいい?
->
-> layout.tsx と page.tsx の違いを教えて
->
-> Tailwind CSS で青いボタンを作るにはどう書けばいい?
+```plaintext
+$ このプロジェクトで TODO アプリを作るとしたら、どんなファイルを作ればいい?
+
+$ layout.tsx と page.tsx の違いを教えて
+
+$ Tailwind CSS で青いボタンを作るにはどう書けばいい?
+```
 
 Claude Code がプロジェクトのコンテキスト（文脈）を踏まえて回答してくれることを確認してください。
 
@@ -453,7 +429,9 @@ npx next dev -p 3001
 
 以下のように明示的に許可を伝えてください。
 
-> git コマンドの実行を許可します。git log を実行してコミット履歴を確認して
+```plaintext
+$ git コマンドの実行を許可します。git log を実行してコミット履歴を確認して
+```
 
 ---
 
