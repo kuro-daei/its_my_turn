@@ -1,4 +1,12 @@
 {
+  "permissions": {
+    "allow": [
+      "Edit(/docs/**)",
+      "Write(/docs/**)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:https://code.claude.com/)"
+    ]
+  },
   "hooks": {
     "PreToolUse": [
       {

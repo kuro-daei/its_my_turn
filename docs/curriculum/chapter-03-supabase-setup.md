@@ -13,7 +13,7 @@
 ## このチャプターで学ぶこと
 
 - Supabase のアカウントを作成し、プロジェクトを立ち上げる
-- プラグイン（外部サービス連携の仕組み）をインストールし、Claude Code と Supabase を接続する
+- プラグイン（外部サービス連携の仕組み）をインストールし、ブラウザ認証で Claude Code と Supabase を接続する
 - プラグインの認証を完了させ、Claude Code から Supabase を直接操作できる状態にする
 - `todos` テーブルを Claude Code に直接作成させる（SQL のコピー&ペーストは不要）
 - `.env.local` に接続情報を設定する
@@ -39,11 +39,8 @@ Supabase（スーパーベース）は、データを安全に保管してくれ
 
 1. ブラウザで `https://supabase.com` を開く
 2. 右上の「Start your project」または「Sign Up」ボタンをクリック
-3. 「Continue with GitHub」を選択（GitHub アカウントがある場合は推奨）。
-   または、メールアドレスとパスワードで登録する
-4. GitHub 連携の場合は「Authorize supabase」をクリックして認証を完了させる
-
-> **なぜ GitHub 連携が便利なの？** 別のパスワードを覚える必要がなく、すでに使っている GitHub アカウントでログインできます。サービス間の連携がスムーズになるため推奨です。
+3. 登録方法を選んでクリックする。GitHub・Google アカウントでの連携、またはメールアドレスとパスワードでの登録が利用できます。いずれかお好みの方法で登録してください
+4. 画面の指示に従って認証を完了させる
 
 **確認ポイント**
 
@@ -64,13 +61,13 @@ Supabase（スーパーベース）は、データを安全に保管してくれ
 | **Name** | `todos`（または任意のプロジェクト名） |
 | **Database Password** | 強力なパスワードを入力する（後で必要になるので必ず保存） |
 | **Region** | `Northeast Asia (Tokyo)` を選択（日本に近いため表示速度が速い） |
-| **Plan** | `Free` のまま |
+| **Security / Enable Data API** | トグルスイッチをオンにする |
 
 > **Database Password について**: データベースに直接アクセスするための鍵です。今後使う場面があるため、パスワード管理ツールやメモ帳に必ず記録しておいてください。
 
-3. 「Create new project」ボタンをクリック
+> **Enable Data API とは？** アプリから Supabase のデータを読み書きするための入口（API）を有効にするスイッチです。これをオンにしないと、Next.js アプリから Supabase に接続できないため、必ずオンにしてください。
 
-> **注意:** データベースのセットアップには 1〜2 分かかります。「Setting up your project...」という表示が消えるまで待ってください。
+3. 「Create new project」ボタンをクリック
 
 **確認ポイント**
 
@@ -79,7 +76,7 @@ Supabase（スーパーベース）は、データを安全に保管してくれ
 
 ---
 
-## Step 2: Supabase プラグインのインストール（5分）
+## Step 2: Supabase プラグインのインストールと認証（5分）
 
 ### プラグインって何？
 
@@ -89,24 +86,7 @@ Supabase（スーパーベース）は、データを安全に保管してくれ
 
 ---
 
-### 2-1. アクセストークンを取得する
-
-Supabase プラグインを使うには、まず Supabase の「Personal Access Token（パーソナルアクセストークン）」を取得する必要があります。
-
-1. ブラウザで Supabase ダッシュボードを開く
-2. 左下のアカウントアイコン → 「Access tokens」をクリック（または直接 `https://supabase.com/dashboard/account/tokens` にアクセス）
-3. 「Generate new token」をクリック
-4. トークン名を入力（例: `claude-code`）
-5. 「Generate token」をクリック
-6. 表示されたトークン（`sbp_` で始まる文字列）を**必ずコピーして安全な場所に保存する**
-
-> **注意:** トークンは一度しか表示されません。ページを閉じると二度と確認できないため、必ずこの時点でコピーしてメモ帳やパスワード管理ツールに保存してください。
->
-> **Personal Access Token とは？** Supabase が「このアクセスは本人からのものです」と確認するための鍵です。この鍵を使って Claude Code が Supabase にアクセスできるようになります。
-
----
-
-### 2-2. プラグインをインストールする
+### 2-1. プラグインをインストールする
 
 プロジェクトフォルダに移動して、Claude Code を起動します。
 
@@ -114,19 +94,35 @@ Supabase プラグインを使うには、まず Supabase の「Personal Access 
 claude
 ```
 
-Claude Code が起動したら、以下を入力してプラグインをインストールします。
+Claude Code が起動したら、以下を入力してプラグインの一覧を表示します。
 
 ```plaintext
-/install-plugin supabase @ claude-plugins-official
+/plugin
 ```
 
-インストール中に Supabase のアクセストークンを入力する画面が表示されます。先ほどコピーした `sbp_` で始まるトークンを貼り付けてください。
+プラグインの一覧が表示されるので、Supabase のプラグインを探して選択し、インストールを進めてください。画面の指示に従って操作すれば完了します。
+
+---
+
+### 2-2. 認証する
+
+インストールが完了したら、再び `/plugin` と入力します。
+
+```plaintext
+/plugin
+```
+
+一覧から Supabase を選ぶと「Authenticate」が選択できるようになっています。「Authenticate」を押すと URL が発行されます。
+
+その URL をコピーして、ブラウザのアドレスバーに貼り付けてください。Supabase のログイン画面が表示されるのでログインすると認証完了です。
+
+> **なぜブラウザでログインするのか？** これは「Claude Code があなたの Supabase アカウントにアクセスする許可を与える」ための手順です。スマホのアプリで「Google でサインイン」ボタンを押すと Google のログイン画面が開いて許可を求めてくる、あの仕組みと同じです。パスワードを Claude Code に直接渡すのではなく、Supabase 側のログイン画面を経由することで安全に認証できます。
 
 ---
 
 ### 2-3. 接続を確認する
 
-プラグインのインストールが完了したら、続けて以下を入力して接続を確認します。
+認証が完了したら、続けて以下を入力して接続を確認します。
 
 ```plaintext
 Supabase のプロジェクト一覧を表示して
@@ -138,8 +134,8 @@ Step 1 で作成した `todos` プロジェクトが表示されれば成功で�
 
 **確認ポイント**
 
-- [ ] Supabase の Personal Access Token を取得して保存した
-- [ ] `/install-plugin supabase @ claude-plugins-official` が正常に完了した
+- [ ] Supabase プラグインのインストールが完了した
+- [ ] ブラウザでの認証が完了した
 - [ ] Claude Code のプロンプトで `todos` プロジェクトの情報が表示された
 
 ---
@@ -165,49 +161,7 @@ Claude Code が Supabase プラグインを通じて、テーブルの作成と 
 
 ---
 
-### 3-2. Claude Code が実行する SQL（参考）
-
-Claude Code が内部で生成・実行する SQL は以下のようなものです（参考として掲載しています。コピーする必要はありません）。
-
-```sql
--- todos テーブルの作成
-CREATE TABLE todos (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  title TEXT NOT NULL,
-  completed BOOLEAN DEFAULT false,
-  created_at TIMESTAMPTZ DEFAULT now(),
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE
-);
-
--- Row Level Security を有効化
-ALTER TABLE todos ENABLE ROW LEVEL SECURITY;
-
--- ポリシー: 自分の TODO だけ閲覧できる
-CREATE POLICY "Users can view their own todos"
-  ON todos FOR SELECT
-  USING (auth.uid() = user_id);
-
--- ポリシー: 自分の TODO だけ作成できる
-CREATE POLICY "Users can create their own todos"
-  ON todos FOR INSERT
-  WITH CHECK (auth.uid() = user_id);
-
--- ポリシー: 自分の TODO だけ更新できる
-CREATE POLICY "Users can update their own todos"
-  ON todos FOR UPDATE
-  USING (auth.uid() = user_id);
-
--- ポリシー: 自分の TODO だけ削除できる
-CREATE POLICY "Users can delete their own todos"
-  ON todos FOR DELETE
-  USING (auth.uid() = user_id);
-```
-
-> **RLS（Row Level Security）って何？** 「行レベルのセキュリティ」という意味で、マンションの各部屋のようなイメージです。自分の部屋（データ）は自分だけが入れる、他の人の部屋には入れない、という仕組みです。「Aさんの TODO を Bさんが見たり削除したりする」ことを防げます。
-
----
-
-### 3-3. テーブルが作成されたことを確認する
+### 3-2. テーブルが作成されたことを確認する
 
 ブラウザで Supabase ダッシュボードを開き、テーブルが作成されていることを確認します。
 
@@ -236,21 +190,37 @@ CREATE POLICY "Users can delete their own todos"
 |---|---|---|
 | **誰が接続するか** | あなた（Claude Code 経由） | TODO アプリ |
 | **何のために** | テーブル作成・DB 管理 | データの読み書き |
-| **認証方法** | Personal Access Token | URL + anon key |
+| **認証方法** | Authenticate（ブラウザでのログイン） | URL + service_role key |
 | **いつ使うか** | 開発中のみ | アプリが動いている間ずっと |
 
 ---
 
 ## Step 4: 接続情報の設定（5分）
 
-### 4-1. 接続情報を Claude Code に取得させる
+### 4-1. API キーを取得する
 
-> **接続情報とは？** アプリが「どの Supabase プロジェクトに接続するか」を識別するための情報です。家の住所と玄関の鍵のセットのようなもので、URL が住所、anon key が鍵に相当します。
+アプリ（プログラム）が Supabase に接続するには、専用のキーが必要です。ここで取得するのは、**サーバーサイド専用の強力なキー**（service_role key）です。
+
+Step 2 でブラウザ認証したのは「あなた（開発者）が Claude Code を通じて Supabase を管理するための認証」でした。一方、ここで取得するキーは「アプリのサーバーがデータを読み書きするための鍵」です。全く別物ですので、混同しないようにしてください。
+
+1. ブラウザで Step 1 で作成したプロジェクトのダッシュボードを開く
+2. 左サイドバーの「Settings」をクリック
+3. 「API Keys」をクリック
+4. 「Secret Keys」のセクションにある `sb_secret_` から始まるキーをコピーする
+5. コピーしたキーをパスワード管理ツールやメモ帳など、安全な場所に保存する
+
+> **このキーは厳重に管理してください。** service_role key は RLS（Row Level Security）をバイパスして、データベースの全データに読み取り・書き換え・削除ができる強力なキーです。そのため、ブラウザには絶対に公開してはいけません。また、環境変数名に `NEXT_PUBLIC_` をつけると Next.js がブラウザにも公開してしまうため、絶対に `NEXT_PUBLIC_` をつけてはいけません。漏洩した場合はデータの全読み取り・書き換え・削除が可能になるため、取り扱いには十分注意してください。
+
+---
+
+### 4-2. 接続情報を Claude Code に取得させる
+
+> **接続情報とは？** アプリが「どの Supabase プロジェクトに接続するか」を識別するための情報です。家の住所と玄関の鍵のセットのようなもので、URL が住所、service_role key が鍵に相当します。
 
 プラグインがインストールされているので、Claude Code に接続情報の取得を依頼できます。Claude Code のプロンプトで以下を入力してください。
 
 ```plaintext
-Supabase の todos プロジェクトの URL と anon key を教えて
+Supabase の todos プロジェクトの URL を教えて
 ```
 
 Claude Code が値を表示してくれるので、表示された値をメモしておいてください。
@@ -265,25 +235,27 @@ Claude Code を一度終了します。
 
 ---
 
-### 4-2. `.env.local` ファイルを作成する
+### 4-3. `.env.local` ファイルを作成する
 
 > **`.env.local` って何？** アプリの「秘密のメモ帳」のようなものです。パスワードや接続情報など、他の人に見せたくない設定値を保存するファイルです。このファイルは Git に含まれないため、インターネット上に公開される心配がありません。
 
 ターミナルでプロジェクトルートに移動します（Claude Code を終了した後のターミナルで作業します）。
 
-テキストエディタで `.env.local` ファイルを新規作成して、以下の内容を記述します。`your-url` と `your-anon-key` の部分を先ほど Claude Code が表示した実際の値に置き換えてください。
+テキストエディタで `.env.local` ファイルを新規作成して、以下の内容を記述します。各変数の `...` の部分を実際の値に置き換えてください。
 
 ```dotenv
 # .env.local
 NEXT_PUBLIC_SUPABASE_URL=https://xxxxxxxxxx.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+SUPABASE_SECRET_KEY=sb_secret_...
 ```
 
-> **`NEXT_PUBLIC_` って何？** Next.js のルールで、この文字列で始まる変数名は「ブラウザ側のコードからも読み取れる」という意味になります。Supabase の URL と anon key は、ブラウザから直接やりとりするために必要なため、このプレフィックス（接頭語）が付いています。
+`NEXT_PUBLIC_SUPABASE_URL` は 4-2 で Claude Code が表示した値を入力してください。`SUPABASE_SECRET_KEY` には 4-1 で取得した service_role key（`sb_secret_` から始まるキー）を入力してください。
+
+> **`NEXT_PUBLIC_` について** Next.js のルールで、この文字列で始まる変数名は「ブラウザ側のコードからも読み取れる」という意味になります。Supabase の URL はブラウザからも参照するため `NEXT_PUBLIC_` をつけています。一方、`SUPABASE_SECRET_KEY` には `NEXT_PUBLIC_` をつけていません。このキーはサーバーサイドのみで使うキーのため、ブラウザに公開してはいけないからです。`NEXT_PUBLIC_` をつけると Next.js がブラウザにも公開してしまうため、絶対につけないでください。
 
 ---
 
-### 4-3. `.gitignore` を確認する
+### 4-4. `.gitignore` を確認する
 
 `.env.local` には接続情報が含まれているため、Git に含めてはいけません。プロジェクトルートの `.gitignore`（Git が無視するファイルのリスト）に `.env.local` が含まれていることを確認します。
 
@@ -303,12 +275,18 @@ cat .gitignore | grep env
 **確認ポイント**
 
 - [ ] `.env.local` ファイルがプロジェクトルートに作成された
-- [ ] `NEXT_PUBLIC_SUPABASE_URL` と `NEXT_PUBLIC_SUPABASE_ANON_KEY` が正しく設定されている
+- [ ] `NEXT_PUBLIC_SUPABASE_URL` と `SUPABASE_SECRET_KEY` が正しく設定されている
 - [ ] `.gitignore` に `.env.local`（または `.env*.local`）が含まれている
 
 ---
 
 ## Step 5: コミット（5分）
+
+Step 4 で `.env.local` を作成したとき、Claude Code は終了した状態になっています。再度起動してから作業を続けましょう。
+
+```bash
+claude --continue
+```
 
 確認が取れたら、作業内容をコミットします。
 
@@ -349,7 +327,7 @@ Claude Code を終了します。
 - [ ] Supabase プロジェクトが作成されている
 - [ ] Supabase プラグインがインストールされている
 - [ ] Supabase の Table Editor に `todos` テーブルが存在する
-- [ ] `.env.local` に `NEXT_PUBLIC_SUPABASE_URL` と `NEXT_PUBLIC_SUPABASE_ANON_KEY` が設定されている
+- [ ] `.env.local` に `NEXT_PUBLIC_SUPABASE_URL` と `SUPABASE_SECRET_KEY` が設定されている
 
 ---
 
@@ -359,11 +337,11 @@ Claude Code を終了します。
 
 **「Database password is too weak」と表示される場合:**
 
-パスワードに大文字・小文字・数字・記号を組み合わせた 8 文字以上のものを設定してください。例: `MyPass123!`
+大文字・小文字・数字・記号を組み合わせた 8 文字以上のパスワードを設定してください（例: `MyPass123!`）。
 
 **プロジェクト作成が何分経っても完了しない場合:**
 
-ブラウザをリロードしてダッシュボードを確認してください。バックグラウンドでセットアップが完了している場合があります。
+ブラウザをリロードして確認してください。バックグラウンドで完了している場合があります。
 
 ---
 
@@ -371,27 +349,11 @@ Claude Code を終了します。
 
 **「プラグインがインストールできない」または「接続エラーが出る」場合:**
 
-まず Claude Code を再起動して、もう一度インストールを試みてください。
-
-```bash
-claude
-```
-
-```plaintext
-/install-plugin supabase @ claude-plugins-official
-```
+Claude Code を再起動して `/plugin` からインストールを試みてください。
 
 **「Supabase のプロジェクト一覧を表示して」と言っても何も表示されない場合:**
 
-トークンが正しく設定されていない可能性があります。Supabase ダッシュボードでトークンを再発行し、インストール時に入力したトークンと一致しているか確認してください。トークンを再発行した場合は、`/install-plugin supabase @ claude-plugins-official` を再実行してください。
-
----
-
-### 接続エラー
-
-**ブラウザの Console に「Invalid API key」と表示される場合:**
-
-`.env.local` の `NEXT_PUBLIC_SUPABASE_ANON_KEY` を確認してください。`anon` キー（`service_role` キーではない）を設定していること、前後に余分なスペースや改行がないことを確認してください。
+認証が完了していない可能性があります。`/plugin` から Supabase を選んで Authenticate をやり直してください。
 
 ---
 
@@ -399,7 +361,7 @@ claude
 
 | 機能 | 体験した内容 |
 |------|-------------|
-| **プラグイン（外部サービス連携）** | Personal Access Token を取得し `/install-plugin supabase @ claude-plugins-official` で Supabase との接続口を追加した。Claude Code から直接データベースを操作できる状態を作った |
+| **プラグイン（外部サービス連携）** | `/plugin` からプラグイン一覧を開いて Supabase をインストールし、Authenticate でブラウザ認証して Claude Code から直接データベースを操作できる状態を作った |
 | **DB 設計指示** | 日本語でテーブル要件を伝えるだけで、適切な SQL（RLS ポリシー含む）をプラグイン経由で直接実行してもらえることを体験した |
 | **SQL 生成** | 複雑なセキュリティ設定（Row Level Security）も「自分の TODO だけ見れるようにして」という自然な指示で生成・実行できることを体験した |
 
