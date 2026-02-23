@@ -1,14 +1,14 @@
 # Chapter 5: Issue とワークツリー — 修正・改善を習慣にする
 
 **所要時間**: 約 1.5 時間
-**ゴール**: Issue を起点に、ワークツリーで安全に修正して PR を出すサイクルを体験する
-**学ぶ Claude Code 機能**: `gh issue create`、`claude -w`（ワークツリー起動）、PR 作成
+**ゴール**: ワークツリーで Google ログインを安全に実装し、PR を出してマージするサイクルを体験する
+**学ぶ Claude Code 機能**: `gh issue create`、`claude -w`（ワークツリー起動）、PR 作成・マージ
 
 ---
 
 ## このチャプターで学ぶこと
 
-- GitHub Issues でやること（修正・改善）を管理する方法
+- GitHub Issues で実装タスクを管理する方法
 - Claude Code のワークツリー機能を使って、作業場所を安全に分離する方法
 - ワークツリー内で修正してコミットし、PR を作成してマージする流れ
 - このサイクルを毎週の習慣として続けるためのコツ
@@ -76,6 +76,32 @@ claude
 
 ---
 
+## はじめに: CLAUDE.md にブランチルールを追加する
+
+このチャプターからは「ブランチを切って開発する」ワークフローを使います。まず Claude Code がこのルールを常に守るよう、CLAUDE.md に明記します。
+
+Claude Code に以下のように指示してください。
+
+```plaintext
+CLAUDE.md に以下のルールを追加して:
+- main ブランチには直接コミットしない
+- main ブランチで直接作業しない。必ずブランチを切ってから作業すること
+```
+
+Claude Code が CLAUDE.md を更新したら、コミットします。
+
+```plaintext
+CLAUDE.md の変更をコミットして
+```
+
+> **なぜこのルールを追加するの？** このチャプターで習慣にする「Issue → ブランチ → 修正 → PR → マージ」のサイクルは、main ブランチを常に安全な状態に保つことが前提です。CLAUDE.md に書いておくことで、Claude Code が自動でこの習慣を守るようになります。
+
+#### 確認ポイント
+
+- [ ] CLAUDE.md に「main ブランチには直接コミットしない」「main ブランチで直接作業しない」が追記されている
+
+---
+
 ## Step 1: Claude Code で Issue を立てる（15分）
 
 ### このステップの目的
@@ -89,14 +115,10 @@ claude
 Claude Code のチャット画面に、自分が直したいことを入力してください。以下はその例です。
 
 ```plaintext
-GitHub に Issue を立てて。タイトルは「例: ○○のとき△△が起きる」、内容は「[修正したい内容と理由を具体的に書く]」にして
+GitHub に Issue を立てて。タイトルは「feat: Google ログインを実装する」、内容は「Supabase Auth と @supabase/ssr を使って Google ログインを実装する。未ログインの場合は /login にリダイレクトする。」にして
 ```
 
-実際には、あなたのアプリで気になっている点を入れてください。例えば：
-
-- 「エラーが起きたとき、ユーザーに何も表示されない」
-- 「ボタンのテキストがわかりにくい」
-- 「ローディング中に画面が固まって見える」
+今回は Google ログインの実装を Issue として立てます。
 
 Claude Code は以下のようなコマンドを自動で実行します。
 
@@ -159,10 +181,10 @@ Git のワークツリーも同じです。main ブランチの内容はその�
 Claude Code を起動します。
 
 ```bash
-claude -w fix_issue_1
+claude -w feat_google_auth
 ```
 
-> **`-w` オプションとは？** `--worktree` の略です。`claude -w fix_issue_1` と実行すると、`.claude/worktrees/fix_issue_1/` というフォルダが自動で作成され、その中で Claude Code が起動します。名前（`fix_issue_1` の部分）は自分でわかりやすい名前をつけてください。
+> **`-w` オプションとは？** `--worktree` の略です。`claude -w feat_google_auth` と実行すると、`.claude/worktrees/feat_google_auth/` というフォルダが自動で作成され、その中で Claude Code が起動します。名前（`feat_google_auth` の部分）は自分でわかりやすい名前をつけてください。
 
 Claude Code が起動したら、現在どの作業場所にいるかを確認しましょう。
 
@@ -173,10 +195,10 @@ git branch --show-current
 期待される出力例:
 
 ```text
-fix_issue_1
+feat_google_auth
 ```
 
-> **名前なしで起動した場合:** `claude -w` とだけ入力すると、ランダムな名前のワークツリーが自動で作られます。名前を指定したほうが後から何のための作業場所かわかりやすいため、`claude -w fix_issue_1` のように名前をつけることをおすすめします。
+> **名前なしで起動した場合:** `claude -w` とだけ入力すると、ランダムな名前のワークツリーが自動で作られます。名前を指定したほうが後から何のための作業場所かわかりやすいため、`claude -w feat_google_auth` のように名前をつけることをおすすめします。
 
 ### ワークツリーの確認
 
@@ -196,17 +218,17 @@ git worktree list
 
 ```text
 /home/yourname/myproject                                    abc1234 [main]
-/home/yourname/myproject/.claude/worktrees/fix_issue_1     def5678 [fix_issue_1]
+/home/yourname/myproject/.claude/worktrees/feat_google_auth     def5678 [feat_google_auth]
 ```
 
-> **2 つの机が並んでいる:** main（元の机）と fix_issue_1（作業用の新しい机）が同時に存在しています。それぞれ独立しているため、片方での変更がもう片方に影響することはありません。
+> **2 つの机が並んでいる:** main（元の机）と feat_google_auth（作業用の新しい机）が同時に存在しています。それぞれ独立しているため、片方での変更がもう片方に影響することはありません。
 >
 > **注意:** `.claude/worktrees/` は Claude Code が自動で管理するフォルダです。直接触ったり削除したりしないようにしてください。
 
 #### 確認ポイント
 
-- [ ] `claude -w fix_issue_1` を実行して Claude Code が起動した
-- [ ] `git branch --show-current` で `fix_issue_1` と表示される
+- [ ] `claude -w feat_google_auth` を実行して Claude Code が起動した
+- [ ] `git branch --show-current` で `feat_google_auth` と表示される
 - [ ] `git worktree list` でワークツリーが 2 つ表示される
 
 ---
@@ -218,10 +240,10 @@ git worktree list
 ここからは、ワークツリー内の Claude Code で作業します。先ほど `/exit` で終了した場合は、再度起動してください。
 
 ```bash
-claude -w fix_issue_1
+claude -w feat_google_auth
 ```
 
-`claude -w fix_issue_1` で起動した Claude Code は、最初からワークツリー（新しい机）の上で動いています。元のプロジェクトフォルダ（main ブランチの机）には一切触れません。「今どの机で作業しているか」は以下で確認できます。
+`claude -w feat_google_auth` で起動した Claude Code は、最初からワークツリー（新しい机）の上で動いています。元のプロジェクトフォルダ（main ブランチの机）には一切触れません。「今どの机で作業しているか」は以下で確認できます。
 
 ```plaintext
 git branch --show-current
@@ -230,70 +252,159 @@ git branch --show-current
 期待される出力:
 
 ```text
-fix_issue_1
+feat_google_auth
 ```
 
 > **体験:** 別のターミナルウィンドウを開いて元のプロジェクトフォルダを見ると、何も変わっていないことがわかります。ワークツリー側でどれだけファイルを編集しても、元の机の書類（main ブランチ）は安全なままです。これがワークツリーの最大の利点です。
 
 ---
 
-### 修正 1: 最初の修正をする
+### Phase A: Claude Code に計画を立てさせる
 
-Issue #1 の内容に沿って修正を進めます。Claude Code に指示を出します。
-
-```plaintext
-Issue #1 の修正をして。[修正してほしい内容を具体的に書く]
-```
-
-例えば次のように指示します：
-
-- 「エラー時にユーザーにメッセージを表示して」
-- 「入力が空のまま送信できないようにして」
-- 「○○ボタンのテキストを△△に変えて」
-
-Claude Code がコードを修正します。
-
-#### 動作確認
-
-修正が終わったら、ブラウザでアプリを開いて意図した通りに動くか確認します。
-
-確認ポイント:
-
-- [ ] 修正した機能が期待通りに動いている
-- [ ] 既存の機能が壊れていない
-
-確認できたらコミットします。
+まず Claude Code に全体の手順を聞きます。
 
 ```plaintext
-今の変更をコミットして。コミットメッセージは「fix: [修正内容を日本語で書く] (#1)」にして
+Supabase Auth で Google ログインを実装したい。まず何をすべきか手順を教えて
 ```
 
-Claude Code は以下のようなコマンドを自動で実行します。
-
-```bash
-git add .
-git commit -m "fix: [修正内容を日本語で書く] (#1)"
-```
-
-> **コミットメッセージに `(#1)` を入れる理由:** GitHub が Issue #1 とこのコミットを自動でリンクしてくれます。後から「この修正はどの Issue への対応か」をすぐにたどれます。
+Claude Code から以下のような計画が返ってきます。
 
 ---
 
-### 修正 2: 追加の改善をする（任意）
-
-追加で改善タスクがある場合は、引き続き同じワークツリー内で修正します。
+**期待される応答の概要:**
 
 ```plaintext
-[追加で修正したい内容を書く]
+Google ログインを実装するには、以下の手順が必要です。
+
+1. Supabase ダッシュボードで Google Provider を有効化
+2. @supabase/ssr パッケージのインストール
+3. Supabase クライアントの設定（ブラウザ用・サーバー用）
+4. ログイン画面の作成（Google でログインボタンのみ）
+5. 認証状態に基づくリダイレクト処理（Middleware）
+6. OAuth コールバック処理の実装
+7. RLS の設定（自分の TODO のみ操作可能に）
+
+まず Supabase ダッシュボードの設定から始めましょうか？
 ```
 
-確認ポイント:
+---
 
-- [ ] 修正した機能が期待通りに動いている
-- [ ] 既存の機能が壊れていない
+> **体験:** Claude Code が大きなタスクを小さなステップに分解しました。「まず何をすべきか」と聞くことで、全体の見通しを立ててから進められます。
+
+---
+
+### Phase B: Supabase で Google Provider を有効化
+
+Google ログインを使えるようにするには、Supabase 側で設定が必要です。ブラウザで Supabase ダッシュボードを操作します。
+
+#### 手順（ブラウザで操作）
+
+1. Supabase ダッシュボード（`https://supabase.com/dashboard`）を開く
+2. 左サイドバーの「Authentication」をクリック
+3. 「Providers」タブを選択
+4. 「Google」を見つけてクリックして展開する
+5. 「Enable Sign in with Google」のトグルをオンにする
+6. 「Redirect URLs」の欄に以下を追加する
 
 ```plaintext
-今の変更をコミットして。コミットメッセージは「fix: [追加の修正内容を日本語で書く] (#1)」にして
+http://localhost:3000/auth/callback
+```
+
+> **Redirect URL って何？** Google でログインが完了したあと、「どの URL に戻るか」を指定する設定です。
+
+7. 「Save」ボタンをクリックして保存する
+
+#### 確認ポイント
+
+- [ ] Supabase の Authentication → Providers で Google が有効になっている
+- [ ] Redirect URL に `http://localhost:3000/auth/callback` が追加されている
+
+---
+
+### Phase C: @supabase/ssr のインストールと認証フロー実装
+
+#### @supabase/ssr って何？
+
+> **`@supabase/ssr` とは？** Next.js のような「サーバー側でも動く」フレームワークに対応した Supabase の認証ライブラリです。Cookie ベース認証を採用しており、2025 年以降の推奨パターンです。
+
+#### パッケージのインストール
+
+Claude Code に以下を指示します。
+
+```plaintext
+@supabase/ssr をインストールして
+```
+
+#### 認証フローの実装
+
+続けて以下を指示します。
+
+```plaintext
+Supabase Auth の Google ログインを実装して。@supabase/ssr を使って。未ログインの場合は /login にリダイレクトして
+```
+
+Claude Code は以下のファイルを作成・更新します。
+
+| ファイル | 概要 |
+|---|---|
+| `src/lib/supabase/server.ts` | サーバーサイド用 Supabase クライアント |
+| `src/middleware.ts` | 未ログイン時のリダイレクト処理（関所） |
+| `src/app/login/page.tsx` | 「Google でログイン」ボタンのみのログイン画面 |
+| `src/app/auth/callback/route.ts` | Google ログイン完了後のコールバック処理 |
+
+> **Middleware（ミドルウェア）って何？** ユーザーがどのページを開こうとしても、まず通る「関所」のようなものです。「ログインしていますか？していなければログイン画面へ」という判断をここで行います。
+
+#### 確認ポイント
+
+- [ ] `package.json` に `@supabase/ssr` が追加されている
+- [ ] `src/middleware.ts` が作成されている
+- [ ] `src/app/login/page.tsx` が作成されている
+- [ ] `http://localhost:3000` にアクセスすると `/login` にリダイレクトされる
+- [ ] ログイン画面に「Google でログイン」ボタンが表示されている
+
+#### トラブルシュート
+
+**リダイレクトが無限ループする場合:**
+
+```plaintext
+middleware.ts の matcher が /login を除外しているか確認して。無限リダイレクトが起きている
+```
+
+---
+
+### Phase D: RLS の更新と user_id の保存
+
+Chapter 3 で設定した RLS は「ログインユーザーが自分の TODO だけ操作できる」ポリシーです。Google ログインが完了したので、TODO 追加時にログインユーザーの `user_id` も一緒に保存するよう修正します。
+
+```plaintext
+AddTodoForm で TODO を追加するとき、ログインユーザーの user_id も一緒に保存するようにして
+```
+
+#### 確認ポイント
+
+- [ ] TODO 追加時に `user_id` が保存されている
+- [ ] ログイン → TODO 追加 → ログアウト → 再ログインしても自分の TODO だけ表示される
+
+---
+
+### 動作確認
+
+以下をブラウザで確認します。
+
+- [ ] `http://localhost:3000` にアクセスすると `/login` にリダイレクトされる
+- [ ] 「Google でログイン」ボタンをクリックすると Google の認証画面が開く
+- [ ] Google アカウントでログインすると TODO リスト画面に遷移する
+- [ ] TODO の追加・表示・完了切り替え・削除がすべて動作する
+- [ ] ヘッダーの「ログアウト」ボタンでログアウトできる
+
+---
+
+### コミットする
+
+動作確認ができたら、コミットします。
+
+```plaintext
+今の変更をコミットして。コミットメッセージは「feat: implement Google authentication (#1)」にして
 ```
 
 ---
@@ -309,13 +420,12 @@ git log --oneline
 期待される出力例:
 
 ```text
-a3f2c1d fix: [追加の修正内容] (#1)
-b8e4d2a fix: [最初の修正内容] (#1)
-c9f1b3e feat: [前のチャプターまでのコミット]
+a3f2c1d feat: implement Google authentication (#1)
+b8e4d2a feat: [前のチャプターまでのコミット]
 ...
 ```
 
-- [ ] `fix:` プレフィックスのコミットが 1 件以上ある
+- [ ] `feat:` プレフィックスのコミットが 1 件以上ある
 - [ ] コミットメッセージに `(#1)` が含まれている
 - [ ] ブラウザでアプリが正常に動作している
 
@@ -336,20 +446,22 @@ PR（プルリクエスト）は「この修正を本体（main ブランチ）�
 ワークツリー内の Claude Code で以下を入力します。
 
 ```plaintext
-ワークツリーの変更を push して、PR を作って。タイトルは「fix: [修正内容を日本語で書く]」、Issue #1 をクローズする形にして
+ワークツリーの変更を push して、PR を作って。タイトルは「feat: Google ログインを実装する」、Issue #1 をクローズする形にして
 ```
 
 Claude Code は以下の操作を自動で行います。
 
 ```bash
-git push -u origin fix_issue_1
+git push -u origin feat_google_auth
 
 gh pr create \
-  --title "fix: [修正内容を日本語で書く]" \
+  --title "feat: Google ログインを実装する" \
   --body "## 変更内容
 
-- [修正した内容を箇条書きで書く]
-- [追加で修正した内容があれば書く]
+- Supabase Auth で Google ログインを実装
+- @supabase/ssr を使って Cookie ベース認証に対応
+- 未ログイン時は /login にリダイレクト
+- TODO 追加時に user_id を保存するよう更新
 
 Closes #1"
 ```
@@ -379,7 +491,7 @@ gh pr list
 期待される出力例:
 
 ```text
-#2  fix: [修正内容]  fix_issue_1  about now
+#2  fix: [修正内容]  feat_google_auth  about now
 ```
 
 ### PR をレビューする
@@ -435,10 +547,10 @@ GitHub の「Files changed」タブをクリックすると、変更されたフ
 Claude Code を起動します。
 
 ```bash
-claude -w fix_issue_1
+claude -w feat_google_auth
 ```
 
-> **`-w` で再起動しても大丈夫:** すでに `fix_issue_1` ワークツリーが存在する場合、同じ名前で `claude -w fix_issue_1` を実行すると既存のワークツリーで Claude Code が起動します。作業内容は消えていません。
+> **`-w` で再起動しても大丈夫:** すでに `feat_google_auth` ワークツリーが存在する場合、同じ名前で `claude -w feat_google_auth` を実行すると既存のワークツリーで Claude Code が起動します。作業内容は消えていません。
 
 **2. 指摘内容を Claude Code に伝えて修正を依頼する**
 
@@ -495,7 +607,7 @@ gh pr merge 2 --merge
 
 > **`--merge`（マージ方式）について:** PR のマージには複数の方式があります。`--merge` は通常のマージで、コミット履歴がそのまま残ります。チームのルールに合わせて `--squash`（コミットをまとめる）や `--rebase` を使い分けることもあります。このチュートリアルでは `--merge` を使います。
 
-マージが完了すると、`fix_issue_1` ブランチの変更が main に取り込まれます。
+マージが完了すると、`feat_google_auth` ブランチの変更が main に取り込まれます。
 
 #### 確認ポイント
 
@@ -522,7 +634,7 @@ git log --oneline
 期待される出力例:
 
 ```text
-e5f1a2b Merge pull request #2 from yourname/fix_issue_1
+e5f1a2b Merge pull request #2 from yourname/feat_google_auth
 a3f2c1d fix: [追加の修正内容] (#1)
 b8e4d2a fix: [最初の修正内容] (#1)
 ...
@@ -537,8 +649,8 @@ b8e4d2a fix: [最初の修正内容] (#1)
 マージが終わったワークツリーは不要になります。ターミナルで以下を実行して片付けます。
 
 ```bash
-git worktree remove .claude/worktrees/fix_issue_1
-git branch -d fix_issue_1
+git worktree remove .claude/worktrees/feat_google_auth
+git branch -d feat_google_auth
 ```
 
 片付いたか確認します。
@@ -662,7 +774,7 @@ git branch -d fix_issue_[番号]
 
 | 機能 | 体験した内容 |
 |------|-------------|
-| **`gh issue create`** | Claude Code から GitHub Issues を作成し、番号付きでタスクを管理できることを体験した |
+| **`gh issue create`** | Claude Code から GitHub Issues に実装タスクを登録し、番号付きで管理できることを体験した |
 | **`claude -w`** | ターミナルで `claude -w 名前` を実行するだけで、新しい作業場所（ワークツリー）が自動で用意され Claude Code が起動することを体験した |
 | **Git ワークツリー** | ワークツリーで main ブランチに影響を与えず安全に修正できることを体験した |
 | **コミットと Issue の紐付け** | コミットメッセージに `(#番号)` を付けることで GitHub が自動でリンクを張ることを確認した |
@@ -670,6 +782,7 @@ git branch -d fix_issue_[番号]
 | **PR 作成・マージ** | `gh pr create` と `gh pr merge` で、ブラウザを使わず PR のライフサイクル全体を完結できることを体験した |
 | **`Closes #番号`** | PR のマージと同時に Issue が自動でクローズされる仕組みを確認した |
 | **週次サイクル** | Issue → `claude -w` 起動 → 修正 → PR という習慣として繰り返せるサイクルを体験した |
+| **CLAUDE.md によるルール管理** | CLAUDE.md にブランチルールを書いておくことで、Claude Code が自動でそのルールを守るようになることを体験した |
 
 ---
 
