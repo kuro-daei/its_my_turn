@@ -26,6 +26,7 @@
 **4 つのステップの流れ:**
 
 ```text
+# output
 Step 1: Claude Code で Issue を立てる                    （15分）
 Step 2: ワークツリーを作って作業場所を分離する             （15分）
 Step 3: Claude Code に計画を立てさせる                   （5分）
@@ -53,6 +54,7 @@ Step 8: PR を作ってレビューしてマージする                 （30�
 Claude Code のチャット画面に、自分が直したいことを入力してください。以下はその例です。
 
 ```plaintext
+# claude
 GitHub に Issue を立てて。タイトルは「Google ログインを実装する」、内容は「Google アカウントでログインできるようにする。ログインしていない状態でアプリを開いたときは、ログイン画面に移動するようにする。」にして
 ```
 
@@ -61,6 +63,7 @@ GitHub に Issue を立てて。タイトルは「Google ログインを実装�
 Claude Code は以下のようなコマンドを自動で実行します。
 
 ```bash
+# bash
 gh issue create \
   --title "[修正したいこと]" \
   --body "[詳細と理由]"
@@ -69,6 +72,7 @@ gh issue create \
 Issue が作成されると、URL と Issue 番号が表示されます。
 
 ```text
+# output
 https://github.com/yourname/yourrepo/issues/1
 ```
 
@@ -77,18 +81,21 @@ https://github.com/yourname/yourrepo/issues/1
 Claude Code を一度終了します。
 
 ```plaintext
+# claude
 /exit
 ```
 
 ターミナルに戻ったら、以下を実行して Issue が作成されているか確認してください。
 
 ```bash
+# bash
 gh issue list
 ```
 
 期待される出力例:
 
 ```text
+# output
 #1  [立てた Issue のタイトル]  about now
 ```
 
@@ -119,6 +126,7 @@ Git のワークツリーも同じです。main ブランチの内容はその�
 Claude Code を起動します。
 
 ```bash
+# bash
 claude -w feat_google_auth
 ```
 
@@ -127,12 +135,14 @@ claude -w feat_google_auth
 Claude Code が起動したら、現在どの作業場所にいるかを確認しましょう。
 
 ```plaintext
+# claude
 ! git branch --show-current
 ```
 
 期待される出力例:
 
 ```text
+# output
 worktree-feat_google_auth
 ```
 
@@ -143,12 +153,14 @@ worktree-feat_google_auth
 Claudeで以下を実行してください。
 
 ```plaintext
+# claude
 ! git worktree list
 ```
 
 期待される出力例:
 
 ```text
+# output
 /home/yourname/myproject                                    abc1234 [main]
 /home/yourname/myproject/.claude/worktrees/feat_google_auth     def5678 [feat_google_auth]
 ```
@@ -170,6 +182,7 @@ Claudeで以下を実行してください。
 ワークツリー内の Claude Code に以下のように指示してください。
 
 ```plaintext
+# claude
 CLAUDE.md に以下のルールを追加して:
 - main ブランチには直接コミットしない
 - main ブランチで直接作業しない。必ずブランチを切ってから作業すること
@@ -179,6 +192,7 @@ CLAUDE.md に以下のルールを追加して:
 Claude Code が CLAUDE.md を更新したら、コミットします。
 
 ```plaintext
+# claude
 CLAUDE.md の変更をコミットして
 ```
 
@@ -192,6 +206,7 @@ CLAUDE.md の変更をコミットして
 セッションを一度終了します。
 
 ```plaintext
+# claude
 /exit
 ```
 
@@ -209,6 +224,7 @@ CLAUDE.md の変更をコミットして
 ここからは、ワークツリー内の Claude Code で作業します。先ほど `/exit` で終了した場合は、再度起動してください。
 
 ```bash
+# bash
 claude -w feat_google_auth
 ```
 
@@ -228,6 +244,7 @@ claude -w feat_google_auth
 ワークツリーを再起動して、まず Claude Code に全体の手順を聞きます。
 
 ```plaintext
+# claude
 Supabase Auth で Google ログインを実装したい。まず何をすべきか手順を教えて
 ```
 
@@ -238,6 +255,7 @@ Claude Code から以下のような計画が返ってきます。
 **期待される応答の概要:**
 
 ```plaintext
+# output
 Google ログインを実装するには、以下の手順が必要です。
 
 1. Supabase ダッシュボードで Google Provider を有効化
@@ -275,18 +293,21 @@ Supabase に Google ログインを設定するには、まず Google 側で「�
 8. 「承認済みの JavaScript オリジン」に以下を追加する
 
 ```plaintext
+# output
 http://localhost:3000
 ```
 
 9. 「承認済みのリダイレクト URI」に Supabase のコールバック URL を追加する。URL はワークツリー内の Claude Code に聞いて取得してください。
 
 ```plaintext
+# claude
 Supabase の OAuth コールバック URL を教えて
 ```
 
 Claude Code が `.env.local` を読んで、以下のような形式で URL を返してくれます。
 
 ```plaintext
+# output
 https://xxxxx.supabase.co/auth/v1/callback
 ```
 
@@ -322,6 +343,7 @@ Google ログインを使えるようにするには、Supabase 側で設定が�
 9. 「Redirect URLs」の欄に以下を追加して「Save」をクリックする
 
 ```plaintext
+# output
 http://localhost:3000/**
 ```
 
@@ -348,6 +370,7 @@ Chapter 4 でインストールした `nextjs-supabase-auth` スキルが、こ�
 実装の前に、**Plan Mode** で設計を確認します。`Shift+Tab` を 2 回押して Plan Mode に切り替えてから、以下を入力してください。
 
 ```plaintext
+# claude
 Supabase Auth の Google ログインを実装して。@supabase/ssr を使って。未ログインの場合は /login にリダイレクトして
 ```
 
@@ -371,6 +394,7 @@ Claude Code が「どのファイルを作成・変更するか」という計�
 実装が完了したら、アプリを起動します。**ワークツリーのディレクトリ**（`.claude/worktrees/feat_google_auth/`）で実行してください。Claude Code のターミナルで直接実行しても、別のターミナルを開いて実行しても、どちらでも構いません。
 
 ```bash
+# bash
 cd .claude/worktrees/feat_google_auth
 npm run dev
 ```
@@ -394,6 +418,7 @@ npm run dev
 Chapter 3 で設定した RLS は「ログインユーザーが自分の TODO だけ操作できる」ポリシーです。Google ログインが完了したので、TODO 追加時にログインユーザーの `user_id` も一緒に保存するよう修正します。
 
 ```plaintext
+# claude
 TODO を追加するとき、ログインユーザーの user_id も一緒に保存するようにして
 ```
 
@@ -421,6 +446,7 @@ TODO を追加するとき、ログインユーザーの user_id も一緒に保
 動作確認ができたら、コミットします。
 
 ```plaintext
+# claude
 今の変更をコミットして。コミットメッセージは「feat: implement Google authentication (#1)」にして
 ```
 
@@ -431,12 +457,14 @@ TODO を追加するとき、ログインユーザーの user_id も一緒に保
 コミット履歴を確認します。
 
 ```plaintext
+# claude
 git log --oneline
 ```
 
 期待される出力例:
 
 ```text
+# output
 a3f2c1d feat: implement Google authentication (#1)
 b8e4d2a feat: [前のチャプターまでのコミット]
 ...
@@ -463,12 +491,14 @@ PR（プルリクエスト）は「この修正を本体（main ブランチ）�
 ワークツリー内の Claude Code で以下を入力します。
 
 ```plaintext
+# claude
 ワークツリーの変更を push して、PR を作って。タイトルは「feat: Google ログインを実装する」、Issue #1 をクローズする形にして
 ```
 
 Claude Code は以下の操作を自動で行います。
 
 ```bash
+# bash
 git push -u origin feat_google_auth
 
 gh pr create \
@@ -488,6 +518,7 @@ Closes #1"
 PR が作成されると URL が表示されます。
 
 ```text
+# output
 https://github.com/yourname/yourrepo/pull/2
 ```
 
@@ -496,18 +527,21 @@ https://github.com/yourname/yourrepo/pull/2
 PR の URL が表示されたら、Claude Code を一度終了してターミナルで確認します。
 
 ```plaintext
+# claude
 /exit
 ```
 
 ターミナルに戻ったら、以下を実行してください。
 
 ```bash
+# bash
 gh pr list
 ```
 
 期待される出力例:
 
 ```text
+# output
 #2  fix: [修正内容]  feat_google_auth  about now
 ```
 
@@ -522,6 +556,7 @@ PR を作ったら、すぐマージするのではなく、まず「意図し�
 ターミナルで以下を実行します。
 
 ```bash
+# bash
 gh pr view 2
 gh pr diff 2
 ```
@@ -533,6 +568,7 @@ gh pr diff 2
 PR の URL をブラウザで開くと、GitHub の画面上でも差分を視覚的に確認できます。
 
 ```text
+# output
 https://github.com/yourname/yourrepo/pull/2
 ```
 
@@ -564,6 +600,7 @@ GitHub の「Files changed」タブをクリックすると、変更されたフ
 Claude Code を起動します。
 
 ```bash
+# bash
 claude -w feat_google_auth
 ```
 
@@ -572,12 +609,14 @@ claude -w feat_google_auth
 **2. 指摘内容を Claude Code に伝えて修正を依頼する**
 
 ```plaintext
+# claude
 PR のレビューで「[指摘された内容]」を指摘されたので修正して
 ```
 
 例えば次のように伝えます：
 
 ```plaintext
+# claude
 PR のレビューで「エラー時にもローディング表示が残ったままになる」と指摘されたので修正して
 ```
 
@@ -589,12 +628,14 @@ Claude Code がコードを修正します。
 - [ ] 既存の機能が壊れていない
 
 ```plaintext
+# claude
 今の変更をコミットして。コミットメッセージは「fix: [修正した内容] (#1)」にして
 ```
 
 **4. push すると同じ PR に自動で追加される**
 
 ```plaintext
+# claude
 修正を push して
 ```
 
@@ -613,12 +654,14 @@ push すると、追加コミットが自動的に PR #2 に反映されます�
 レビューで問題がなければ、ワークツリー内の Claude Code から main ブランチに取り込みます。
 
 ```plaintext
+# claude
 PR #2 をマージして
 ```
 
 Claude Code は以下のコマンドを自動で実行します。
 
 ```bash
+# bash
 gh pr merge 2 --merge
 ```
 
@@ -631,12 +674,14 @@ gh pr merge 2 --merge
 マージが完了したら、Claude Code を終了してターミナルで確認します。
 
 ```plaintext
+# claude
 /exit
 ```
 
 ターミナルに戻ったら、以下を実行してください。
 
 ```bash
+# bash
 gh pr list
 gh issue list
 git checkout main
@@ -651,6 +696,7 @@ git log --oneline
 期待される出力例:
 
 ```text
+# output
 e5f1a2b Merge pull request #2 from yourname/feat_google_auth
 a3f2c1d fix: [追加の修正内容] (#1)
 b8e4d2a fix: [最初の修正内容] (#1)
@@ -666,6 +712,7 @@ b8e4d2a fix: [最初の修正内容] (#1)
 マージが終わったワークツリーは不要になります。ターミナルで以下を実行して片付けます。
 
 ```bash
+# bash
 git worktree remove .claude/worktrees/feat_google_auth
 git branch -d feat_google_auth
 ```
@@ -673,12 +720,14 @@ git branch -d feat_google_auth
 片付いたか確認します。
 
 ```bash
+# bash
 git worktree list
 ```
 
 期待される出力:
 
 ```text
+# output
 /home/yourname/myproject  abc1234 [main]
 ```
 
@@ -695,6 +744,7 @@ git worktree list
 同じ名前のワークツリーがすでに存在する場合にエラーになることがあります。
 
 ```bash
+# bash
 # 既存のワークツリー一覧を確認する
 git worktree list
 
@@ -707,6 +757,7 @@ git worktree prune
 **PR のマージ後に main に変更が反映されていない場合:**
 
 ```bash
+# bash
 # main ブランチを最新状態に更新する
 git checkout main
 git pull origin main
@@ -717,6 +768,7 @@ git pull origin main
 まだ push していない場合は修正できます。ワークツリー内の Claude Code で以下を入力します。
 
 ```plaintext
+# claude
 さっきのコミットメッセージを修正して。正しいメッセージは「fix: [正しい修正内容] (#1)」にして
 ```
 
@@ -725,6 +777,7 @@ Claude Code が `git commit --amend` で修正します。
 **ログイン後にリダイレクトが無限ループする場合:**
 
 ```plaintext
+# claude
 middleware.ts の matcher が /login を除外しているか確認して。無限リダイレクトが起きている
 ```
 
@@ -737,6 +790,7 @@ middleware.ts の matcher が /login を除外しているか確認して。無�
 ### 週次サイクルのイメージ
 
 ```text
+# output
 月曜日: 気になることを Issue に記録する（5分）
          「ボタンの色が地味」「エラー時に画面が固まる」など
 
@@ -750,12 +804,14 @@ middleware.ts の matcher が /login を除外しているか確認して。無�
 **Issue を立てるとき（Claude Code 内で）:**
 
 ```plaintext
+# claude
 GitHub に Issue を立てて。タイトルは「[修正したいこと]」、内容は「[詳細と理由]」にして
 ```
 
 **ワークツリーを作って作業を始めるとき（ターミナルで実行）:**
 
 ```bash
+# bash
 claude -w fix_issue_[番号]
 ```
 
@@ -764,18 +820,21 @@ claude -w fix_issue_[番号]
 **起動した Claude Code 内で修正を依頼するとき:**
 
 ```plaintext
+# claude
 Issue #[番号] の修正をして。[修正内容の説明]
 ```
 
 **PR を作るとき（ワークツリーの Claude Code 内で）:**
 
 ```plaintext
+# claude
 ワークツリーの変更を push して PR を作って。Issue #[番号] をクローズする形にして
 ```
 
 **片付けるとき（PR マージ後、ターミナルで実行）:**
 
 ```bash
+# bash
 git worktree remove .claude/worktrees/fix_issue_[番号]
 git branch -d fix_issue_[番号]
 ```

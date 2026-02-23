@@ -44,18 +44,21 @@ Chapter 5 まででローカル環境（自分のパソコン）で動く TODO �
 Claude Code を起動します。
 
 ```bash
+# bash
 claude
 ```
 
 Claude Code が起動したら、作業を始める前に現在のブランチを確認してください。
 
 ```plaintext
+# claude
 git branch --show-current
 ```
 
 > **注意:** `main` と表示された場合は、作業を止めてブランチを作成してください。
 >
 > ```plaintext
+> # claude
 > git checkout -b feature/vercel-deploy
 > ```
 
@@ -82,18 +85,21 @@ git branch --show-current
 Vercel CLI のインストールはターミナルで行います。Claude Code を一度終了します。
 
 ```plaintext
+# claude
 /exit
 ```
 
 ターミナルに戻ったら、以下を実行してください。
 
 ```bash
+# bash
 npm i -g vercel
 ```
 
 インストールが完了したか確認します。
 
 ```bash
+# bash
 vercel --version
 ```
 
@@ -120,16 +126,19 @@ Vercel は GitHub と連携して動作します。まず GitHub にリポジト
 Claude Code を起動して、以下のように依頼します。
 
 ```bash
+# bash
 claude
 ```
 
 ```plaintext
+# claude
 GitHub にコードを push する準備をして。リモートリポジトリの URL は `https://github.com/あなたのユーザー名/todos.git`
 ```
 
 または、Claude Code を使わずターミナルで直接実行することもできます。
 
 ```bash
+# bash
 # リモートリポジトリを登録する
 git remote add origin https://github.com/あなたのユーザー名/todos.git
 
@@ -157,10 +166,12 @@ git push -u origin main
 Claude Code が起動していない場合は起動します。
 
 ```bash
+# bash
 claude
 ```
 
 ```plaintext
+# claude
 Vercel にデプロイする準備をして。環境変数に何を設定すればいいか教えて
 ```
 
@@ -192,18 +203,21 @@ Vercel の「環境変数」機能を使って、本番サーバーにも同じ�
 ローカルの `.env.local` ファイルを確認して、設定する値を用意します。Claude Code を一度終了します。
 
 ```plaintext
+# claude
 /exit
 ```
 
 ターミナルに戻ったら、以下を実行してください。
 
 ```bash
+# bash
 cat .env.local
 ```
 
 以下の 2 つの値が必要です。
 
 ```plaintext
+# output
 NEXT_PUBLIC_SUPABASE_URL=https://xxxxxxxxxxxxxx.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciO...（長い文字列）
 ```
@@ -244,12 +258,14 @@ Vercel のプロジェクト設定画面で環境変数を登録します。
 **方法 B: Vercel CLI から**
 
 ```bash
+# bash
 vercel
 ```
 
 初回実行時は対話形式で設定を聞かれます。
 
 ```plaintext
+# output
 ? Set up and deploy "~/workspace/todos"? [Y/n] y
 ? Which scope do you want to deploy to? → あなたのアカウント名を選択
 ? Link to existing project? [y/N] n
@@ -262,12 +278,14 @@ vercel
 Claude Code を起動します。
 
 ```bash
+# bash
 claude
 ```
 
 Claude Code が起動したら、以下を入力してください。
 
 ```plaintext
+# claude
 Vercel にデプロイして。デプロイ前に問題がないかビルドを確認して
 ```
 
@@ -284,6 +302,7 @@ Claude Code はまず `npm run build` でビルドが通るかを確認し、問
 ログの最後に以下のような表示が出れば成功です。
 
 ```plaintext
+# output
 ✓ Build completed
 ✓ Deployment completed
 ```
@@ -333,12 +352,14 @@ Supabase の認証機能は、デフォルトで `localhost:3000`（自分のパ
 5. 「Site URL」を本番 URL に更新する:
 
    ```plaintext
+   # output
    https://プロジェクト名.vercel.app
    ```
 
 6. 「Redirect URLs」に以下を追加する（「Add URL」をクリック）:
 
    ```plaintext
+   # output
    https://プロジェクト名.vercel.app/**
    ```
 
@@ -347,6 +368,7 @@ Supabase の認証機能は、デフォルトで `localhost:3000`（自分のパ
 > **注意:** Site URL を変更すると、`localhost:3000` でのローカル開発時に認証が動作しなくなることがあります。ローカル開発の URL も Redirect URLs に残しておくことを推奨します:
 >
 > ```plaintext
+> # output
 > http://localhost:3000/**
 > https://プロジェクト名.vercel.app/**
 > ```
@@ -362,12 +384,14 @@ GitHub への push で Vercel が自動デプロイされることを体験し�
 Claude Code を起動します。
 
 ```bash
+# bash
 claude
 ```
 
 Claude Code が起動したら、以下を入力してください。
 
 ```plaintext
+# claude
 TODO リストのスタイルを少し改善して、feature/style-tweak ブランチを作ってコミットして push して
 ```
 
@@ -424,6 +448,7 @@ TODO リストのスタイルを少し改善して、feature/style-tweak ブラ�
 このチャプターで使ったツールを、Chapter 0（環境構築）のチェックリストに追加しておきましょう。
 
 ```markdown
+# output
 ## Chapter 6 で必要なもの（Chapter 0 に追記）
 
 - [ ] Vercel アカウント（https://vercel.com で GitHub 連携して作成）
@@ -440,16 +465,19 @@ TODO リストのスタイルを少し改善して、feature/style-tweak ブラ�
 Vercel のビルドログにエラーが表示された場合、まずターミナルでローカルビルドを試みます。
 
 ```bash
+# bash
 npm run build
 ```
 
 エラーが出た場合は Claude Code を起動して依頼します。
 
 ```bash
+# bash
 claude
 ```
 
 ```plaintext
+# claude
 npm run build でエラーが出ています。ログを確認して修正して
 ```
 
@@ -472,6 +500,7 @@ Vercel にデプロイしてもアプリが Supabase に繋がらない場合:
 3. 環境変数を変更したら「Redeploy」が必要
 
 ```bash
+# bash
 # 環境変数の確認（ローカル）
 cat .env.local
 ```
@@ -492,6 +521,7 @@ cat .env.local
 ### vercel コマンドが認識されない
 
 ```bash
+# bash
 # npm のグローバルインストールパスを確認する
 npm root -g
 
@@ -516,10 +546,12 @@ Vercel のビルドログにエラーがなくても、ランタイムエラー�
 3. エラーメッセージをメモしてから、Claude Code を起動して原因を調べてもらう
 
 ```bash
+# bash
 claude
 ```
 
 ```plaintext
+# claude
 デプロイ後のページが真っ白になります。ブラウザのコンソールに以下のエラーがあります:（エラーメッセージを貼り付ける）
 ```
 
@@ -528,6 +560,7 @@ claude
 ### GitHub への push が拒否される
 
 ```bash
+# bash
 # リモートリポジトリが登録されているか確認
 git remote -v
 

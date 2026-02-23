@@ -67,6 +67,7 @@ Supabase が使っているデータベースは **PostgreSQL（ポストグレ�
 このカリキュラムの TODO アプリでは `todos` テーブルを作ります。テーブルは「列（カラム）」と「行（レコード）」で構成されます。
 
 ```text
+# output
 todos テーブル（イメージ）
 
 | id | user_id | title         | is_done | created_at         |
@@ -166,6 +167,7 @@ RLS の「Row（行）」は、テーブルの「1 行分のデータ」を指�
 Chapter 3 で設定した RLS ポリシーの意味を解説します。
 
 ```text
+# output
 ルール: todos テーブルの行は、その行の user_id が
         現在ログインしているユーザーの ID と一致する場合のみアクセス可能
 ```
@@ -180,6 +182,7 @@ Chapter 3 で設定した RLS ポリシーの意味を解説します。
 6. 田中さんの画面には田中さんの TODO だけが表示される
 
 ```text
+# output
 todos テーブル
 
 | id | user_id | title       |    ← RLS フィルタ後
@@ -266,6 +269,7 @@ Supabase のダッシュボードで操作する主な画面を整理します�
 アプリが「どの Supabase プロジェクトに接続するか」を識別するためのアドレスです。
 
 ```text
+# output
 https://xxxxxxxxxx.supabase.co
          ↑
          プロジェクト固有の ID
@@ -278,6 +282,7 @@ https://xxxxxxxxxx.supabase.co
 アプリの「秘密のメモ帳」として機能するファイルです。API キーや接続 URL などの機密情報を保存します。
 
 ```text
+# output
 # .env.local の中身（イメージ）
 NEXT_PUBLIC_SUPABASE_URL=https://xxxxxxxxxx.supabase.co
 SUPABASE_SECRET_KEY=sb_secret_...
@@ -292,6 +297,7 @@ SUPABASE_SECRET_KEY=sb_secret_...
 この補足資料で解説した内容を整理します。
 
 ```text
+# output
 Supabase の全体像
 
 ┌─────────────────────────────────────────────┐

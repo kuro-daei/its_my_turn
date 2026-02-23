@@ -58,6 +58,7 @@
 実際の package.json の例と、各項目の意味を確認します。
 
 ```text
+# output
 {
   "name": "my-todo-app",
   "version": "0.1.0",
@@ -137,6 +138,7 @@
 #### `npm install`
 
 ```bash
+# bash
 npm install
 ```
 
@@ -151,6 +153,7 @@ package.json の `dependencies` と `devDependencies` に書かれているす�
 #### `npm install パッケージ名`
 
 ```bash
+# bash
 npm install @supabase/supabase-js
 ```
 
@@ -159,6 +162,7 @@ npm install @supabase/supabase-js
 #### `npm run dev`
 
 ```bash
+# bash
 npm run dev
 ```
 
@@ -169,6 +173,7 @@ npm run dev
 #### `npm run build`
 
 ```bash
+# bash
 npm run build
 ```
 
@@ -177,6 +182,7 @@ npm run build
 #### `npm run start`
 
 ```bash
+# bash
 npm run start
 ```
 
@@ -197,6 +203,7 @@ npm run start
 #### `npx create-next-app` がなぜ `npx` を使うのか
 
 ```bash
+# bash
 npx create-next-app@latest my-todo-app
 ```
 
@@ -233,6 +240,7 @@ npx create-next-app@latest my-todo-app
 ビルドに失敗したら、Claude Code にそのエラーメッセージをそのまま貼り付けて「ビルドエラーを直してください」と依頼してください。Claude Code がエラーを読んで修正してくれます。
 
 ```bash
+# bash
 npm run build
 # エラーが出た場合、そのメッセージをコピーして Claude Code に渡す
 ```
@@ -273,6 +281,7 @@ npm run build
 ### インストール・セットアップ
 
 ```bash
+# bash
 # プロジェクトの全パッケージをインストールする（初回 or 環境リセット後）
 npm install
 
@@ -286,6 +295,7 @@ npx create-next-app@latest プロジェクト名
 ### 開発・確認
 
 ```bash
+# bash
 # 開発サーバーを起動する（http://localhost:3000 で確認できる）
 npm run dev
 
