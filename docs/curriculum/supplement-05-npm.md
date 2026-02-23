@@ -337,4 +337,4 @@ npm run start
 
 - [補足 1: Bash / ターミナル操作ガイド](supplement-01-bash.md) — ターミナルの基本操作とコマンドの読み方
 - [補足 2: Git 仕様ガイド](supplement-02-git.md) — Git の概念・Worktree の仕組みの詳細
-- [Chapter 1: プロジェクト初期化](chapter-01-project-setup.md) — `npx create-next-app` を実際に使うハンズオン
+- [Chapter 1: プロジェクト初期化](chapter-01-project-init.md) — `npx create-next-app` を実際に使うハンズオン

@@ -247,5 +247,5 @@ claude --resume
 ## 関連資料
 
 - [補足 2: Git 仕様ガイド](supplement-02-git.md) — Git の概念・Worktree の仕組みの詳細
-- [Chapter 2: 最初の会話](module-02-first-session.md) — `claude` コマンドで最初の作業を体験する
+- [Chapter 2: 最初の会話](chapter-02-claude-code.md) — `claude` コマンドで最初の作業を体験する
 - [Chapter 5: Issue とワークツリー](chapter-05-git-workflow.md) — `claude -w` を使った並列作業のハンズオン

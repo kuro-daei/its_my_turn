@@ -219,10 +219,10 @@ cat .env.local
 ```plaintext
 # output
 NEXT_PUBLIC_SUPABASE_URL=https://xxxxxxxxxxxxxx.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciO...（長い文字列）
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=eyJhbGciO...（長い文字列）
 ```
 
-> **注意:** これらの値を第三者に教えないでください。特に `NEXT_PUBLIC_SUPABASE_ANON_KEY` は公開 API キーですが、Supabase の RLS（Chapter 3 で設定したセキュリティ機能）が有効であれば安全に使用できます。
+> **注意:** これらの値を第三者に教えないでください。特に `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` は公開 API キーですが、Supabase の RLS（Chapter 3 で設定したセキュリティ機能）が有効であれば安全に使用できます。
 
 ### 2-2. Vercel に環境変数を設定する
 
@@ -236,7 +236,7 @@ Vercel のプロジェクト設定画面で環境変数を登録します。
    - Name: `NEXT_PUBLIC_SUPABASE_URL`
    - Value: `.env.local` の `NEXT_PUBLIC_SUPABASE_URL` の値
 4. 「Add」をクリックする
-5. 同様に `NEXT_PUBLIC_SUPABASE_ANON_KEY` も追加する
+5. 同様に `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` も追加する
 
 **方法 B: 既存プロジェクトの設定画面から**
 
@@ -311,7 +311,7 @@ Claude Code はまず `npm run build` でビルドが通るかを確認し、問
 
 ### Step 2 の確認ポイント
 
-- [ ] `.env.local` に `NEXT_PUBLIC_SUPABASE_URL` と `NEXT_PUBLIC_SUPABASE_ANON_KEY` が存在する
+- [ ] `.env.local` に `NEXT_PUBLIC_SUPABASE_URL` と `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` が存在する
 - [ ] Vercel のプロジェクト設定に 2 つの環境変数が登録されている
 - [ ] `vercel` コマンドを実行してエラーが出ない（CLI を使う場合）
 - [ ] Vercel ダッシュボードでビルドが成功している（緑のチェックマーク）
