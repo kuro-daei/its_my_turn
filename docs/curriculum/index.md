@@ -11,3 +11,16 @@ Chapter 0 から順番に進めてください。各チャプターは前のチ�
 | 4 | [Vibe Coding で TODO アプリを作る](chapter-04-development.md) | 約 3 時間 |
 | 5 | [Issue とワークツリー](chapter-05-git-workflow.md) | 約 1.5 時間 |
 | 6 | [Vercel デプロイ](chapter-06-deploy.md) | 約 1 時間 |
+
+## 補足資料
+
+チャプターを進めながら、必要に応じて参照してください。
+
+| # | タイトル | 概要 |
+|---|---------|------|
+| 補足 1 | [Bash / ターミナル操作ガイド](supplement-01-bash.md) | 基本コマンド・パスの概念・.zshrc の使い方をまとめた参照資料 |
+| 補足 2 | [Git 仕様ガイド](supplement-02-git.md) | Git の基本概念・ブランチ・Worktree のベストプラクティスを体系的にまとめた参照資料 |
+| 補足 3 | [Claude Code 操作ガイド](supplement-03-claude-code-operations.md) | 起動コマンド・キーボードショートカット・セッション管理の実用ガイド |
+| 補足 4 | [Supabase 仕様ガイド](supplement-04-supabase.md) | データベース・認証（Auth）・RLS など Supabase の機能と仕組みを体系的にまとめた参照資料 |
+| 補足 5 | [npm / Node.js ガイド](supplement-05-npm.md) | npm コマンド・package.json・ビルドの基礎をまとめた参照資料 |
+| 補足 6 | [ビルドとデプロイ](supplement-06-deploy.md) | ビルド・デプロイ・CI/CD・環境変数の仕組みをまとめた参照資料 |

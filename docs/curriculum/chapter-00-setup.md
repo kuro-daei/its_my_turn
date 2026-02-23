@@ -21,6 +21,7 @@
 | Node.js | ノード ジェイエス | JavaScript の実行環境 |
 | uv | ユーブイ | Python のバージョン・パッケージ管理ツール |
 | Python | パイソン | Python の実行環境 |
+| Docker | ドッカー | コンテナ型の実行環境。アプリの動作環境を統一するツール |
 
 > **ポイント**: Claude Code はネイティブアプリとして動作するため、Node.js がなくてもインストール・起動できます。Node.js は後から別途インストールします。
 
@@ -213,7 +214,31 @@ Python のバージョンが表示されれば OK です。
 
 ---
 
-### Step 8: GitHub CLI（gh）の認証
+### Step 8: Docker のインストール
+
+Docker（ドッカー）は、アプリの動作環境をまとめてパッケージ化して動かすツールです。「コンテナ」と呼ばれる軽量な実行環境を使うことで、どのマシンでも同じ条件でアプリを動かせます。
+
+```bash
+brew install --cask docker
+```
+
+インストール後、アプリケーションフォルダから **Docker** を起動してください。メニューバーにクジラのアイコン（🐳）が表示されたら起動成功です。
+
+> **初回起動時**: 「Docker Desktop is starting...」と表示されしばらく待ちます。クジラアイコンが静止したら起動完了です。
+
+**確認:**
+
+```bash
+docker --version
+```
+
+バージョン番号が表示されれば OK です。
+
+- [ ] `docker --version` でバージョン番号が表示された
+
+---
+
+### Step 9: GitHub CLI（gh）の認証
 
 ```bash
 gh auth login
@@ -473,7 +498,63 @@ uv python list
 
 ---
 
-### Step 12: gh の認証
+### Step 12: Docker のインストール
+
+WSL Ubuntu では、Docker Engine（ドッカー エンジン）を直接インストールします。Mac の Docker Desktop とは異なりますが、コマンドの使い方は同じです。
+
+**Docker の公式リポジトリを追加:**
+
+```bash
+sudo apt-get update
+sudo apt-get install -y ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+```
+
+**Docker をインストール:**
+
+```bash
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+**`sudo` なしで使えるようにする:**
+
+```bash
+sudo usermod -aG docker $USER
+```
+
+> **この設定の意味**: デフォルトでは Docker コマンドに毎回 `sudo` が必要です。この設定で自分のアカウントを「docker グループ」に追加することで、`sudo` なしで使えるようになります。
+
+設定を反映するため、**WSL を一度閉じて開き直してください**。
+
+```bash
+# WSL を閉じる
+exit
+```
+
+Windows Terminal で Ubuntu を開き直したあと、確認してください。
+
+**確認:**
+
+```bash
+docker --version
+docker run hello-world
+```
+
+`docker run hello-world` で「Hello from Docker!」が表示されれば OK です。
+
+- [ ] `docker --version` でバージョン番号が表示された
+- [ ] `docker run hello-world` で「Hello from Docker!」が表示された
+
+---
+
+### Step 13: gh の認証
 
 ```bash
 gh auth login
@@ -529,6 +610,7 @@ Chapter 0 が完了したら、以下がすべてチェックできているは�
 - [ ] `node --version` でバージョン番号が表示される
 - [ ] `uv --version` でバージョン番号が表示される
 - [ ] Python がインストールされている
+- [ ] `docker --version` でバージョン番号が表示される
 
 ---
 
@@ -542,6 +624,7 @@ Chapter 0 が完了したら、以下がすべてチェックできているは�
 - **gh** で GitHub 操作がターミナルからできるようになりました
 - **nvm + Node.js** で JavaScript の実行環境を整えました
 - **uv + Python** で Python の実行環境を整えました
+- **Docker（ドッカー）** でコンテナ型の実行環境を整えました
 - 作業用ディレクトリ `~/projects` を用意しました
 
 次の Chapter 1 では、Next.js アプリのスキャフォールドを実行し、GitHub にリポジトリを作成して `/init` コマンドで CLAUDE.md を生成します。
