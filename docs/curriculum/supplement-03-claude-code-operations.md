@@ -40,6 +40,7 @@ Claude Code にはいくつかの起動方法があります。**日常の作業
 ### `claude -p` の使い方
 
 ```bash
+# bash
 # 一問一答で聞くだけ（セッションを開かない）
 claude -p "Markdown の表の書き方を教えて"
 ```
@@ -58,6 +59,7 @@ claude -p "Markdown の表の書き方を教えて"
 | `claude --resume` | 過去のセッション一覧を表示して選ぶ | 「あの作業はどのセッションだっけ」というとき |
 
 ```bash
+# bash
 # 直前のセッションを再開する
 claude --continue
 
@@ -72,6 +74,7 @@ claude --resume
 Claude Code セッションを起動した後、チャット画面で `/rename` コマンドを使うと、セッションに名前をつけられます。
 
 ```plaintext
+# claude
 /rename Google ログイン実装
 ```
 
@@ -159,6 +162,7 @@ Claude Code のチャット画面（セッション内）で `/` から始まる
 Claude Code は長い会話を続けていると、「コンテキスト（一度に記憶できる量）」の上限に近づきます。画面に「コンテキストが少なくなってきた」という表示が出たら、`/compact` を実行してください。
 
 ```plaintext
+# claude
 /compact
 ```
 
@@ -173,6 +177,7 @@ Claude Code は長い会話を続けていると、「コンテキスト（一�
 `claude -w` コマンドは「新しい机を用意して、その机で Claude Code を起動する」コマンドです。Worktree（机）の詳しい仕組みは補足 2 を参照してください。
 
 ```bash
+# bash
 # 名前なしで起動（ランダムな名前が自動付与される）
 claude -w
 
@@ -199,6 +204,7 @@ claude -w feat_google_auth
 ### 起動のクイックリファレンス
 
 ```bash
+# bash
 # 通常起動
 claude
 

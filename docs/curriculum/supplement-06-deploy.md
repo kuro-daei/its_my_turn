@@ -39,12 +39,14 @@ Chapter 4 で `npm run build` というコマンドが登場したとき、Chapt
 4. **静的ファイルの生成** — `.next/` フォルダにビルド済みのファイル群を出力する
 
 ```bash
+# bash
 npm run build
 ```
 
 実行後、ターミナルに次のような出力が表示されます。
 
 ```text
+# output
 Route (app)                              Size     First Load JS
 ┌ ○ /                                    5.23 kB        87.3 kB
 ├ ○ /login                               3.12 kB        85.1 kB
@@ -194,6 +196,7 @@ Vercel には、`main` ブランチ以外への push に対して「プレビュ
 `.env.local` は Git の管理対象外です。GitHub に push しても、このファイルは含まれません。これは意図的な設計です。API キーなどの機密情報が GitHub に公開されることを防ぐためです。
 
 ```text
+# output
 .gitignore（抜粋）
 
 # local env files
@@ -226,6 +229,7 @@ Next.js には 2 種類の環境変数があります。
 `npm run build` を実行してエラーが出たとき、ターミナルに表示される内容を確認します。エラーは必ずファイル名と行番号とともに表示されます。
 
 ```text
+# output
 ./src/app/todos/page.tsx
 Type error: Type 'string | undefined' is not assignable to type 'string'.
 
@@ -252,6 +256,7 @@ Type error: Type 'string | undefined' is not assignable to type 'string'.
 ビルドエラーが出たら、エラーメッセージをそのままコピーして Claude Code に貼り付け、以下のように依頼します。
 
 ```plaintext
+# claude
 npm run build したらエラーが出ました。直してください。
 
 [エラーメッセージをここに貼り付ける]
@@ -266,6 +271,7 @@ Claude Code はエラーメッセージから原因を特定し、修正を行�
 このカリキュラムで行う Vercel デプロイの全体フローを整理します。
 
 ```text
+# output
 コードを書く（Claude Code）
   ↓
 git commit & push（GitHub にコードを送る）

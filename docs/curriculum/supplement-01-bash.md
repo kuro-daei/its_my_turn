@@ -54,6 +54,7 @@
 macOS Catalina（2019年）以降、デフォルトのシェルは **zsh** です。設定ファイルは `~/.zshrc` です。
 
 ```bash
+# bash
 echo $SHELL
 # → /bin/zsh と表示されれば zsh
 ```
@@ -63,6 +64,7 @@ echo $SHELL
 WSL の Ubuntu では **bash** がデフォルトです。設定ファイルは `~/.bashrc` です。
 
 ```bash
+# bash
 echo $SHELL
 # → /bin/bash と表示されれば bash
 ```
@@ -103,6 +105,7 @@ echo $SHELL
 `.` で始まるファイル・フォルダは**隠しファイル**と呼ばれ、通常の `ls` コマンドでは表示されません。
 
 ```bash
+# bash
 # 通常の ls（隠しファイルは表示されない）
 ls
 
@@ -197,6 +200,7 @@ ls -la
 よく使うコマンドを短い別名で呼び出せるようにします。
 
 ```bash
+# bash
 # ll と打つだけで ls -la を実行する
 alias ll='ls -la'
 
@@ -211,6 +215,7 @@ alias myapp='cd ~/workspace/my-todo-app'
 プログラムが参照する設定値を登録します。
 
 ```bash
+# bash
 # 開発環境であることをプログラムに伝える
 export NODE_ENV=development
 ```
@@ -222,6 +227,7 @@ export NODE_ENV=development
 新しくインストールしたコマンドをターミナルで使えるようにします。
 
 ```bash
+# bash
 # インストールしたツールをターミナルで使えるようにする
 export PATH="$PATH:/usr/local/bin"
 ```
@@ -236,6 +242,7 @@ export PATH="$PATH:/usr/local/bin"
 - **`source` コマンドを実行する** — 今のターミナルに即反映される（再起動不要）
 
 ```bash
+# bash
 # Mac（zsh）の場合
 source ~/.zshrc
 
@@ -254,6 +261,7 @@ source ~/.bashrc
 ### 場所・移動
 
 ```bash
+# bash
 # 今いる場所を確認する
 pwd
 
@@ -273,6 +281,7 @@ cd ~
 ### ファイル・フォルダ操作
 
 ```bash
+# bash
 # フォルダを作成する
 mkdir myproject
 
@@ -292,6 +301,7 @@ rm -r myproject
 ### このカリキュラムでよく使うコマンド
 
 ```bash
+# bash
 # Claude Code を起動する
 claude
 
@@ -311,6 +321,7 @@ git log --oneline
 ### `.zshrc` の操作
 
 ```bash
+# bash
 # Mac（zsh）: 設定ファイルを VS Code で開く
 code ~/.zshrc
 

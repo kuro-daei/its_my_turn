@@ -91,12 +91,14 @@ Supabase（スーパーベース）は、データを安全に保管してくれ
 プロジェクトフォルダに移動して、Claude Code を起動します。
 
 ```bash
+# bash
 claude
 ```
 
 Claude Code が起動したら、以下を入力してプラグインの一覧を表示します。
 
 ```plaintext
+# claude
 /plugin
 ```
 
@@ -109,6 +111,7 @@ Claude Code が起動したら、以下を入力してプラグインの一覧�
 インストールが完了したら、再び `/plugin` と入力します。
 
 ```plaintext
+# claude
 /plugin
 ```
 
@@ -125,6 +128,7 @@ Claude Code が起動したら、以下を入力してプラグインの一覧�
 認証が完了したら、続けて以下を入力して接続を確認します。
 
 ```plaintext
+# claude
 Supabase のプロジェクト一覧を表示して
 ```
 
@@ -151,6 +155,7 @@ Step 1 で作成した `todos` プロジェクトが表示されれば成功で�
 引き続き Claude Code のプロンプトで、以下を入力してください。
 
 ```plaintext
+# claude
 Supabase の todos プロジェクトに TODO管理用の `todos` テーブルを作って。
 Row Level Security (RLS) を有効化して。ログインしたユーザーが自分の TODO だけを見れる・作れる・更新できる・削除できるようにして
 ```
@@ -217,6 +222,7 @@ Claude Code が Supabase プラグインを通じて、テーブルの作成と 
 プラグインがインストールされているので、Claude Code に接続情報の取得を依頼できます。Claude Code のプロンプトで以下を入力してください。
 
 ```plaintext
+# claude
 Supabase の todos プロジェクトの URL を教えて
 ```
 
@@ -231,6 +237,7 @@ Claude Code が値を表示してくれるので、表示された値をメモ�
 続けて Claude Code に `.env.local` の作成を依頼します。
 
 ```plaintext
+# claude
 Supabase の設定用として、サイト URL を localhost に指定した .env.local ファイルを作成してください。Publishable Key を使用するものとします
 ```
 
@@ -240,7 +247,8 @@ Claude Code が `.env.local` を作成したら、`NEXT_PUBLIC_SUPABASE_URL` の
 
 この時点での `.env.local` の全体像は以下のようになります。
 
-```dotenv
+```text
+# output
 # .env.local
 NEXT_PUBLIC_SUPABASE_URL=https://xxxxxxxxxx.supabase.co
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
@@ -254,12 +262,14 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
 `.env.local` には接続情報が含まれているため、Git に含めてはいけません。プロジェクトルートの `.gitignore`（Git が無視するファイルのリスト）に `.env.local` が含まれていることを確認します。
 
 ```bash
+# bash
 cat .gitignore | grep env
 ```
 
 `.env.local` が出力に含まれていれば OK です。Next.js のデフォルト設定では以下のように記載されているはずです。
 
-```gitignore
+```text
+# output
 # local env files
 .env*.local
 ```
@@ -284,6 +294,7 @@ cat .gitignore | grep env
 Claude Code に日本語で指示するだけでコミットが完了します（Chapter 2 の Step 5 と同じ体験です）。
 
 ```plaintext
+# claude
 今回の作業をコミットして。`.env.local` は絶対に含めないで
 ```
 
@@ -292,6 +303,7 @@ Claude Code がファイルの確認、コミットメッセージの作成、�
 コミットが完了したら、GitHub に push します。
 
 ```plaintext
+# claude
 push して
 ```
 
@@ -308,6 +320,7 @@ push して
 Claude Code を終了します。
 
 ```plaintext
+# claude
 /exit
 ```
 

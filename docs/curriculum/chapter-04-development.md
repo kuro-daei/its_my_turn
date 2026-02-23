@@ -72,6 +72,7 @@
 ターミナルで以下のコマンドを順番に実行してください。
 
 ```bash
+# bash
 npx skills add https://github.com/vercel-labs/agent-skills \
   --skill vercel-react-best-practices \
   -a claude-code --scopre project -y
@@ -79,7 +80,7 @@ npx skills add https://github.com/vercel-labs/agent-skills \
   --skill web-design-guidelines \
   -a claude-code --scope project -y
 npx skills add https://github.com/sickn33/antigravity-awesome-skills \
-  --skill nextjs-supabase-auth 
+  --skill nextjs-supabase-auth
   -a claude-code --scopre project -y
 ```
 
@@ -100,12 +101,14 @@ npx skills add https://github.com/sickn33/antigravity-awesome-skills \
 Global で使えるようにインストールします。
 
 ```bash
+# bash
 uv tool install cisco-ai-skill-scanner
 ```
 
 スキャンの実行:
 
 ```bash
+# bash
 uv run skill-scanner scan-all .claude/skills/
 ```
 
@@ -155,6 +158,7 @@ Claude Code のチャット画面で、**`Shift` キーを押しながら `Tab` 
 Plan Mode に切り替えたら、以下の指示を入力してください。
 
 ```plaintext
+# claude
  Next.js + TypeScript + Tailwind CSS v4 を使って、TODO アプリを設計・実装して。データは supabase に保存すること
 
   機能要件（CRUD）：
@@ -180,6 +184,7 @@ Claude Code から以下のような設計案が返ってきます。
 **期待される応答の概要:**
 
 ```plaintext
+# output
 TODO アプリの構成を提案します。
 
 ## コンポーネント設計
@@ -232,6 +237,7 @@ Chapter 3 ではクラウドの Supabase に接続しました。ここでは**�
 まず、Supabase CLI をプロジェクトの開発用パッケージとしてインストールします。
 
 ```bash
+# bash
 npm install --save-dev supabase
 ```
 
@@ -240,12 +246,14 @@ npm install --save-dev supabase
 続けて、別のターミナルで以下を実行してください。
 
 ```bash
+# bash
 npx supabase start
 ```
 
 しばらくすると、以下のような出力が表示されます。
 
 ```plaintext
+# output
 Started supabase local development setup.
 
          API URL: http://127.0.0.1:54321
@@ -263,6 +271,7 @@ service_role key: eyJ...
 続けて、アプリがローカルの Supabase に接続するよう `.env.local` を更新してください。Claude Code に以下を指示します。
 
 ```plaintext
+# claude
 .env.local を supabase start の出力に合わせてローカル接続用に更新して
 ```
 
@@ -281,12 +290,14 @@ service_role key: eyJ...
 ファイルが生成されたら、**別のターミナルを開いて**開発サーバーを起動します。
 
 ```bash
+# bash
 npm run dev
 ```
 
 ブラウザで `http://localhost:3000` を開きます。以下のような画面が表示されれば成功です。
 
 ```plaintext
+# output
 ┌────────────────────────────────────┐
 │  TODO アプリ           [ログアウト] │
 ├────────────────────────────────────┤
@@ -318,6 +329,7 @@ npm run dev
 **ブラウザに何も表示されない、またはエラーになる場合:**
 
 ```bash
+# bash
 # 開発サーバーが起動しているか確認
 # 別ターミナルで実行
 npm run dev
@@ -326,12 +338,14 @@ npm run dev
 Claude Code に以下のように聞いてみてください。
 
 ```plaintext
+# claude
 ブラウザで localhost:3000 を開いたらエラーになった。ターミナルのエラーメッセージを確認して修正して
 ```
 
 **Tailwind CSS のスタイルが当たっていない場合:**
 
 ```plaintext
+# claude
 Tailwind CSS のスタイルが反映されていない。tailwind.config.ts の設定を確認して
 ```
 
@@ -340,6 +354,7 @@ Tailwind CSS のスタイルが反映されていない。tailwind.config.ts の
 Claude Code に以下のように聞いてみてください。
 
 ```plaintext
+# claude
 Supabase との接続でエラーが起きているかもしれない。各操作（追加・取得・更新・削除）のエラーをコンソールに出力して確認して
 ```
 
@@ -356,6 +371,7 @@ Supabase との接続でエラーが起きているかもしれない。各操�
 別のターミナルを開いて、以下を実行してください。
 
 ```bash
+# bash
 npm run build
 ```
 
@@ -418,12 +434,14 @@ npm run build
 コミット前に、ビルドエラーがないことを確認します。別のターミナルを開いて、以下を実行してください。
 
 ```bash
+# bash
 npm run build
 ```
 
 以下のような出力が出ればビルド成功です。
 
 ```plaintext
+# output
 ▲ Next.js 15.x.x
 
 ✓ Compiled successfully
@@ -446,12 +464,14 @@ Route (app)                  Size     First Load JS
 Claude Code に以下を入力してください。
 
 ```plaintext
+# claude
 今回の変更をコミットして。Conventional Commits 形式で
 ```
 
 Claude Code は以下のような手順でコミットを行います。
 
 ```bash
+# bash
 # 変更ファイルを確認
 git status
 
@@ -469,12 +489,14 @@ git commit -m "feat: implement todo app with CRUD and Google authentication"
 コミットが完了したら、PR を作成して main にマージします。
 
 ```plaintext
+# claude
 push して、PR を作って main にマージして
 ```
 
 Claude Code は以下のような操作を自動で行います。
 
 ```bash
+# bash
 git push -u origin <現在のブランチ名>
 gh pr create --title "feat: implement todo app with CRUD" --body "TODO アプリの基本機能（CRUD）を実装。"
 gh pr merge --merge
@@ -483,6 +505,7 @@ gh pr merge --merge
 マージが完了したら、main ブランチを最新状態にします。
 
 ```bash
+# bash
 git checkout main
 git pull
 ```

@@ -44,6 +44,7 @@ VS Code を起動したら、`Cmd + Shift + P` でコマンドパレットを開
 **確認:**
 
 ```bash
+# bash
 code --version
 ```
 
@@ -64,6 +65,7 @@ Homebrew（ホームブリュー）は Mac 用のパッケージ管理ツール�
 > **ターミナルの開き方**: `Cmd + Space` を押して「ターミナル」と入力し、Enter キーを押します。
 
 ```bash
+# bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
@@ -72,6 +74,7 @@ Homebrew（ホームブリュー）は Mac 用のパッケージ管理ツール�
 **確認:**
 
 ```bash
+# bash
 brew --version
 ```
 
@@ -80,6 +83,7 @@ brew --version
 > **Apple Silicon Mac（M1/M2/M3/M4）の場合**: インストール後に以下を実行してください。
 >
 > ```bash
+> # bash
 > echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
 > eval "$(/opt/homebrew/bin/brew shellenv)"
 > ```
@@ -98,6 +102,7 @@ brew --version
 以下を実行するだけでインストールが完了します。
 
 ```bash
+# bash
 curl -fsSL https://claude.ai/install.sh | bash
 ```
 
@@ -108,6 +113,7 @@ curl -fsSL https://claude.ai/install.sh | bash
 **確認:**
 
 ```bash
+# bash
 claude --version
 ```
 
@@ -127,6 +133,7 @@ claude --version
 Claude Code はホームディレクトリ（`~`）ではなく、専用の作業用フォルダで実行します。
 
 ```bash
+# bash
 mkdir ~/projects
 ```
 
@@ -141,12 +148,14 @@ mkdir ~/projects
 Homebrew を使って一括でインストールします。
 
 ```bash
+# bash
 brew install git gh nvm uv
 ```
 
 nvm をターミナルで使えるようにするため、以下を実行してください。これは「ターミナルを開くたびに nvm を自動で読み込む」ための設定です。
 
 ```bash
+# bash
 echo 'export NVM_DIR="$HOME/.nvm"' >> ~/.zprofile
 echo '[ -s "$(brew --prefix)/opt/nvm/nvm.sh" ] && \. "$(brew --prefix)/opt/nvm/nvm.sh"' >> ~/.zprofile
 source ~/.zprofile
@@ -155,6 +164,7 @@ source ~/.zprofile
 **確認:**
 
 ```bash
+# bash
 git --version
 gh --version
 nvm --version
@@ -175,6 +185,7 @@ uv --version
 nvm を使って Node.js をインストールします。
 
 ```bash
+# bash
 nvm install --lts
 nvm use --lts
 ```
@@ -184,6 +195,7 @@ nvm use --lts
 **確認:**
 
 ```bash
+# bash
 node --version
 npm --version
 ```
@@ -199,12 +211,14 @@ npm --version
 uv を使って Python をインストールします。
 
 ```bash
+# bash
 uv python install
 ```
 
 **確認:**
 
 ```bash
+# bash
 uv python list
 ```
 
@@ -219,6 +233,7 @@ Python のバージョンが表示されれば OK です。
 Docker（ドッカー）は、アプリの動作環境をまとめてパッケージ化して動かすツールです。「コンテナ」と呼ばれる軽量な実行環境を使うことで、どのマシンでも同じ条件でアプリを動かせます。
 
 ```bash
+# bash
 brew install --cask docker
 ```
 
@@ -229,6 +244,7 @@ brew install --cask docker
 **確認:**
 
 ```bash
+# bash
 docker --version
 ```
 
@@ -241,6 +257,7 @@ docker --version
 ### Step 9: GitHub CLI（gh）の認証
 
 ```bash
+# bash
 gh auth login
 ```
 
@@ -251,6 +268,7 @@ gh auth login
 **確認:**
 
 ```bash
+# bash
 gh auth status
 ```
 
@@ -336,6 +354,7 @@ wsl --install -d Ubuntu-24.04
 Windows Terminal を開いて Ubuntu タブを開き:
 
 ```bash
+# bash
 uname -a
 ```
 
@@ -357,6 +376,7 @@ uname -a
 Ubuntu ターミナルで最初に以下を実行してください。
 
 ```bash
+# bash
 sudo apt update && sudo apt upgrade -y
 ```
 
@@ -367,6 +387,7 @@ sudo apt update && sudo apt upgrade -y
 ### Step 5: Claude Code のインストール・認証
 
 ```bash
+# bash
 curl -fsSL https://claude.ai/install.sh | bash
 ```
 
@@ -381,6 +402,7 @@ curl -fsSL https://claude.ai/install.sh | bash
 **確認:**
 
 ```bash
+# bash
 claude --version
 ```
 
@@ -393,6 +415,7 @@ claude --version
 ### Step 6: 作業用ディレクトリの作成
 
 ```bash
+# bash
 mkdir ~/projects
 ```
 
@@ -407,12 +430,14 @@ mkdir ~/projects
 **git:**
 
 ```bash
+# bash
 sudo apt install -y git
 ```
 
 **gh（GitHub CLI）:**
 
 ```bash
+# bash
 curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
 sudo apt update && sudo apt install -y gh
@@ -421,6 +446,7 @@ sudo apt update && sudo apt install -y gh
 **確認:**
 
 ```bash
+# bash
 git --version
 gh --version
 ```
@@ -433,6 +459,7 @@ gh --version
 ### Step 8: nvm のインストール
 
 ```bash
+# bash
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 source ~/.bashrc
 ```
@@ -440,6 +467,7 @@ source ~/.bashrc
 **確認:**
 
 ```bash
+# bash
 nvm --version
 ```
 
@@ -450,6 +478,7 @@ nvm --version
 ### Step 9: Node.js のインストール
 
 ```bash
+# bash
 nvm install --lts
 nvm use --lts
 ```
@@ -457,6 +486,7 @@ nvm use --lts
 **確認:**
 
 ```bash
+# bash
 node --version
 npm --version
 ```
@@ -468,6 +498,7 @@ npm --version
 ### Step 10: uv のインストール
 
 ```bash
+# bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 source ~/.bashrc
 ```
@@ -475,6 +506,7 @@ source ~/.bashrc
 **確認:**
 
 ```bash
+# bash
 uv --version
 ```
 
@@ -485,12 +517,14 @@ uv --version
 ### Step 11: Python のインストール
 
 ```bash
+# bash
 uv python install
 ```
 
 **確認:**
 
 ```bash
+# bash
 uv python list
 ```
 
@@ -505,6 +539,7 @@ WSL Ubuntu では、Docker Engine（ドッカー エンジン）を直接イン�
 **Docker の公式リポジトリを追加:**
 
 ```bash
+# bash
 sudo apt-get update
 sudo apt-get install -y ca-certificates curl
 sudo install -m 0755 -d /etc/apt/keyrings
@@ -520,12 +555,14 @@ sudo apt-get update
 **Docker をインストール:**
 
 ```bash
+# bash
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
 
 **`sudo` なしで使えるようにする:**
 
 ```bash
+# bash
 sudo usermod -aG docker $USER
 ```
 
@@ -534,6 +571,7 @@ sudo usermod -aG docker $USER
 設定を反映するため、**WSL を一度閉じて開き直してください**。
 
 ```bash
+# bash
 # WSL を閉じる
 exit
 ```
@@ -543,6 +581,7 @@ Windows Terminal で Ubuntu を開き直したあと、確認してください�
 **確認:**
 
 ```bash
+# bash
 docker --version
 docker run hello-world
 ```
@@ -557,6 +596,7 @@ docker run hello-world
 ### Step 13: gh の認証
 
 ```bash
+# bash
 gh auth login
 ```
 
@@ -565,6 +605,7 @@ gh auth login
 **確認:**
 
 ```bash
+# bash
 gh auth status
 ```
 
@@ -577,12 +618,14 @@ gh auth status
 Claude Code を起動します。
 
 ```bash
+# bash
 claude
 ```
 
 `>` プロンプトが表示されたら起動成功です。試しに話しかけてみてください。
 
 ```plaintext
+# claude
 こんにちは！
 ```
 
@@ -666,12 +709,14 @@ Chapter 3 で Supabase（データベースと認証を提供するクラウド�
 2. パッケージのインストール（プロジェクトディレクトリで実行）:
 
 ```bash
+# bash
 npm install @supabase/supabase-js
 ```
 
 3. Chapter 3 で Supabase プロジェクトを作成した後、`.env.local` に接続情報を設定します:
 
 ```text
+# output
 NEXT_PUBLIC_SUPABASE_URL=your-project-url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 ```
@@ -688,6 +733,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 Chapter 4 で SPA ベースのログイン認証を実装します。以下のパッケージを追加インストールしてください。
 
 ```bash
+# bash
 npm install @supabase/ssr
 ```
 
@@ -705,12 +751,14 @@ Chapter 6 でアプリをインターネットに公開（デプロイ）しま�
 2. Vercel CLI（ターミナルから Vercel を操作するツール）をインストール:
 
 ```bash
+# bash
 npm install -g vercel
 ```
 
 3. Vercel にログイン:
 
 ```bash
+# bash
 vercel login
 ```
 
