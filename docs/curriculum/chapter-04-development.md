@@ -42,7 +42,7 @@
 
 - [ ] Chapter 0〜3 が完了している
 - [ ] Supabase の `todos` テーブルが作成済みである
-- [ ] `.env.local` に Supabase の URL と ANON KEY が設定済みである
+- [ ] `.env.local` に Supabase の URL と Publishable Key が設定済みである
 - [ ] Google アカウントを持っている
 
 確認できたら、Step 1 に進みます。
@@ -72,8 +72,15 @@
 ターミナルで以下のコマンドを順番に実行してください。
 
 ```bash
-npx skills add https://github.com/vercel-labs/skills --skill vercel-react-best-practices  -a claude-code --scope project -y 
-npx skills add https://github.com/vercel-labs/skills --skill web-design-guidelines -a claude-code --scope project -y 
+npx skills add https://github.com/vercel-labs/agent-skills \
+  --skill vercel-react-best-practices \
+  -a claude-code --scopre project -y
+npx skills add https://github.com/vercel-labs/agent-skills \
+  --skill web-design-guidelines \
+  -a claude-code --scope project -y
+npx skills add https://github.com/sickn33/antigravity-awesome-skills \
+  --skill nextjs-supabase-auth 
+  -a claude-code --scopre project -y
 ```
 
 インストールするスキルの概要は以下の通りです。
@@ -82,6 +89,7 @@ npx skills add https://github.com/vercel-labs/skills --skill web-design-guidelin
 |---|---|---|
 | `vercel-react-best-practices` | 約 152,000 | Vercel 公式の React / Next.js パフォーマンス最適化ガイドライン |
 | `web-design-guidelines` | 約 115,000 | Vercel 公式のウェブデザインガイドライン。美しく使いやすい UI の原則 |
+| `nextjs-supabase-auth` | — | Next.js + Supabase の認証実装ベストプラクティス。Chapter 5 の Google ログイン実装で自動的に活用される |
 
 ---
 
@@ -109,7 +117,7 @@ GitHub: <https://github.com/cisco-ai-defense/skill-scanner>
 
 - [ ] vercel-react-best-practices スキルがインストールされた
 - [ ] web-design-guidelines スキルがインストールされた
-- [ ] supabase-postgres-best-practices スキルがインストールされた
+- [ ] nextjs-supabase-auth スキルがインストールされた
 - [ ] Claude Code が起動した
 
 ---
@@ -147,7 +155,7 @@ Claude Code のチャット画面で、**`Shift` キーを押しながら `Tab` 
 Plan Mode に切り替えたら、以下の指示を入力してください。
 
 ```plaintext
- Next.js + TypeScript + Tailwind CSS v4 を使って、TODO アプリを設計・実装して。
+ Next.js + TypeScript + Tailwind CSS v4 を使って、TODO アプリを設計・実装して。データは supabase に保存すること
 
   機能要件（CRUD）：
   - Create：タスクを入力して追加できる（空文字は送信不可）
@@ -161,7 +169,6 @@ Plan Mode に切り替えたら、以下の指示を入力してください。
   - TODO リスト（各アイテムにチェックボックス・タスク名編集・削除ボタン）
 
   実装上の前提：
-  - globals.css に --background / --foreground の CSS 変数が定義済みなので活用すること
   - 実装前に docs/plans/ に設計書を作成し、それをもとに coder が実装すること
 
 ```
@@ -213,6 +220,59 @@ src/
 - [ ] Plan Mode に切り替えられた（`Shift+Tab` × 2）
 - [ ] Claude Code から設計案が提示された
 - [ ] 設計内容を確認して承認した
+
+---
+
+#### ローカル Supabase を起動する
+
+Chapter 3 ではクラウドの Supabase に接続しました。ここでは**ローカルに Supabase を立ち上げて**、アプリのデータが本当に保存されているかを Studio 画面で確認します。
+
+> **なぜローカルで確認するの？** クラウドの管理画面（`https://supabase.com/dashboard`）でも確認できますが、ローカルで Supabase を動かすとページを切り替えることなくすぐ確認でき、開発のリズムが崩れません。また、接続が速く、本番データを誤って変更するリスクもありません。
+
+まず、Supabase CLI をプロジェクトの開発用パッケージとしてインストールします。
+
+```bash
+npm install --save-dev supabase
+```
+
+> **`--save-dev` とは？** 開発中にのみ使うツールとして登録する指定です。本番公開後のアプリには含まれないため、余分なファイルを増やさずに済みます。
+
+続けて、別のターミナルで以下を実行してください。
+
+```bash
+npx supabase start
+```
+
+しばらくすると、以下のような出力が表示されます。
+
+```plaintext
+Started supabase local development setup.
+
+         API URL: http://127.0.0.1:54321
+     GraphQL URL: http://127.0.0.1:54321/graphql/v1
+  S3 Storage URL: http://127.0.0.1:54321/storage/v1/s3
+          DB URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
+      Studio URL: http://127.0.0.1:54323
+    Inbucket URL: http://127.0.0.1:54324
+      anon key: eyJ...
+service_role key: eyJ...
+```
+
+`Studio URL` に表示されている `http://127.0.0.1:54323` をブラウザで開くと、**ローカルの Supabase Studio** が表示されます。
+
+続けて、アプリがローカルの Supabase に接続するよう `.env.local` を更新してください。Claude Code に以下を指示します。
+
+```plaintext
+.env.local を supabase start の出力に合わせてローカル接続用に更新して
+```
+
+> **`npx supabase start` で起動したローカル Supabase は、クラウドとは独立した環境です。** データはローカルにのみ保存されます。Chapter 6 で本番デプロイするときに、クラウドの Supabase に接続し直します。
+
+##### 確認ポイント
+
+- [ ] `npx supabase start` が完了して `Studio URL` が表示された
+- [ ] `http://127.0.0.1:54323` をブラウザで開くと Supabase Studio が表示された
+- [ ] `.env.local` がローカル接続用の URL と anon key に更新されている
 
 ---
 
@@ -325,6 +385,7 @@ npm run build
 - [ ] テキスト欄に「買い物に行く」と入力して「追加」ボタンをクリックする
 - [ ] 「買い物に行く」が一覧に表示される
 - [ ] Supabase の `todos` テーブルに行が追加されている
+- [ ] `http://127.0.0.1:54323` の Table Editor を開くと `todos` テーブルに行が追加されている
 
 ---
 
@@ -348,6 +409,7 @@ npm run build
 - [ ] 「買い物に行く」の削除ボタンをクリックする
 - [ ] 一覧から「買い物に行く」が消える
 - [ ] Supabase の `todos` テーブルからも行が削除されている
+- [ ] `http://127.0.0.1:54323` の Table Editor を開くと `todos` テーブルから行が削除されている
 
 ---
 

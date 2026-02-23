@@ -190,32 +190,29 @@ Claude Code が Supabase プラグインを通じて、テーブルの作成と 
 |---|---|---|
 | **誰が接続するか** | あなた（Claude Code 経由） | TODO アプリ |
 | **何のために** | テーブル作成・DB 管理 | データの読み書き |
-| **認証方法** | Authenticate（ブラウザでのログイン） | URL + service_role key |
+| **認証方法** | Authenticate（ブラウザでのログイン） | URL + Publishable Key |
 | **いつ使うか** | 開発中のみ | アプリが動いている間ずっと |
 
 ---
 
 ## Step 4: 接続情報の設定（5分）
 
-### 4-1. API キーを取得する
+### 4-1. Publishable Key を取得する
 
-アプリ（プログラム）が Supabase に接続するには、専用のキーが必要です。ここで取得するのは、**サーバーサイド専用の強力なキー**（service_role key）です。
-
-Step 2 でブラウザ認証したのは「あなた（開発者）が Claude Code を通じて Supabase を管理するための認証」でした。一方、ここで取得するキーは「アプリのサーバーがデータを読み書きするための鍵」です。全く別物ですので、混同しないようにしてください。
+アプリ（プログラム）が Supabase に接続するには、専用のキーが必要です。ここで取得するのは **Publishable Key**（パブリッシャブルキー）です。
 
 1. ブラウザで Step 1 で作成したプロジェクトのダッシュボードを開く
-2. 左サイドバーの「Settings」をクリック
-3. 「API Keys」をクリック
-4. 「Secret Keys」のセクションにある `sb_secret_` から始まるキーをコピーする
-5. コピーしたキーをパスワード管理ツールやメモ帳など、安全な場所に保存する
+2. 左サイドバーの「Project Settings」→「API Keys」を開く
+3. 「Publishable key」セクションから `sb_publishable_...` から始まるキーをコピーする
+4. コピーしたキーをメモしておく
 
-> **このキーは厳重に管理してください。** service_role key は RLS（Row Level Security）をバイパスして、データベースの全データに読み取り・書き換え・削除ができる強力なキーです。そのため、ブラウザには絶対に公開してはいけません。また、環境変数名に `NEXT_PUBLIC_` をつけると Next.js がブラウザにも公開してしまうため、絶対に `NEXT_PUBLIC_` をつけてはいけません。漏洩した場合はデータの全読み取り・書き換え・削除が可能になるため、取り扱いには十分注意してください。
+> **Publishable Key とは？** 「公開しても安全」に設計された低権限のキーです。RLS（Row Level Security）を正しく機能させながら認証フローを動かします。もし仮に `sb_secret_` から始まるキー（service_role key）を使ってしまうと、管理者権限で RLS がバイパスされ「誰でも全ユーザーのデータを見られる」状態になってしまいます。Publishable Key はブラウザに公開しても安全なため、環境変数名に `NEXT_PUBLIC_` を付けて使います。
 
 ---
 
 ### 4-2. 接続情報を Claude Code に取得させる
 
-> **接続情報とは？** アプリが「どの Supabase プロジェクトに接続するか」を識別するための情報です。家の住所と玄関の鍵のセットのようなもので、URL が住所、service_role key が鍵に相当します。
+> **接続情報とは？** アプリが「どの Supabase プロジェクトに接続するか」を識別するための情報です。家の住所と玄関の鍵のセットのようなもので、URL が住所、Publishable Key が鍵に相当します。
 
 プラグインがインストールされているので、Claude Code に接続情報の取得を依頼できます。Claude Code のプロンプトで以下を入力してください。
 
@@ -225,33 +222,30 @@ Supabase の todos プロジェクトの URL を教えて
 
 Claude Code が値を表示してくれるので、表示された値をメモしておいてください。
 
-Claude Code を一度終了します。
-
-```plaintext
-/exit
-```
-
-> **`/exit` とは？** Claude Code を終了してターミナルに戻るコマンドです。
-
 ---
 
 ### 4-3. `.env.local` ファイルを作成する
 
 > **`.env.local` って何？** アプリの「秘密のメモ帳」のようなものです。パスワードや接続情報など、他の人に見せたくない設定値を保存するファイルです。このファイルは Git に含まれないため、インターネット上に公開される心配がありません。
 
-ターミナルでプロジェクトルートに移動します（Claude Code を終了した後のターミナルで作業します）。
+続けて Claude Code に `.env.local` の作成を依頼します。
 
-テキストエディタで `.env.local` ファイルを新規作成して、以下の内容を記述します。各変数の `...` の部分を実際の値に置き換えてください。
+```plaintext
+Supabase の設定用として、サイト URL を localhost に指定した .env.local ファイルを作成してください。Publishable Key を使用するものとします
+```
+
+Claude Code が `.env.local` を作成したら、`NEXT_PUBLIC_SUPABASE_URL` の値が正しい Supabase URL になっているかを確認してください。
+
+> **Publishable Key って anon key と違うの？** Publishable Key は 2025 年に導入された anon key の後継です。2026 年後半には anon key が廃止される予定のため、新規プロジェクトでは Publishable Key を使います。
+
+この時点での `.env.local` の全体像は以下のようになります。
 
 ```dotenv
 # .env.local
 NEXT_PUBLIC_SUPABASE_URL=https://xxxxxxxxxx.supabase.co
-SUPABASE_SECRET_KEY=sb_secret_...
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
 ```
-
-`NEXT_PUBLIC_SUPABASE_URL` は 4-2 で Claude Code が表示した値を入力してください。`SUPABASE_SECRET_KEY` には 4-1 で取得した service_role key（`sb_secret_` から始まるキー）を入力してください。
-
-> **`NEXT_PUBLIC_` について** Next.js のルールで、この文字列で始まる変数名は「ブラウザ側のコードからも読み取れる」という意味になります。Supabase の URL はブラウザからも参照するため `NEXT_PUBLIC_` をつけています。一方、`SUPABASE_SECRET_KEY` には `NEXT_PUBLIC_` をつけていません。このキーはサーバーサイドのみで使うキーのため、ブラウザに公開してはいけないからです。`NEXT_PUBLIC_` をつけると Next.js がブラウザにも公開してしまうため、絶対につけないでください。
 
 ---
 
@@ -275,18 +269,13 @@ cat .gitignore | grep env
 **確認ポイント**
 
 - [ ] `.env.local` ファイルがプロジェクトルートに作成された
-- [ ] `NEXT_PUBLIC_SUPABASE_URL` と `SUPABASE_SECRET_KEY` が正しく設定されている
+- [ ] `.env.local` に `NEXT_PUBLIC_SUPABASE_URL` が設定されている
+- [ ] `.env.local` に `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` が設定されている（`sb_publishable_` から始まっている）
 - [ ] `.gitignore` に `.env.local`（または `.env*.local`）が含まれている
 
 ---
 
 ## Step 5: コミット（5分）
-
-Step 4 で `.env.local` を作成したとき、Claude Code は終了した状態になっています。再度起動してから作業を続けましょう。
-
-```bash
-claude --continue
-```
 
 確認が取れたら、作業内容をコミットします。
 
@@ -327,7 +316,8 @@ Claude Code を終了します。
 - [ ] Supabase プロジェクトが作成されている
 - [ ] Supabase プラグインがインストールされている
 - [ ] Supabase の Table Editor に `todos` テーブルが存在する
-- [ ] `.env.local` に `NEXT_PUBLIC_SUPABASE_URL` と `SUPABASE_SECRET_KEY` が設定されている
+- [ ] `.env.local` に `NEXT_PUBLIC_SUPABASE_URL` が設定されている
+- [ ] `.env.local` に `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` が設定されている
 
 ---
 
