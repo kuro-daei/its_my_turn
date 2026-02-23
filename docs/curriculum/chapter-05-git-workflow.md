@@ -26,79 +26,17 @@
 **4 つのステップの流れ:**
 
 ```text
-Step 1: Claude Code で Issue を立てる             （15分）
-Step 2: ワークツリーを作って作業場所を分離する      （15分）
-Step 3: ワークツリー内で修正してコミットする        （40分）
-Step 4: PR を作ってレビューしてマージする          （30分）
+Step 1: Claude Code で Issue を立てる                    （15分）
+Step 2: ワークツリーを作って作業場所を分離する             （15分）
+Step 3: Claude Code に計画を立てさせる                   （5分）
+Step 4: Google Cloud Console で OAuth クライアント ID を取得（10分）
+Step 5: Supabase で Google Provider を有効化             （10分）
+Step 6: @supabase/ssr のインストールと認証フロー実装       （20分）
+Step 7: RLS の更新と user_id の保存                     （10分）
+Step 8: PR を作ってレビューしてマージする                 （30分）
 ```
 
 間違えても大丈夫です。途中でわからなくなったらすぐメンターに声をかけてください。
-
----
-
-## 前提確認
-
-このチャプターを始める前に、以下の状態になっているか確認してください。
-
-- [ ] Chapter 4 が完了している
-- [ ] アプリがブラウザで動作している
-- [ ] GitHub CLI（`gh`）が使える状態になっている
-
-ターミナルで以下を実行して、ログイン状態を確認してください。
-
-```bash
-gh auth status
-```
-
-期待される出力例（ログイン済みの場合）:
-
-```text
-github.com
-  ✓ Logged in to github.com as yourname (keyring)
-  ✓ Git operations for github.com configured to use https protocol.
-```
-
-> **`gh` コマンドとは？** GitHub を操作するコマンドラインツール（CLI）です。ブラウザを開かなくても Issue の作成・PR の作成・マージなどが全部ターミナルでできます。Claude Code から自動で使われる場面も多いです。
-
-ログインしていない場合:
-
-```bash
-gh auth login
-```
-
-指示に従ってブラウザで認証してください。わからなければメンターに声をかけてください。
-
-確認できたら、Claude Code を起動します。
-
-```bash
-claude
-```
-
----
-
-## はじめに: CLAUDE.md にブランチルールを追加する
-
-このチャプターからは「ブランチを切って開発する」ワークフローを使います。まず Claude Code がこのルールを常に守るよう、CLAUDE.md に明記します。
-
-Claude Code に以下のように指示してください。
-
-```plaintext
-CLAUDE.md に以下のルールを追加して:
-- main ブランチには直接コミットしない
-- main ブランチで直接作業しない。必ずブランチを切ってから作業すること
-```
-
-Claude Code が CLAUDE.md を更新したら、コミットします。
-
-```plaintext
-CLAUDE.md の変更をコミットして
-```
-
-> **なぜこのルールを追加するの？** このチャプターで習慣にする「Issue → ブランチ → 修正 → PR → マージ」のサイクルは、main ブランチを常に安全な状態に保つことが前提です。CLAUDE.md に書いておくことで、Claude Code が自動でこの習慣を守るようになります。
-
-#### 確認ポイント
-
-- [ ] CLAUDE.md に「main ブランチには直接コミットしない」「main ブランチで直接作業しない」が追記されている
 
 ---
 
@@ -115,7 +53,7 @@ CLAUDE.md の変更をコミットして
 Claude Code のチャット画面に、自分が直したいことを入力してください。以下はその例です。
 
 ```plaintext
-GitHub に Issue を立てて。タイトルは「feat: Google ログインを実装する」、内容は「Supabase Auth と @supabase/ssr を使って Google ログインを実装する。未ログインの場合は /login にリダイレクトする。」にして
+GitHub に Issue を立てて。タイトルは「Google ログインを実装する」、内容は「Google アカウントでログインできるようにする。ログインしていない状態でアプリを開いたときは、ログイン画面に移動するようにする。」にして
 ```
 
 今回は Google ログインの実装を Issue として立てます。
@@ -189,29 +127,23 @@ claude -w feat_google_auth
 Claude Code が起動したら、現在どの作業場所にいるかを確認しましょう。
 
 ```plaintext
-git branch --show-current
+! git branch --show-current
 ```
 
 期待される出力例:
 
 ```text
-feat_google_auth
+worktree-feat_google_auth
 ```
 
 > **名前なしで起動した場合:** `claude -w` とだけ入力すると、ランダムな名前のワークツリーが自動で作られます。名前を指定したほうが後から何のための作業場所かわかりやすいため、`claude -w feat_google_auth` のように名前をつけることをおすすめします。
 
 ### ワークツリーの確認
 
-Claude Code を一度終了して、ターミナルからワークツリーの一覧を確認します。
+Claudeで以下を実行してください。
 
 ```plaintext
-/exit
-```
-
-ターミナルに戻ったら、以下を実行してください。
-
-```bash
-git worktree list
+! git worktree list
 ```
 
 期待される出力例:
@@ -231,11 +163,48 @@ git worktree list
 - [ ] `git branch --show-current` で `feat_google_auth` と表示される
 - [ ] `git worktree list` でワークツリーが 2 つ表示される
 
+### ワークツリー内で最初にすること：CLAUDE.md にブランチルールを追加する
+
+これから「mainブランチには直接コミットしない、必ずブランチを切って作業する」というルールで開発を進めます。このルール自体も、ワークツリー（作業ブランチ）内で追加してPRでmainに取り込むことで、矛盾なく適用できます。
+
+ワークツリー内の Claude Code に以下のように指示してください。
+
+```plaintext
+CLAUDE.md に以下のルールを追加して:
+- main ブランチには直接コミットしない
+- main ブランチで直接作業しない。必ずブランチを切ってから作業すること
+- コミットメッセージは Conventional Commits 形式で書く（例: feat: 機能追加、fix: バグ修正）
+```
+
+Claude Code が CLAUDE.md を更新したら、コミットします。
+
+```plaintext
+CLAUDE.md の変更をコミットして
+```
+
+> **なぜワークツリー内で追加するの？** 「mainブランチに直接コミットしない」というルールをmainブランチ上で追加してコミットしてしまうのは矛盾しています。ワークツリー（フィーチャーブランチ）でルールを追加してPRでmainに取り込むことで、このルールも正しいフローを経てmainに反映されます。
+
+確認ポイント：
+
+- [ ] CLAUDE.md に「main ブランチには直接コミットしない」「main ブランチで直接作業しない」が追記されている
+- [ ] CLAUDE.md の変更がコミットされている
+
+セッションを一度終了します。
+
+```plaintext
+/exit
+```
+
+> **終了時にワークツリーを削除するか確認が出る場合があります:** 変更やコミットがある状態で `/exit` すると、「この机（ワークツリー）を残しておきますか、それとも片付けますか？」という確認が表示されます。Step 3 でまだ作業を続けるので、ここでは**「残す（keep）」**を選んでください。
+>
+> - **残す（keep）**: ワークツリーとブランチがそのまま保持され、次回 `claude -w feat_google_auth` で再開できます
+> - **削除する（remove）**: ワークツリーとブランチが完全に削除されます。コミット済みの変更も含めてすべて消えるため、取り消せません。マージが済んでから選ぶようにしてください
+>
+> なお、何も変更していない状態で `/exit` した場合は、確認なしに自動でワークツリーが削除されます。
+
 ---
 
-## Step 3: ワークツリー内で修正してコミットする（40分）
-
-### ワークツリー内で作業する
+## Step 3: Claude Code に計画を立てさせる（5分）
 
 ここからは、ワークツリー内の Claude Code で作業します。先ほど `/exit` で終了した場合は、再度起動してください。
 
@@ -243,25 +212,20 @@ git worktree list
 claude -w feat_google_auth
 ```
 
-`claude -w feat_google_auth` で起動した Claude Code は、最初からワークツリー（新しい机）の上で動いています。元のプロジェクトフォルダ（main ブランチの机）には一切触れません。「今どの机で作業しているか」は以下で確認できます。
-
-```plaintext
-git branch --show-current
-```
-
-期待される出力:
-
-```text
-feat_google_auth
-```
+> **`-c` をつけるかどうかで「Claude が何を覚えているか」が変わります:**
+>
+> | コマンド | 挙動 |
+> |---|---|
+> | `claude -w feat_google_auth`（`-c` なし） | 前回の作業ファイルはそのまま残っていますが、Claude との会話は白紙から始まります |
+> | `claude -w feat_google_auth -c`（`-c` あり） | 前回のセッションで Claude と話した内容がそのまま復元されます |
+>
+> 新しいタスクとして作業を始めるなら `-c` なし、「昨日の続きをやろう」と文脈を引き継ぎたいなら `-c` ありを選びましょう。ここでは `-c` なしで進めます。
 
 > **体験:** 別のターミナルウィンドウを開いて元のプロジェクトフォルダを見ると、何も変わっていないことがわかります。ワークツリー側でどれだけファイルを編集しても、元の机の書類（main ブランチ）は安全なままです。これがワークツリーの最大の利点です。
 
 ---
 
-### Phase A: Claude Code に計画を立てさせる
-
-まず Claude Code に全体の手順を聞きます。
+ワークツリーを再起動して、まず Claude Code に全体の手順を聞きます。
 
 ```plaintext
 Supabase Auth で Google ログインを実装したい。まず何をすべきか手順を教えて
@@ -293,7 +257,52 @@ Google ログインを実装するには、以下の手順が必要です。
 
 ---
 
-### Phase B: Supabase で Google Provider を有効化
+## Step 4: Google Cloud Console で OAuth クライアント ID を取得（10分）
+
+Supabase に Google ログインを設定するには、まず Google 側で「このアプリを Google が認識するための ID」を発行してもらう必要があります。これを Google Cloud Console という管理画面で行います。
+
+> **OAuth クライアント ID って何？** Google が「このアプリは信頼できる」と認識するための身分証明書のようなものです。アプリが Google のログイン機能を使う許可を申請するために必要です。
+
+### 手順（ブラウザで操作）
+
+1. [Google Cloud Console](https://console.cloud.google.com/) を開く
+2. 画面上部のプロジェクト選択から「新しいプロジェクト」を作成する（名前は何でもOK）
+3. 左メニューの「APIとサービス」→「OAuth 同意画面」を選択する
+4. User Type は「外部」を選択して「作成」
+5. アプリ名・サポートメール・デベロッパーの連絡先メールを入力して「保存して次へ」（残りはスキップしてOK）
+6. OAuth 同意画面の設定が完了すると、メイン画面に「Auth クライアント作成」が表示されるのでクリックする
+7. アプリケーションの種類は「ウェブアプリケーション」を選択する
+8. 「承認済みの JavaScript オリジン」に以下を追加する
+
+```plaintext
+http://localhost:3000
+```
+
+9. 「承認済みのリダイレクト URI」に Supabase のコールバック URL を追加する。URL はワークツリー内の Claude Code に聞いて取得してください。
+
+```plaintext
+Supabase の OAuth コールバック URL を教えて
+```
+
+Claude Code が `.env.local` を読んで、以下のような形式で URL を返してくれます。
+
+```plaintext
+https://xxxxx.supabase.co/auth/v1/callback
+```
+
+この URL をコピーして「承認済みのリダイレクト URI」に貼り付けてください。
+
+10. 「作成」ボタンをクリックする
+11. 「クライアント ID」と「クライアントシークレット」が表示されるので、両方をコピーしてどこかにメモしておく（「JSON をダウンロード」ボタンも表示されますが、Supabase の設定には不要です）
+
+#### 確認ポイント
+
+- [ ] Google Cloud Console で OAuth クライアント ID が作成されている
+- [ ] クライアント ID とクライアントシークレットをメモしてある
+
+---
+
+## Step 5: Supabase で Google Provider を有効化（10分）
 
 Google ログインを使えるようにするには、Supabase 側で設定が必要です。ブラウザで Supabase ダッシュボードを操作します。
 
@@ -304,46 +313,49 @@ Google ログインを使えるようにするには、Supabase 側で設定が�
 3. 「Providers」タブを選択
 4. 「Google」を見つけてクリックして展開する
 5. 「Enable Sign in with Google」のトグルをオンにする
-6. 「Redirect URLs」の欄に以下を追加する
+6. Step 4 でメモした「クライアント ID」と「クライアントシークレット」を入力する
+7. 「Save」ボタンをクリックして保存する
+
+> **Callback URL（for OAuth）** という欄も画面に表示されていますが、これは表示のみで編集できません。Step 4 でここに表示されている URL を Google Cloud Console に貼り付けました。
+
+8. 続けて、左サイドバーの「URL Configuration」をクリックする
+9. 「Redirect URLs」の欄に以下を追加して「Save」をクリックする
 
 ```plaintext
-http://localhost:3000/auth/callback
+http://localhost:3000/**
 ```
 
-> **Redirect URL って何？** Google でログインが完了したあと、「どの URL に戻るか」を指定する設定です。
-
-7. 「Save」ボタンをクリックして保存する
+> **Redirect URL って何？** Google 認証が完了した後、Supabase がアプリのどの URL に戻ってよいかを許可リストで管理しています。`/**` は「このドメインの全ページを許可する」という意味です。ローカル開発中は `localhost:3000` を、本番公開後は本番の URL を追加します。
 
 #### 確認ポイント
 
 - [ ] Supabase の Authentication → Providers で Google が有効になっている
-- [ ] Redirect URL に `http://localhost:3000/auth/callback` が追加されている
+- [ ] クライアント ID とクライアントシークレットが入力されている
+- [ ] Authentication → URL Configuration の Redirect URLs に `http://localhost:3000/**` が追加されている
 
 ---
 
-### Phase C: @supabase/ssr のインストールと認証フロー実装
+## Step 6: @supabase/ssr のインストールと認証フロー実装（20分）
+
+Chapter 4 でインストールした `nextjs-supabase-auth` スキルが、このステップで自動的に活用されます。Claude Code はこのスキルの知識を使って、Next.js + Supabase の認証実装を最適なパターンで行います。
 
 #### @supabase/ssr って何？
 
 > **`@supabase/ssr` とは？** Next.js のような「サーバー側でも動く」フレームワークに対応した Supabase の認証ライブラリです。Cookie ベース認証を採用しており、2025 年以降の推奨パターンです。
 
-#### パッケージのインストール
-
-Claude Code に以下を指示します。
-
-```plaintext
-@supabase/ssr をインストールして
-```
-
 #### 認証フローの実装
 
-続けて以下を指示します。
+実装の前に、**Plan Mode** で設計を確認します。`Shift+Tab` を 2 回押して Plan Mode に切り替えてから、以下を入力してください。
 
 ```plaintext
 Supabase Auth の Google ログインを実装して。@supabase/ssr を使って。未ログインの場合は /login にリダイレクトして
 ```
 
-Claude Code は以下のファイルを作成・更新します。
+Claude Code が「どのファイルを作成・変更するか」という計画を提示します。内容を確認して問題なければ承認してください。承認すると実装が始まります。
+
+> **なぜ Plan Mode で確認するの？** Google ログインの実装は複数のファイルにまたがる変更です。いきなり実装させるより、「どこに何を作るか」を先に確認することで、意図しない変更を防げます。Chapter 4 で習った「設計図を確認してから工事を始める」習慣をここでも使います。
+
+実装が完了すると、Claude Code は以下のファイルを作成・更新しています。
 
 | ファイル | 概要 |
 |---|---|
@@ -354,6 +366,19 @@ Claude Code は以下のファイルを作成・更新します。
 
 > **Middleware（ミドルウェア）って何？** ユーザーがどのページを開こうとしても、まず通る「関所」のようなものです。「ログインしていますか？していなければログイン画面へ」という判断をここで行います。
 
+#### アプリを起動して確認する
+
+実装が完了したら、アプリを起動します。**ワークツリーのディレクトリ**（`.claude/worktrees/feat_google_auth/`）で実行してください。Claude Code のターミナルで直接実行しても、別のターミナルを開いて実行しても、どちらでも構いません。
+
+```bash
+cd .claude/worktrees/feat_google_auth
+npm run dev
+```
+
+ブラウザで `http://localhost:3000` を開いて確認します。
+
+> **ターミナルの使い分けは好みで OK:** Claude Code と `npm run dev` を同じターミナルで管理する人も、別ウィンドウに分けてすっきりさせたい人もいます。どちらのスタイルでも動作に違いはありません。
+
 #### 確認ポイント
 
 - [ ] `package.json` に `@supabase/ssr` が追加されている
@@ -362,22 +387,14 @@ Claude Code は以下のファイルを作成・更新します。
 - [ ] `http://localhost:3000` にアクセスすると `/login` にリダイレクトされる
 - [ ] ログイン画面に「Google でログイン」ボタンが表示されている
 
-#### トラブルシュート
-
-**リダイレクトが無限ループする場合:**
-
-```plaintext
-middleware.ts の matcher が /login を除外しているか確認して。無限リダイレクトが起きている
-```
-
 ---
 
-### Phase D: RLS の更新と user_id の保存
+## Step 7: RLS の更新と user_id の保存（10分）
 
 Chapter 3 で設定した RLS は「ログインユーザーが自分の TODO だけ操作できる」ポリシーです。Google ログインが完了したので、TODO 追加時にログインユーザーの `user_id` も一緒に保存するよう修正します。
 
 ```plaintext
-AddTodoForm で TODO を追加するとき、ログインユーザーの user_id も一緒に保存するようにして
+TODO を追加するとき、ログインユーザーの user_id も一緒に保存するようにして
 ```
 
 #### 確認ポイント
@@ -409,7 +426,7 @@ AddTodoForm で TODO を追加するとき、ログインユーザーの user_id
 
 ---
 
-### Step 3 の確認ポイントまとめ
+### コミット後の確認ポイント
 
 コミット履歴を確認します。
 
@@ -433,7 +450,7 @@ b8e4d2a feat: [前のチャプターまでのコミット]
 
 ---
 
-## Step 4: PR を作ってレビューしてマージする（30分）
+## Step 8: PR を作ってレビューしてマージする（30分）
 
 ### PR とは
 
@@ -673,15 +690,6 @@ git worktree list
 
 ## うまくいかない場合
 
-**`gh auth status` でエラーが出る場合:**
-
-```bash
-# 再度ログインする
-gh auth login
-```
-
-ブラウザで認証を求められます。「GitHub.com」→「HTTPS」→「Login with a web browser」を選択して進んでください。
-
 **`claude -w` でワークツリーが作れない場合:**
 
 同じ名前のワークツリーがすでに存在する場合にエラーになることがあります。
@@ -713,6 +721,12 @@ git pull origin main
 ```
 
 Claude Code が `git commit --amend` で修正します。
+
+**ログイン後にリダイレクトが無限ループする場合:**
+
+```plaintext
+middleware.ts の matcher が /login を除外しているか確認して。無限リダイレクトが起きている
+```
 
 ---
 
