@@ -1,8 +1,8 @@
 # Chapter 3: Supabase 初期設定
 
-**所要時間**: 約 30 分
-**ゴール**: Supabase プラグインがインストール済み + Supabase のデータベースが立ち上がった状態にする
-**学ぶ Claude Code 機能**: プラグイン（外部サービス連携）、データベース設計の指示、SQL 生成
+**所要時間**: 約 40 分
+**ゴール**: Supabase MCP サーバーが設定済み + ローカル Supabase が起動 + データベースのテーブルが作成された状態にする
+**学ぶ Claude Code 機能**: MCP サーバー（外部サービス連携）、マイグレーション（データベース変更管理）
 
 ---
 
@@ -13,13 +13,13 @@
 ## このチャプターで学ぶこと
 
 - Supabase のアカウントを作成し、プロジェクトを立ち上げる
-- プラグイン（外部サービス連携の仕組み）をインストールし、ブラウザ認証で Claude Code と Supabase を接続する
-- プラグインの認証を完了させ、Claude Code から Supabase を直接操作できる状態にする
-- `todos` テーブルを Claude Code に直接作成させる（SQL のコピー&ペーストは不要）
-- `.env.local` に接続情報を設定する
+- MCP サーバーをインストールし、ブラウザ認証で Claude Code と Supabase を接続する
+- ローカル（自分のパソコン上）に Supabase を起動する
+- マイグレーションファイルを使って `todos` テーブルを作成し、クラウドに同期する
+- `.env.local` にローカル接続情報を設定する
 - コミットする
 
-全部終わったら、Supabase のデータベースが立ち上がり、次のチャプターでアプリと接続できる準備が整います。
+全部終わったら、ローカル Supabase が動いてテーブルが作成され、次のチャプターでアプリと接続できる準備が整います。
 
 ---
 
@@ -76,117 +76,212 @@ Supabase（スーパーベース）は、データを安全に保管してくれ
 
 ---
 
-## Step 2: Supabase プラグインのインストールと認証（5分）
+## Step 2: Supabase MCP サーバーの設定（5分）
 
-### プラグインって何？
+### MCP サーバーって何？
 
-> **プラグインとは？** Claude Code に追加機能をインストールする仕組みです。スマホにアプリを入れるとそのサービスが使えるようになるのと同じイメージです。Supabase プラグインを入れると、Claude Code が直接データベースを操作できるようになります。
+> **MCP サーバーとは？** Claude Code に外部サービスを操作する能力を追加する仕組みです。スマホにアプリを入れるとそのサービスが使えるようになるのと同じイメージです。Supabase の MCP サーバーを追加すると、Claude Code が直接データベースを操作できるようになります。
 
-プラグインを使わない場合、Claude Code が生成した SQL をコピーして、ブラウザのダッシュボードに貼り付けて実行する、という手順が必要でした。プラグインを使うと、「テーブルを作って」と Claude Code に指示するだけで完了します。
+MCP サーバーがない場合、Claude Code が生成した SQL をコピーして、ブラウザのダッシュボードに貼り付けて実行する、という手順が必要でした。MCP サーバーを使うと、「テーブルを作って」と Claude Code に指示するだけで完了します。
 
 ---
 
-### 2-1. プラグインをインストールする
+### 2-1. npm パッケージをインストールする
 
-プロジェクトフォルダに移動して、Claude Code を起動します。
+ターミナルでプロジェクトフォルダにいることを確認し、以下を実行してください。
+
+```bash
+npm install --save-dev supabase
+```
+
+> **`--save-dev` とは？** このプロジェクトの開発用ツールとして追加する、という意味です。アプリ本体には含まれず、開発中にだけ使う道具として管理されます。
+
+---
+
+### 2-2. MCP サーバーを追加する
+
+続けて以下のコマンドを実行します。
+
+```bash
+claude mcp add supabase --transport http https://mcp.supabase.com/mcp
+```
+
+これで Supabase の MCP サーバーが Claude Code に登録されます。この時点ではまだ認証は行われていません。
+
+---
+
+### 2-3. Claude Code を起動して認証する
+
+ターミナルで Claude Code を起動します。
 
 ```bash
 claude
 ```
 
-Claude Code が起動したら、以下を入力してプラグインの一覧を表示します。
+起動したら、プロンプトで以下を入力します。
 
 ```plaintext
-/plugin
+/mcp
 ```
 
-プラグインの一覧が表示されるので、Supabase のプラグインを探して選択し、インストールを進めてください。画面の指示に従って操作すれば完了します。
-
----
-
-### 2-2. 認証する
-
-インストールが完了したら、再び `/plugin` と入力します。
-
-```plaintext
-/plugin
-```
-
-一覧から Supabase を選ぶと「Authenticate」が選択できるようになっています。「Authenticate」を押すと URL が発行されます。
+MCP サーバーの一覧が表示されるので、Supabase を選んで認証を実行してください。認証用の URL が発行されます。
 
 その URL をコピーして、ブラウザのアドレスバーに貼り付けてください。Supabase のログイン画面が表示されるのでログインすると認証完了です。
 
 > **なぜブラウザでログインするのか？** これは「Claude Code があなたの Supabase アカウントにアクセスする許可を与える」ための手順です。スマホのアプリで「Google でサインイン」ボタンを押すと Google のログイン画面が開いて許可を求めてくる、あの仕組みと同じです。パスワードを Claude Code に直接渡すのではなく、Supabase 側のログイン画面を経由することで安全に認証できます。
 
+**確認ポイント**
+
+- [ ] Supabase の npm パッケージがインストールされた（`npm install` が完了した）
+- [ ] MCP サーバーが登録された（`claude mcp add` が完了した）
+- [ ] `/mcp` コマンドで認証を実行した
+- [ ] ブラウザでの認証が完了した
+
 ---
 
-### 2-3. 接続を確認する
+## Step 3: ローカル Supabase の起動（10分）
 
-認証が完了したら、続けて以下を入力して接続を確認します。
+### なぜローカルで開発するの？
+
+> クラウドの管理画面（`https://supabase.com/dashboard`）でも確認できますが、ローカルで Supabase を動かすと**ページを切り替えることなくすぐ確認でき**、開発のリズムが崩れません。また、接続が速く、本番データを誤って変更するリスクもありません。
+
+Step 2 で `npm install --save-dev supabase` は完了しているので、追加のインストールは不要です。
+
+### 3-1. Claude Code に supabase を初期化させる
+
+**ターミナルでコマンドを打つのではなく、Claude Code（Step 2-3 で起動済み）に指示します。**
+
+Claude Code のプロンプトに以下を入力してください。
 
 ```plaintext
-Supabase のプロジェクト一覧を表示して
+supabase を初期化して
 ```
 
-Step 1 で作成した `todos` プロジェクトが表示されれば成功です。
+Claude Code が `npx supabase init` を実行し、`supabase/` フォルダを作成します。
 
-> **体験:** ブラウザを開かなくても、Claude Code から Supabase のプロジェクト情報を確認できるようになりました。これがプラグインの力です。
+> **何が起きる？** `supabase/` というフォルダが作成されます。これがローカル開発の設定フォルダです。
+
+### 3-2. クラウドプロジェクトとリンクさせる
+
+引き続き Claude Code に指示します。
+
+```plaintext
+Supabase のプロジェクト「todos」とローカルをリンクして
+```
+
+> **たとえ:** クラウドの倉庫（Supabase プロジェクト）と手元の作業場（ローカル環境）を「同じプロジェクトのもの」として結びつける操作です。
+
+Supabase MCP がすでに認証済みなので、Claude Code がプロジェクト名からプロジェクト ID を自動で調べて `npx supabase link` を実行してくれます。URL から文字列を探す必要はありません。
+
+### 3-3. ローカル Supabase を起動する
+
+> **事前確認:** Docker Desktop が起動していることを確認してください。タスクバーまたは画面上部のメニューバーに Docker のアイコンが表示されていれば OK です。起動していない場合は Docker Desktop アプリを先に開いてください。
+
+**新しいターミナルを開いて**（Claude Code を使っているターミナルとは別に）、以下を実行してください。
+
+```bash
+npx supabase start
+```
+
+しばらくすると、以下のような出力が表示されます。
+
+```text
+Started supabase local development setup.
+
+         API URL: http://127.0.0.1:54321
+     GraphQL URL: http://127.0.0.1:54321/graphql/v1
+  S3 Storage URL: http://127.0.0.1:54321/storage/v1/s3
+          DB URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
+      Studio URL: http://127.0.0.1:54323
+    Inbucket URL: http://127.0.0.1:54324
+      anon key: eyJ...
+service_role key: eyJ...
+```
+
+`Studio URL` と ローカルの Publishable Key（出力の `anon key`）の値をメモしておいてください（Step 5 で使います）。
+
+> **このターミナルは閉じないでください。** `npx supabase start` はデータベースを動かし続けるプロセスです。開発中はこのターミナルを開いたままにしておいてください。
+
+### 3-4. ローカル Studio で確認する
+
+`http://127.0.0.1:54323` をブラウザで開いてください。ローカルの Supabase Studio が表示されれば成功です。
 
 **確認ポイント**
 
-- [ ] Supabase プラグインのインストールが完了した
-- [ ] ブラウザでの認証が完了した
-- [ ] Claude Code のプロンプトで `todos` プロジェクトの情報が表示された
+- [ ] Claude Code の指示で `supabase/` フォルダが作成された
+- [ ] Claude Code の指示でクラウドプロジェクトとのリンクが完了した
+- [ ] 別のターミナルで `npx supabase start` を実行し、Studio URL とローカルの Publishable Key が表示された
+- [ ] `http://127.0.0.1:54323` をブラウザで開くと Supabase Studio が表示された
 
 ---
 
-## Step 3: todos テーブルの作成（10分）
+## Step 4: todos テーブルの作成（10分）
 
-プラグインが使えるようになったので、SQL を手動でコピー&ペーストする必要はありません。Claude Code に直接指示するだけでテーブルが作れます。
+### マイグレーションって何？
 
-> **SQL（エスキューエル）とは？** データベースを操作するための「命令言語」です。以前は Claude Code が SQL を生成して、それをダッシュボードに貼り付けて実行する必要がありました。今は Claude Code がプラグインを通じて直接実行してくれます。
+> データベースへの変更内容を「変更手順書」としてファイルに記録しておく仕組みです。「いつ・どんな変更をしたか」が履歴として残るため、ローカルで作った手順書をクラウドに送るだけで同じ状態を再現できます。
 
-### 3-1. Claude Code にテーブルを作らせる
+### 4-1. マイグレーションファイルを Claude Code に作らせる
 
-引き続き Claude Code のプロンプトで、以下を入力してください。
+Claude Code を起動します。
+
+```bash
+claude
+```
+
+以下を入力してください。
 
 ```plaintext
-Supabase の todos プロジェクトに TODO管理用の `todos` テーブルを作って。
+Supabase の todos プロジェクト向けに、todos テーブルを作るマイグレーションファイルを supabase/migrations/ に作って。
 Row Level Security (RLS) を有効化して。ログインしたユーザーが自分の TODO だけを見れる・作れる・更新できる・削除できるようにして
 ```
 
-Claude Code が Supabase プラグインを通じて、テーブルの作成と RLS の設定を直接実行してくれます。
+Claude Code が `supabase/migrations/YYYYMMDDHHMMSS_create_todos.sql` というファイルを作成します。
 
-> **体験:** ダッシュボードを開いて SQL をコピペする必要がなくなりました。Claude Code に日本語で指示するだけでデータベースが作れます。
+> **体験:** SQL を自分で書く必要はありません。要件を日本語で伝えるだけで、Claude Code が正しい SQL とセキュリティ設定を含んだマイグレーションファイルを作ってくれます。
 
----
+### 4-2. ローカルに反映する
 
-### 3-2. テーブルが作成されたことを確認する
+Claude Code に指示します。
 
-ブラウザで Supabase ダッシュボードを開き、テーブルが作成されていることを確認します。
+```plaintext
+マイグレーションをローカルの Supabase に反映して
+```
 
-1. Supabase ダッシュボードの左サイドバーの「Table Editor」をクリック
-2. `todos` テーブルが一覧に表示されていることを確認する
-3. `todos` テーブルをクリックして、カラムの構成を確認する
+> **何が起きる？** 作成されたマイグレーションファイルがローカルのデータベースに適用され、`todos` テーブルが作成されます。
 
-> **カラム（列）とは？** 表でいう「列」にあたるものです。Excel でいえば「氏名」「年齢」「住所」といった列の見出しのような概念です。
+### 4-3. ローカル Studio でテーブルを確認する
+
+`http://127.0.0.1:54323` をブラウザで開き、左サイドバーの「Table Editor」をクリックします。`todos` テーブルが表示されていれば成功です。
+
+### 4-4. クラウドに同期する
+
+Claude Code に指示します。
+
+```plaintext
+マイグレーションをクラウドの Supabase に同期して
+```
+
+> **体験:** ローカルで作ったデータベースの設計を、一言指示するだけでクラウドに反映できました。これがマイグレーションを使った開発の強みです。
 
 **確認ポイント**
 
-- [ ] Table Editor に `todos` テーブルが表示されている
-- [ ] `todos` テーブルに 必要なカラムがある
+- [ ] `supabase/migrations/` にファイルが作成されている
+- [ ] ローカル Studio の Table Editor に `todos` テーブルが表示されている
+- [ ] Claude Code の指示でクラウドへの同期が完了した
+- [ ] クラウドのダッシュボードの Table Editor にも `todos` テーブルが表示されている
 
 ---
 
-> **ここで一度、立ち止まってください。Step 4 からは「全く違う種類の作業」に切り替わります。**
+> **ここで一度、立ち止まってください。Step 5 からは「全く違う種類の作業」に切り替わります。**
 
-ここまでの Step 2〜3 では、**あなた（開発者）として** Supabase に接続していました。Claude Code がプラグインを通じて Supabase にアクセスし、テーブルを作ったりプロジェクト情報を確認しました。
+ここまでの Step 2〜4 では、**あなた（開発者）として** Supabase に接続していました。Claude Code が MCP サーバーを通じて Supabase にアクセスし、テーブルを作ったりプロジェクト情報を確認しました。
 
-これから行う Step 4 は、**TODO アプリ（プログラム）が** Supabase に接続するための設定です。アプリが実際にデータを読み書きするために必要な接続情報を用意します。
+これから行う Step 5 は、**TODO アプリ（プログラム）が** Supabase に接続するための設定です。アプリが実際にデータを読み書きするために必要な接続情報を用意します。
 
 この 2 つは全く別物です。下の表で整理しておきます。
 
-| | 開発者としての接続（Step 2〜3） | アプリとしての接続（Step 4） |
+| | 開発者としての接続（Step 2〜4） | アプリとしての接続（Step 5） |
 |---|---|---|
 | **誰が接続するか** | あなた（Claude Code 経由） | TODO アプリ |
 | **何のために** | テーブル作成・DB 管理 | データの読み書き |
@@ -195,61 +290,43 @@ Claude Code が Supabase プラグインを通じて、テーブルの作成と 
 
 ---
 
-## Step 4: 接続情報の設定（5分）
+## Step 5: 接続情報の設定（5分）
 
-### 4-1. Publishable Key を取得する
+### 5-1. Publishable Key をメモしておく（Chapter 6 で使います）
 
-アプリ（プログラム）が Supabase に接続するには、専用のキーが必要です。ここで取得するのは **Publishable Key**（パブリッシャブルキー）です。
+本番デプロイ（Chapter 6）では、クラウドの Supabase に接続します。そのときに `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` の値をクラウドのキーに差し替えます。今のうちにメモしておきましょう。
 
 1. ブラウザで Step 1 で作成したプロジェクトのダッシュボードを開く
 2. 左サイドバーの「Project Settings」→「API Keys」を開く
 3. 「Publishable key」セクションから `sb_publishable_...` から始まるキーをコピーする
-4. コピーしたキーをメモしておく
+4. コピーしたキーをメモしておく（Chapter 6 で使います）
 
-> **Publishable Key とは？** 「公開しても安全」に設計された低権限のキーです。RLS（Row Level Security）を正しく機能させながら認証フローを動かします。もし仮に `sb_secret_` から始まるキー（service_role key）を使ってしまうと、管理者権限で RLS がバイパスされ「誰でも全ユーザーのデータを見られる」状態になってしまいます。Publishable Key はブラウザに公開しても安全なため、環境変数名に `NEXT_PUBLIC_` を付けて使います。
+> **Publishable Key とは？** 「公開しても安全」に設計された低権限のキーです。RLS（Row Level Security）を正しく機能させながら認証フローを動かします。もし仮に `sb_secret_` から始まるキー（service_role key）を使ってしまうと、管理者権限で RLS がバイパスされ「誰でも全ユーザーのデータを見られる」状態になってしまいます。
 
----
-
-### 4-2. 接続情報を Claude Code に取得させる
-
-> **接続情報とは？** アプリが「どの Supabase プロジェクトに接続するか」を識別するための情報です。家の住所と玄関の鍵のセットのようなもので、URL が住所、Publishable Key が鍵に相当します。
-
-プラグインがインストールされているので、Claude Code に接続情報の取得を依頼できます。Claude Code のプロンプトで以下を入力してください。
-
-```plaintext
-Supabase の todos プロジェクトの URL を教えて
-```
-
-Claude Code が値を表示してくれるので、表示された値をメモしておいてください。
-
----
-
-### 4-3. `.env.local` ファイルを作成する
+### 5-2. `.env.local` ファイルを作成する
 
 > **`.env.local` って何？** アプリの「秘密のメモ帳」のようなものです。パスワードや接続情報など、他の人に見せたくない設定値を保存するファイルです。このファイルは Git に含まれないため、インターネット上に公開される心配がありません。
 
-続けて Claude Code に `.env.local` の作成を依頼します。
+今は**ローカル開発用**の接続情報を設定します。Claude Code に以下を指示してください。
 
 ```plaintext
-Supabase の設定用として、サイト URL を localhost に指定した .env.local ファイルを作成してください。Publishable Key を使用するものとします
+.env.local をローカル接続用に設定して。NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY にはローカルの Publishable Key を使って
 ```
 
-Claude Code が `.env.local` を作成したら、`NEXT_PUBLIC_SUPABASE_URL` の値が正しい Supabase URL になっているかを確認してください。
-
-> **Publishable Key って anon key と違うの？** Publishable Key は 2025 年に導入された anon key の後継です。2026 年後半には anon key が廃止される予定のため、新規プロジェクトでは Publishable Key を使います。
-
-この時点での `.env.local` の全体像は以下のようになります。
+Claude Code が作成する `.env.local` は以下のようになります。
 
 ```dotenv
 # .env.local
-NEXT_PUBLIC_SUPABASE_URL=https://xxxxxxxxxx.supabase.co
+NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=eyJ...（ローカルの Publishable Key）
 ```
 
----
+> **ローカルとクラウドで変数名を統一する理由:** ローカルの Supabase が発行するキー（`supabase start` 出力の `anon key`）が、ローカル版の Publishable Key です。Chapter 6 でクラウドに切り替えるときは、同じ変数 `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` の値を `sb_publishable_...` に差し替えるだけです。アプリのコードを変える必要はありません。
 
-### 4-4. `.gitignore` を確認する
+> **注意:** `NEXT_PUBLIC_SUPABASE_URL` が `http://127.0.0.1:54321`（ローカル）になっていることを確認してください。クラウドの URL（`https://xxxxxxxxxx.supabase.co`）ではありません。
+
+### 5-3. `.gitignore` を確認する
 
 `.env.local` には接続情報が含まれているため、Git に含めてはいけません。プロジェクトルートの `.gitignore`（Git が無視するファイルのリスト）に `.env.local` が含まれていることを確認します。
 
@@ -257,25 +334,20 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
 cat .gitignore | grep env
 ```
 
-`.env.local` が出力に含まれていれば OK です。Next.js のデフォルト設定では以下のように記載されているはずです。
+`.env.local` が出力に含まれていれば OK です。
 
-```gitignore
-# local env files
-.env*.local
-```
-
-> **注意:** `.gitignore` に `.env.local` が含まれていない場合は、必ず追加してください。接続情報が GitHub などに公開されると、データが不正にアクセスされる危険があります。わからない場合はメンターに確認してください。
+> **注意:** `.gitignore` に `.env.local` が含まれていない場合は、必ず追加してください。接続情報が GitHub などに公開されると、データが不正にアクセスされる危険があります。
 
 **確認ポイント**
 
 - [ ] `.env.local` ファイルがプロジェクトルートに作成された
-- [ ] `.env.local` に `NEXT_PUBLIC_SUPABASE_URL` が設定されている
-- [ ] `.env.local` に `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` が設定されている（`sb_publishable_` から始まっている）
+- [ ] `NEXT_PUBLIC_SUPABASE_URL` が `http://127.0.0.1:54321`（ローカル）に設定されている
+- [ ] `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` が設定されている（`eyJ` から始まる長い文字列）
 - [ ] `.gitignore` に `.env.local`（または `.env*.local`）が含まれている
 
 ---
 
-## Step 5: コミット（5分）
+## Step 6: コミット（5分）
 
 確認が取れたら、作業内容をコミットします。
 
@@ -284,7 +356,7 @@ cat .gitignore | grep env
 Claude Code に日本語で指示するだけでコミットが完了します（Chapter 2 の Step 5 と同じ体験です）。
 
 ```plaintext
-今回の作業をコミットして。`.env.local` は絶対に含めないで
+今回の作業をコミットして
 ```
 
 Claude Code がファイルの確認、コミットメッセージの作成、コミットまで行ってくれます。
@@ -314,10 +386,11 @@ Claude Code を終了します。
 このチャプターの全作業が終わったら、以下をまとめて確認してください。
 
 - [ ] Supabase プロジェクトが作成されている
-- [ ] Supabase プラグインがインストールされている
-- [ ] Supabase の Table Editor に `todos` テーブルが存在する
-- [ ] `.env.local` に `NEXT_PUBLIC_SUPABASE_URL` が設定されている
-- [ ] `.env.local` に `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` が設定されている
+- [ ] Supabase MCP サーバーが設定・認証されている
+- [ ] ローカル Supabase が起動している（`http://127.0.0.1:54323` でアクセスできる）
+- [ ] `supabase/migrations/` に todos テーブルのマイグレーションファイルがある
+- [ ] ローカルとクラウドの Table Editor に `todos` テーブルが存在する
+- [ ] `.env.local` に `NEXT_PUBLIC_SUPABASE_URL`（ローカル）と `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` が設定されている
 
 ---
 
@@ -335,15 +408,31 @@ Claude Code を終了します。
 
 ---
 
-### プラグイン関連のトラブル
+### MCP サーバー関連のトラブル
 
-**「プラグインがインストールできない」または「接続エラーが出る」場合:**
+**「接続エラーが出る」または「Supabase の情報が取得できない」場合:**
 
-Claude Code を再起動して `/plugin` からインストールを試みてください。
+Claude Code を再起動して `claude mcp add` からやり直してください。
 
-**「Supabase のプロジェクト一覧を表示して」と言っても何も表示されない場合:**
+---
 
-認証が完了していない可能性があります。`/plugin` から Supabase を選んで Authenticate をやり直してください。
+### ローカル Supabase 関連のトラブル
+
+**「Docker is not running」と表示される場合:**
+
+Docker Desktop が起動していないため、Docker Desktop アプリを起動してから再度 `npx supabase start` を実行してください。
+
+**`npx supabase link` でエラーになる場合:**
+
+`<PROJECT_REF>` が正しいか確認してください。Supabase ダッシュボードの URL（`https://supabase.com/dashboard/project/xxxxxxxxxx`）の `xxxxxxxxxx` の部分です。
+
+**`npx supabase db push` でエラーになる場合:**
+
+Supabase にログインしていない可能性があります。以下を実行してログインしてください。
+
+```bash
+npx supabase login
+```
 
 ---
 
@@ -351,14 +440,15 @@ Claude Code を再起動して `/plugin` からインストールを試みてく
 
 | 機能 | 体験した内容 |
 |------|-------------|
-| **プラグイン（外部サービス連携）** | `/plugin` からプラグイン一覧を開いて Supabase をインストールし、Authenticate でブラウザ認証して Claude Code から直接データベースを操作できる状態を作った |
-| **DB 設計指示** | 日本語でテーブル要件を伝えるだけで、適切な SQL（RLS ポリシー含む）をプラグイン経由で直接実行してもらえることを体験した |
-| **SQL 生成** | 複雑なセキュリティ設定（Row Level Security）も「自分の TODO だけ見れるようにして」という自然な指示で生成・実行できることを体験した |
+| **MCP サーバー（外部サービス連携）** | `claude mcp add` で Supabase の MCP サーバーを追加し、ブラウザ認証して Claude Code から直接データベースを操作できる状態を作った |
+| **ローカル Supabase** | `npx supabase start` でパソコン上に Supabase を起動し、ブラウザでデータを直接確認できる環境を作った |
+| **マイグレーション** | データベースの変更内容をファイルに記録し、ローカルで確認してからクラウドに同期するフローを体験した |
+| **DB 設計指示** | 日本語でテーブル要件を伝えるだけで、適切な SQL（RLS ポリシー含む）を含んだマイグレーションファイルを作成してもらえることを体験した |
 
 ---
 
 ## 次のチャプターへ
 
-Supabase のセットアップが完了しました。
+Supabase のセットアップが完了しました。ローカル Supabase が動いている状態のまま、次のチャプターに進みます。
 
 次の **Chapter 4: Vibe Coding で TODO アプリを作る** では、このデータベースと画面を実際につなぎ、TODO の追加・一覧表示・完了切り替え・削除が動く状態にします。さらにログイン機能も組み込み、自分専用のアプリが完成します。

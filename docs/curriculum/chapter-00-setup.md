@@ -44,6 +44,7 @@ VS Code を起動したら、`Cmd + Shift + P` でコマンドパレットを開
 **確認:**
 
 ```bash
+# bash
 code --version
 ```
 

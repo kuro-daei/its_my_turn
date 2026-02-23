@@ -35,7 +35,9 @@ Claude Code を起動する前に、まずターミナルで Next.js プロジ�
 ターミナルを開いて、以下のコマンドを実行してください。
 
 ```bash
-yes | npx create-next-app@latest todos --typescript --eslint --tailwind --src-dir --app --import-alias "@/*" --rc
+yes | npx create-next-app@latest todos \
+  --typescript --eslint --tailwind \
+  --src-dir --app --import-alias "@/*" --rc
 ```
 
 > **`npx`（エヌピーエックス）とは?** Node.js に付属するコマンドで、パッケージを一時的にダウンロードして実行するツールです。`create-next-app` を事前にインストールしなくても、このコマンドだけで最新版を使えます。
@@ -219,6 +221,7 @@ claude
 Claude Code のセッションで、以下を入力してください。
 
 ```plaintext
+# claude
 /init WebアプリでTODO管理をしたいです
 ```
 

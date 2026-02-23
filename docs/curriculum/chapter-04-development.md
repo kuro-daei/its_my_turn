@@ -42,7 +42,7 @@
 
 - [ ] Chapter 0〜3 が完了している
 - [ ] Supabase の `todos` テーブルが作成済みである
-- [ ] `.env.local` に Supabase の URL と Publishable Key が設定済みである
+- [ ] `.env.local` にローカル Supabase の接続情報が設定済みである
 - [ ] Google アカウントを持っている
 
 確認できたら、Step 1 に進みます。
@@ -81,6 +81,7 @@ npx skills add https://github.com/vercel-labs/agent-skills \
 npx skills add https://github.com/sickn33/antigravity-awesome-skills \
   --skill nextjs-supabase-auth 
   -a claude-code --scopre project -y
+
 ```
 
 インストールするスキルの概要は以下の通りです。
@@ -223,58 +224,7 @@ src/
 
 ---
 
-#### ローカル Supabase を起動する
-
-Chapter 3 ではクラウドの Supabase に接続しました。ここでは**ローカルに Supabase を立ち上げて**、アプリのデータが本当に保存されているかを Studio 画面で確認します。
-
-> **なぜローカルで確認するの？** クラウドの管理画面（`https://supabase.com/dashboard`）でも確認できますが、ローカルで Supabase を動かすとページを切り替えることなくすぐ確認でき、開発のリズムが崩れません。また、接続が速く、本番データを誤って変更するリスクもありません。
-
-まず、Supabase CLI をプロジェクトの開発用パッケージとしてインストールします。
-
-```bash
-npm install --save-dev supabase
-```
-
-> **`--save-dev` とは？** 開発中にのみ使うツールとして登録する指定です。本番公開後のアプリには含まれないため、余分なファイルを増やさずに済みます。
-
-続けて、別のターミナルで以下を実行してください。
-
-```bash
-npx supabase start
-```
-
-しばらくすると、以下のような出力が表示されます。
-
-```plaintext
-Started supabase local development setup.
-
-         API URL: http://127.0.0.1:54321
-     GraphQL URL: http://127.0.0.1:54321/graphql/v1
-  S3 Storage URL: http://127.0.0.1:54321/storage/v1/s3
-          DB URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
-      Studio URL: http://127.0.0.1:54323
-    Inbucket URL: http://127.0.0.1:54324
-      anon key: eyJ...
-service_role key: eyJ...
-```
-
-`Studio URL` に表示されている `http://127.0.0.1:54323` をブラウザで開くと、**ローカルの Supabase Studio** が表示されます。
-
-続けて、アプリがローカルの Supabase に接続するよう `.env.local` を更新してください。Claude Code に以下を指示します。
-
-```plaintext
-.env.local を supabase start の出力に合わせてローカル接続用に更新して
-```
-
-> **`npx supabase start` で起動したローカル Supabase は、クラウドとは独立した環境です。** データはローカルにのみ保存されます。Chapter 6 で本番デプロイするときに、クラウドの Supabase に接続し直します。
-
-##### 確認ポイント
-
-- [ ] `npx supabase start` が完了して `Studio URL` が表示された
-- [ ] `http://127.0.0.1:54323` をブラウザで開くと Supabase Studio が表示された
-- [ ] `.env.local` がローカル接続用の URL と anon key に更新されている
-
----
+> **補足:** ローカル Supabase は Chapter 3 で起動済みです。`.env.local` もローカル接続用に設定済みのため、このまま動作確認に進めます。
 
 #### 動作確認方法
 
