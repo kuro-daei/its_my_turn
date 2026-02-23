@@ -1,6 +1,6 @@
 # Chapter 5: Issue とワークツリー — 修正・改善を習慣にする
 
-**所要時間**: 約 1.5 時間
+**所要時間**: 約 1 時間 20 分
 **ゴール**: ワークツリーで Google ログインを安全に実装し、PR を出してマージするサイクルを体験する
 **学ぶ Claude Code 機能**: `gh issue create`、`claude -w`（ワークツリー起動）、PR 作成・マージ
 
@@ -23,18 +23,16 @@
 >
 > **ワークツリーって何？** 「別の机を用意して、そこだけで作業する」仕組みです。`claude -w` というオプションをつけて Claude Code を起動すると、新しい机（ワークツリー）が自動で用意され、その机の上で Claude Code が動き始めます。本体（main ブランチ）の机には一切触れず、完成したら本体に取り込みます。
 
-**4 つのステップの流れ:**
+**6 つのステップの流れ:**
 
 ```text
 # output
 Step 1: Claude Code で Issue を立てる                    （15分）
 Step 2: ワークツリーを作って作業場所を分離する             （15分）
 Step 3: Claude Code に計画を立てさせる                   （5分）
-Step 4: Google Cloud Console で OAuth クライアント ID を取得（10分）
-Step 5: Supabase で Google Provider を有効化             （10分）
-Step 6: @supabase/ssr のインストールと認証フロー実装       （20分）
-Step 7: RLS の更新と user_id の保存                     （10分）
-Step 8: PR を作ってレビューしてマージする                 （30分）
+Step 4: @supabase/ssr のインストールと認証フロー実装       （20分）
+Step 5: RLS の更新と user_id の保存                     （10分）
+Step 6: PR を作ってレビューしてマージする                 （30分）
 ```
 
 間違えても大丈夫です。途中でわからなくなったらすぐメンターに声をかけてください。
@@ -183,7 +181,7 @@ Claudeで以下を実行してください。
 
 ```plaintext
 # claude
-CLAUDE.md に以下のルールを追加して:
+この worktree のCLAUDE.md に以下のルールを追加して:
 - main ブランチには直接コミットしない
 - main ブランチで直接作業しない。必ずブランチを切ってから作業すること
 - コミットメッセージは Conventional Commits 形式で書く（例: feat: 機能追加、fix: バグ修正）
@@ -236,7 +234,7 @@ claude -w feat_google_auth
 > | `claude -w feat_google_auth -c`（`-c` あり） | 前回のセッションで Claude と話した内容がそのまま復元されます |
 >
 > 新しいタスクとして作業を始めるなら `-c` なし、「昨日の続きをやろう」と文脈を引き継ぎたいなら `-c` ありを選びましょう。ここでは `-c` なしで進めます。
-
+>
 > **体験:** 別のターミナルウィンドウを開いて元のプロジェクトフォルダを見ると、何も変わっていないことがわかります。ワークツリー側でどれだけファイルを編集しても、元の机の書類（main ブランチ）は安全なままです。これがワークツリーの最大の利点です。
 
 ---
@@ -273,91 +271,11 @@ Google ログインを実装するには、以下の手順が必要です。
 
 > **体験:** Claude Code が大きなタスクを小さなステップに分解しました。「まず何をすべきか」と聞くことで、全体の見通しを立ててから進められます。
 
----
-
-## Step 4: Google Cloud Console で OAuth クライアント ID を取得（10分）
-
-Supabase に Google ログインを設定するには、まず Google 側で「このアプリを Google が認識するための ID」を発行してもらう必要があります。これを Google Cloud Console という管理画面で行います。
-
-> **OAuth クライアント ID って何？** Google が「このアプリは信頼できる」と認識するための身分証明書のようなものです。アプリが Google のログイン機能を使う許可を申請するために必要です。
-
-### 手順（ブラウザで操作）
-
-1. [Google Cloud Console](https://console.cloud.google.com/) を開く
-2. 画面上部のプロジェクト選択から「新しいプロジェクト」を作成する（名前は何でもOK）
-3. 左メニューの「APIとサービス」→「OAuth 同意画面」を選択する
-4. User Type は「外部」を選択して「作成」
-5. アプリ名・サポートメール・デベロッパーの連絡先メールを入力して「保存して次へ」（残りはスキップしてOK）
-6. OAuth 同意画面の設定が完了すると、メイン画面に「Auth クライアント作成」が表示されるのでクリックする
-7. アプリケーションの種類は「ウェブアプリケーション」を選択する
-8. 「承認済みの JavaScript オリジン」に以下を追加する
-
-```plaintext
-# output
-http://localhost:3000
-```
-
-9. 「承認済みのリダイレクト URI」に Supabase のコールバック URL を追加する。URL はワークツリー内の Claude Code に聞いて取得してください。
-
-```plaintext
-# claude
-Supabase の OAuth コールバック URL を教えて
-```
-
-Claude Code が `.env.local` を読んで、以下のような形式で URL を返してくれます。
-
-```plaintext
-# output
-https://xxxxx.supabase.co/auth/v1/callback
-```
-
-この URL をコピーして「承認済みのリダイレクト URI」に貼り付けてください。
-
-10. 「作成」ボタンをクリックする
-11. 「クライアント ID」と「クライアントシークレット」が表示されるので、両方をコピーしてどこかにメモしておく（「JSON をダウンロード」ボタンも表示されますが、Supabase の設定には不要です）
-
-#### 確認ポイント
-
-- [ ] Google Cloud Console で OAuth クライアント ID が作成されている
-- [ ] クライアント ID とクライアントシークレットをメモしてある
+> **Google OAuth の事前設定は Chapter 3 で完了しています。** Chapter 3 の Step 6 で Google Cloud Console と Supabase の Google Provider が設定済みのため、ここでは認証フローのコーディングに進みます。
 
 ---
 
-## Step 5: Supabase で Google Provider を有効化（10分）
-
-Google ログインを使えるようにするには、Supabase 側で設定が必要です。ブラウザで Supabase ダッシュボードを操作します。
-
-#### 手順（ブラウザで操作）
-
-1. Supabase ダッシュボード（`https://supabase.com/dashboard`）を開く
-2. 左サイドバーの「Authentication」をクリック
-3. 「Providers」タブを選択
-4. 「Google」を見つけてクリックして展開する
-5. 「Enable Sign in with Google」のトグルをオンにする
-6. Step 4 でメモした「クライアント ID」と「クライアントシークレット」を入力する
-7. 「Save」ボタンをクリックして保存する
-
-> **Callback URL（for OAuth）** という欄も画面に表示されていますが、これは表示のみで編集できません。Step 4 でここに表示されている URL を Google Cloud Console に貼り付けました。
-
-8. 続けて、左サイドバーの「URL Configuration」をクリックする
-9. 「Redirect URLs」の欄に以下を追加して「Save」をクリックする
-
-```plaintext
-# output
-http://localhost:3000/**
-```
-
-> **Redirect URL って何？** Google 認証が完了した後、Supabase がアプリのどの URL に戻ってよいかを許可リストで管理しています。`/**` は「このドメインの全ページを許可する」という意味です。ローカル開発中は `localhost:3000` を、本番公開後は本番の URL を追加します。
-
-#### 確認ポイント
-
-- [ ] Supabase の Authentication → Providers で Google が有効になっている
-- [ ] クライアント ID とクライアントシークレットが入力されている
-- [ ] Authentication → URL Configuration の Redirect URLs に `http://localhost:3000/**` が追加されている
-
----
-
-## Step 6: @supabase/ssr のインストールと認証フロー実装（20分）
+## Step 4: @supabase/ssr のインストールと認証フロー実装（20分）
 
 Chapter 4 でインストールした `nextjs-supabase-auth` スキルが、このステップで自動的に活用されます。Claude Code はこのスキルの知識を使って、Next.js + Supabase の認証実装を最適なパターンで行います。
 
@@ -413,7 +331,7 @@ npm run dev
 
 ---
 
-## Step 7: RLS の更新と user_id の保存（10分）
+## Step 5: RLS の更新と user_id の保存（10分）
 
 Chapter 3 で設定した RLS は「ログインユーザーが自分の TODO だけ操作できる」ポリシーです。Google ログインが完了したので、TODO 追加時にログインユーザーの `user_id` も一緒に保存するよう修正します。
 
@@ -478,7 +396,7 @@ b8e4d2a feat: [前のチャプターまでのコミット]
 
 ---
 
-## Step 8: PR を作ってレビューしてマージする（30分）
+## Step 6: PR を作ってレビューしてマージする（30分）
 
 ### PR とは
 
