@@ -68,11 +68,13 @@ CLAUDE.md（クロード・エムディー）は Claude Code が作業を始め�
 `~/.claude/` ディレクトリを作成し、CLAUDE.md を新規作成します。ターミナルで下記を実行します。
 
 ```bash
+# bash
 mkdir -p ~/.claude
 code ~/.claude/CLAUDE.md
 ```
 
 ```markdown
+# output
 # 自分の共通ルール
 
 - 日本語で会話する
@@ -93,6 +95,7 @@ Chapter 1 の `/init` コマンドにより、プロジェクトルートには�
 生成済みの CLAUDE.md をテキストエディタで開き、以下の内容を参考に追記・強化します。
 
 ```markdown
+# output
 ## 設計書
 
 - `docs/plans/` は機能の設計書を置く場所
@@ -120,6 +123,7 @@ Chapter 1 の `/init` コマンドにより、プロジェクトルートには�
 プラグインのインストールはターミナルで行います。Claude Code を終了した状態で、以下のコマンドを順番に実行してください。
 
 ```bash
+# bash
 claude plugin install claude-md-management
 claude plugin install commit-commands
 claude plugin install context7
@@ -128,6 +132,7 @@ claude plugin install context7
 インストールが完了したら、ターミナルで以下を実行して 3 つとも表示されることを確認しましょう。
 
 ```bash
+# bash
 claude plugin list
 ```
 
@@ -143,6 +148,7 @@ claude plugin list
 インストール後、Claude Code のプロンプトで以下のコマンドを試してみましょう。
 
 ```plaintext
+# claude
 /claude-md-management:revise-claude-md
 ```
 
@@ -177,6 +183,7 @@ claude plugin list
 インストール後は、Claude Code に普通に質問するだけで自動的に最新ドキュメントを参照します。
 
 ```plaintext
+# claude
 Next.js の App Router について教えてください
 ```
 
@@ -184,7 +191,7 @@ Next.js の App Router について教えてください
 
 ### Step 2 の確認ポイント
 
-- [ ] 3 つのプラグインがインストールされている（ターミナルで `% claude plugin list` を実行して確認）
+- [ ] 3 つのプラグインがインストールされている（ターミナルで `claude plugin list` を実行して確認）
 - [ ] `/commit-commands:commit` コマンドが認識される（Claude Code 起動後にプロンプトで `/commit-commands:commit` と入力して補完が出るか確認）
 
 ---
@@ -194,6 +201,7 @@ Next.js の App Router について教えてください
 Claude Code を起動します。前回のセッションを引き継ぐために `--continue` オプションをつけます（セッションの詳細は Step 4 で説明します）。
 
 ```bash
+# bash
 claude --continue
 ```
 
@@ -202,7 +210,8 @@ claude --continue
 起動後、まず CLAUDE.md が正しく読み込まれているか確認しましょう。プロンプトで以下を入力します。
 
 ```plaintext
-$ このプロジェクトは何のためのアプリですか？概要を教えてください。
+# claude
+このプロジェクトは何のためのアプリですか？概要を教えてください。
 ```
 
 > **体験ポイント:** CLAUDE.md に書いた内容が回答に反映されているはずです。「業務マニュアル」を渡したことで、Claude Code がプロジェクトのことを知っているのが確認できます。
@@ -220,6 +229,7 @@ $ このプロジェクトは何のためのアプリですか？概要を教え
 Claude Code のプロンプトで以下を入力します。
 
 ```plaintext
+# claude
 /agents
 ```
 
@@ -232,7 +242,8 @@ Claude Code のプロンプトで以下を入力します。
 エージェントの説明を聞かれたら、以下のように入力します。
 
 ```plaintext
-エージェント名「coder」 
+# claude
+エージェント名「coder」
 設計書を読んでコードを実装する担当者。docs/plans/ にある設計書を参照し、プロジェクトのコーディングルールに従って実装する。日本語で回答する。
 ```
 
@@ -251,6 +262,7 @@ Claude Code のプロンプトで以下を入力します。
 `/agents` コマンドで作成すると、`.claude/agents/coder.md` のようなファイルが自動生成されます。
 
 ```markdown
+# output
 ---
 name: coder
 description: 設計書を読んでコードを実装する担当者。docs/plans/ にある設計書を参照し、プロジェクトのコーディングルールに従って実装する。
@@ -291,12 +303,25 @@ Claude Code の 基本的な操作方法を確認しましょう。
 「さっきまで話していた続きから始めたい」というときは、`--continue`（省略形は `-c`）をつけて起動します。
 
 ```bash
-claude --continue  # -c でも同じ
+# bash
+claude --continue
 ```
 
 作業の途中で一度終了して再開するときは `--continue` を、新しいタスクに切り替えるときはオプションなしの `claude` を使いましょう。
 
-> **体験ポイント:** Step 3 では `claude --continue` で起動しました。プロンプトで「今どんな状況か教えて」と聞いてみると、前のセッションで話した内容を把握していることが確認できます。
+```bash
+# bash
+claude -c
+```
+
+`--continue` をつけると、直前のセッションの会話内容を引き継いだ状態でスタートします。ただし、意図的に新しい文脈でゼロから始めたいときは `--continue` なしで `claude` だけで起動してください。
+
+> **どちらを使うべきか:**
+>
+> - **`claude --continue`** — 作業の途中で一度終了して、同じ作業を再開するとき
+> - **`claude`** — 新しいタスクに切り替えるとき、前の文脈をリセットしてすっきり始めたいとき
+
+> **体験ポイント:** Step 3 では `claude --continue` で起動しました。Step 3 の会話の文脈が引き継がれているはずです。プロンプトで「今どんな状況か教えて」と聞いてみると、前のセッションで話した内容を把握していることが確認できます。
 
 ### 履歴の呼び出し
 
@@ -320,6 +345,7 @@ Claude Code のプロンプトでは、キーボードの上下矢印キー（�
 Claude Code のプロンプト内から、先頭に `!` をつけるとターミナルコマンドを直接実行できます。Claude Code を終了せずにコマンドを打てるので便利です。
 
 ```plaintext
+# claude
 ! git status
 ```
 
@@ -328,6 +354,7 @@ Claude Code のプロンプト内から、先頭に `!` をつけるとターミ
 試してみましょう:
 
 ```plaintext
+# claude
 ! ls src/app/
 ```
 
@@ -338,6 +365,7 @@ Claude Code のプロンプト内から、先頭に `!` をつけるとターミ
 Claude Code への指示の中で `@ファイル名` と書くと、そのファイルの内容を明示的に Claude Code に読み込ませることができます。
 
 ```plaintext
+# claude
 @CLAUDE.md の内容を要約して
 ```
 
@@ -346,6 +374,7 @@ Claude Code への指示の中で `@ファイル名` と書くと、そのファ
 もう1つ試してみましょう:
 
 ```plaintext
+# claude
 @package.json にはどんな依存パッケージが入っている？
 ```
 
@@ -371,10 +400,12 @@ Claude Code を長時間使い続けると、回答の質が徐々に落ちて�
 | `/compact` | 会話を AI が要約して圧縮 | 流れを残したまま軽くしたいとき |
 
 ```plaintext
+# claude
 /clear
 ```
 
 ```plaintext
+# claude
 /compact 今日変更したファイルと決定事項を残して
 ```
 
@@ -389,10 +420,11 @@ Claude Code を長時間使い続けると、回答の質が徐々に落ちて�
 長い指示を書くときは、送信する前に `Shift+Enter` で条件を整理してから送ると、Claude Code に正確に伝わります。
 
 ```plaintext
-このプロジェクトについて以下を教えてください:
-- どんなアプリか
-- 使っている技術スタック
-- ファイルの構成
+# claude
+以下の条件でコンポーネントを作って:
+- ファイル名は TaskCard.tsx
+- props は title と done（boolean）
+- スタイルは Tailwind CSS を使う
 ```
 
 > **体験ポイント:** 複数の条件を箇条書きで整理してから送信すると、Claude Code への指示が正確に伝わります。「一度に送る前に整理する」という習慣が、作業の精度を上げます。
@@ -430,6 +462,7 @@ Windows の WSL（Windows Subsystem for Linux）環境では、ターミナル�
 Claude Code が起動している状態で、以下を入力してください。
 
 ```plaintext
+# claude
 この章で追加・変更したファイルをすべてコミットして
 ```
 
@@ -438,6 +471,7 @@ Claude Code が変更を確認し、適切なコミットメッセージを作�
 コミットが完了したら、プッシュします。
 
 ```plaintext
+# claude
 push して
 ```
 
@@ -466,6 +500,7 @@ push して
 ## ファイル構成（完了後）
 
 ```text
+# output
 ~/.claude/
 └── CLAUDE.md                          # ユーザースコープ（全プロジェクト共通の自分ルール）
 
@@ -485,6 +520,7 @@ push して
 ### Claude Code が起動しない
 
 ```bash
+# bash
 # インストールの確認
 npm list -g @anthropic-ai/claude-code
 
@@ -526,6 +562,6 @@ Chapter 2 で作った設定は、次の Chapter 3 以降で活きてきます�
 
 ---
 
-> **Chapter 3 に進む前に:** Claude Code を終了してください。`$ /exit` で終了できます。
+> **Chapter 3 に進む前に:** Claude Code を終了してください。`/exit` で終了できます。
 
 次のチャプターへ: [Chapter 3: Supabase 初期設定](./chapter-03-supabase-setup.md)
