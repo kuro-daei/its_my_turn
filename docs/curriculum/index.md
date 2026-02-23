@@ -24,3 +24,4 @@ Chapter 0 から順番に進めてください。各チャプターは前のチ�
 | 補足 4 | [Supabase 仕様ガイド](supplement-04-supabase.md) | データベース・認証（Auth）・RLS など Supabase の機能と仕組みを体系的にまとめた参照資料 |
 | 補足 5 | [npm / Node.js ガイド](supplement-05-npm.md) | npm コマンド・package.json・ビルドの基礎をまとめた参照資料 |
 | 補足 6 | [ビルドとデプロイ](supplement-06-deploy.md) | ビルド・デプロイ・CI/CD・環境変数の仕組みをまとめた参照資料 |
+| 補足 7 | [OAuth 解説](supplement-07-oauth.md) | ソーシャルログイン（Google でログイン）の仕組みを非エンジニア向けにやさしく解説した読み物 |

@@ -75,13 +75,13 @@
 # bash
 npx skills add https://github.com/vercel-labs/agent-skills \
   --skill vercel-react-best-practices \
-  -a claude-code --scopre project -y
+  -a claude-code --scope project -y
 npx skills add https://github.com/vercel-labs/agent-skills \
   --skill web-design-guidelines \
   -a claude-code --scope project -y
 npx skills add https://github.com/sickn33/antigravity-awesome-skills \
-  --skill nextjs-supabase-auth
-  -a claude-code --scopre project -y
+  --skill nextjs-supabase-auth \
+  -a claude-code --scope project -y
 ```
 
 インストールするスキルの概要は以下の通りです。
