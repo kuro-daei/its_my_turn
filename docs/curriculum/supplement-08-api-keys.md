@@ -36,17 +36,17 @@ API キーには大きく分けて **2 種類** あります。
 
 このたとえ話で整理すると、
 
-- **anon key（アノンキー）** = ゲスト用 IC カード。入れる場所（権限）が最初から限られている。万が一コピーされても、入れる範囲が限定的なのでダメージが小さい
+- **publishable key（パブリッシャブルキー）** = ゲスト用 IC カード。入れる場所（権限）が最初から限られている。万が一コピーされても、入れる範囲が限定的なのでダメージが小さい
 - **service_role key（サービスロールキー）** = マスターキー。すべての扉を開けられる。絶対に第三者に渡してはいけない
 - **RLS（Row Level Security）** = セキュリティゲート。ゲストカードで入れる部屋をさらに細かく制限する仕組み
 
 ゲスト用 IC カードを渡すことは問題ありません。ただし、「ゲストカードではここには入れない」というゲートが正しく設定されていることが前提です。これが **RLS が必須である理由**です。
 
-> **anon key とは？** "anonymous"（匿名）の略。Supabase が発行するキーのうち、アプリのフロントエンドで使うことを想定した公開キーです。RLS が有効な状態では、このキーでアクセスできる範囲はルールで厳しく制限されます。
+> **publishable key とは？** 「公開可能なキー」の意。Supabase が発行するキーのうち、アプリのフロントエンドで使うことを想定した公開キーです。RLS が有効な状態では、このキーでアクセスできる範囲はルールで厳しく制限されます。
 >
 > **service_role key とは？** Supabase が発行する管理者用のキーです。RLS を完全にバイパス（無効化）して、データベースのすべてのデータにアクセスできます。サーバーサイドの処理専用であり、フロントエンドに置くことは絶対に禁止です。
 >
-> **RLS（Row Level Security）とは？** データベースの「行レベルのセキュリティ」機能です。「自分のデータしか読めない」「ログインしていないと書き込めない」といったルールを、データベース側で強制します。RLS が無効だと、anon key でも全データにアクセスできてしまいます。
+> **RLS（Row Level Security）とは？** データベースの「行レベルのセキュリティ」機能です。「自分のデータしか読めない」「ログインしていないと書き込めない」といったルールを、データベース側で強制します。RLS が無効だと、publishable key でも全データにアクセスできてしまいます。
 
 ---
 
@@ -78,11 +78,11 @@ API キーには大きく分けて **2 種類** あります。
 
 | キー | 置ける場所 | 理由 |
 |------|-----------|------|
-| Supabase `anon key` | フロント可（ただし RLS 必須） | RLS によってアクセス範囲が制限されている前提 |
+| Supabase `publishable key` | フロント可（ただし RLS 必須） | RLS によってアクセス範囲が制限されている前提 |
 | Supabase `service_role key` | サーバーのみ | RLS を完全にバイパスする。全データへのアクセス権を持つ |
 | Vercel / その他 API キー | サーバーのみ | 外部サービスへの直接アクセス権を持つ |
 
-「フロント可」の anon key も、RLS が設定されていない状態では全データにアクセスできてしまいます。**「フロント可」は「RLS が有効である」ことが大前提**です。
+「フロント可」の publishable key も、RLS が設定されていない状態では全データにアクセスできてしまいます。**「フロント可」は「RLS が有効である」ことが大前提**です。
 
 ---
 
@@ -102,7 +102,7 @@ Next.js には、変数名の先頭に `NEXT_PUBLIC_` を付けるかどうか�
 
 | 変数名の形式 | 公開範囲 | 用途 |
 |-------------|---------|------|
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | フロントエンドで使える | anon key など、公開してよいキー |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | フロントエンドで使える | publishable key など、公開してよいキー |
 | `SUPABASE_SERVICE_ROLE_KEY` | サーバーサイドのみ | service_role key など、隠すべきキー |
 
 ### `.env.local` の書き方
@@ -110,7 +110,7 @@ Next.js には、変数名の先頭に `NEXT_PUBLIC_` を付けるかどうか�
 ```text
 # Supabase
 NEXT_PUBLIC_SUPABASE_URL=https://xxxxxxxxxxxx.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJxxxxxxxxxxxxxxxxxx（anon key）
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=eyJxxxxxxxxxxxxxxxxxx（publishable key）
 
 # サーバーサイド専用（NEXT_PUBLIC_ を付けない）
 SUPABASE_SERVICE_ROLE_KEY=eyJxxxxxxxxxxxxxxxxxx（service_role key）
@@ -123,7 +123,7 @@ SUPABASE_SERVICE_ROLE_KEY=eyJxxxxxxxxxxxxxxxxxx（service_role key）
 ```text
 # .env.example（GitHub に上げてよい）
 NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
 SUPABASE_SERVICE_ROLE_KEY=
 ```
 
@@ -141,9 +141,9 @@ service_role key は RLS を完全に無効化します。このキーが第三�
 
 「ユーザーの個人情報が全件流出する」「データが全件削除される」といった最悪の事態が起きます。
 
-### anon key が漏洩した場合（RLS なし）
+### publishable key が漏洩した場合（RLS なし）
 
-RLS が設定されていない状態で anon key が漏洩すると、service_role key が漏洩したのとほぼ同じ被害になります。anon key の「安全性」は RLS の存在が前提です。
+RLS が設定されていない状態で publishable key が漏洩すると、service_role key が漏洩したのとほぼ同じ被害になります。publishable key の「安全性」は RLS の存在が前提です。
 
 ### 外部サービスの API キーが漏洩した場合
 
@@ -162,7 +162,7 @@ OpenAI や Stripe などの外部サービスの API キーが漏洩すると、
 プロジェクトを始める前・GitHub にプッシュする前に、以下を確認してください。
 
 - `.env.local` が `.gitignore` に含まれているか確認する
-- GitHub のリポジトリに `service_role key` や `anon key` が直接書かれたファイルがコミットされていないか確認する
+- GitHub のリポジトリに `service_role key` や `publishable key` が直接書かれたファイルがコミットされていないか確認する
 - Supabase の管理画面でテーブルごとに RLS が有効になっているか確認する
 - Vercel の「Environment Variables」設定画面で、機密キーが `NEXT_PUBLIC_` なしで設定されているか確認する
 
@@ -175,12 +175,12 @@ OpenAI や Stripe などの外部サービスの API キーが漏洩すると、
 | ポイント | 内容 |
 |---------|------|
 | **キーの 2 分類** | 「フロント可（RLS 前提）」と「サーバーのみ」の 2 種類がある |
-| **anon key** | フロントに置けるが、RLS が有効であることが絶対条件 |
+| **publishable key** | フロントに置けるが、RLS が有効であることが絶対条件 |
 | **service_role key** | サーバーサイド専用。フロントに置くことは絶対禁止 |
 | **`NEXT_PUBLIC_` ルール** | プレフィックスあり → フロント公開、なし → サーバー専用 |
 | **`.env.local`** | キーの保管場所。Git 管理外のため GitHub に上がらない |
 | **漏洩リスク** | service_role key 漏洩は DB 全体への無制限アクセスを意味する |
-| **RLS の重要性** | anon key の安全性は RLS の設定が前提。必ず有効にする |
+| **RLS の重要性** | publishable key の安全性は RLS の設定が前提。必ず有効にする |
 
 > **覚えておきたい一文:** 「フロントエンドに書いたものは、インターネット上で公開したのと同じ」。権限の強いキーは必ずサーバーサイドに隔離し、`.env.local` で管理してください。
 
@@ -188,7 +188,7 @@ OpenAI や Stripe などの外部サービスの API キーが漏洩すると、
 
 ## 関連資料
 
-- [Chapter 3: Supabase 初期設定](chapter-03-supabase-setup.md) — Supabase プロジェクトのセットアップと anon key の取得
+- [Chapter 3: Supabase 初期設定](chapter-03-supabase-setup.md) — Supabase プロジェクトのセットアップと publishable key の取得
 - [Chapter 6: Vercel デプロイ](chapter-06-deploy.md) — Vercel の環境変数設定の手順
 - [補足 4: Supabase 仕様ガイド](supplement-04-supabase.md) — RLS の仕組みと設定方法の詳細
 - [補足 6: ビルドとデプロイ](supplement-06-deploy.md) — フロントエンドとサーバーサイドの役割分担
