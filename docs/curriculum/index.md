@@ -25,3 +25,4 @@ Chapter 0 から順番に進めてください。各チャプターは前のチ�
 | 補足 5 | [npm / Node.js ガイド](supplement-05-npm.md) | npm コマンド・package.json・ビルドの基礎をまとめた参照資料 |
 | 補足 6 | [ビルドとデプロイ](supplement-06-deploy.md) | ビルド・デプロイ・CI/CD・環境変数の仕組みをまとめた参照資料 |
 | 補足 7 | [OAuth 解説](supplement-07-oauth.md) | ソーシャルログイン（Google でログイン）の仕組みを非エンジニア向けにやさしく解説した読み物 |
+| 補足 8 | [API キーの安全な扱い方](supplement-08-api-keys.md) | フロントエンドとサーバーサイドでのキー管理・漏洩リスクを非エンジニア向けに解説 |
