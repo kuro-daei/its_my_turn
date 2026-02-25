@@ -92,6 +92,7 @@ MCP サーバーがない場合、Claude Code が生成した SQL をコピー�
 ターミナルでプロジェクトフォルダにいることを確認し、以下を実行してください。
 
 ```bash
+# bash
 npm install --save-dev supabase
 ```
 
@@ -148,25 +149,40 @@ MCP サーバーの一覧が表示されるので、Supabase を選んで認証�
 
 Step 2 で `npm install --save-dev supabase` は完了しているので、追加のインストールは不要です。
 
-### 3-1. Claude Code に supabase を初期化させる
+### 3-1. Supabase CLI にログインする
+
+ターミナルで以下を実行してください。
+
+```bash
+# bash
+npx supabase login
+```
+
+ブラウザが開き、Supabase のログイン画面が表示されます。Supabase アカウントでログインしてください。
+
+> **なぜ必要？** `supabase link`（次のステップ）でクラウドプロジェクトと接続するために、Supabase CLI がアカウント情報を必要とします。
+
+### 3-2. Claude Code に supabase を初期化させる
 
 **ターミナルでコマンドを打つのではなく、Claude Code（Step 2-3 で起動済み）に指示します。**
 
 Claude Code のプロンプトに以下を入力してください。
 
 ```plaintext
-supabase を初期化して
+# claude
+supabase のローカル環境を初期化して。サーバーは起動しないで
 ```
 
 Claude Code が `npx supabase init` を実行し、`supabase/` フォルダを作成します。
 
 > **何が起きる？** `supabase/` というフォルダが作成されます。これがローカル開発の設定フォルダです。
 
-### 3-2. クラウドプロジェクトとリンクさせる
+### 3-3. クラウドプロジェクトとリンクさせる
 
 引き続き Claude Code に指示します。
 
 ```plaintext
+# claude
 Supabase のプロジェクト「todos」とローカルをリンクして
 ```
 
@@ -174,7 +190,7 @@ Supabase のプロジェクト「todos」とローカルをリンクして
 
 Supabase MCP がすでに認証済みなので、Claude Code がプロジェクト名からプロジェクト ID を自動で調べて `npx supabase link` を実行してくれます。URL から文字列を探す必要はありません。
 
-### 3-3. ローカル Supabase を起動する
+### 3-4. ローカル Supabase を起動する
 
 > **事前確認:** Docker Desktop が起動していることを確認してください。タスクバーまたは画面上部のメニューバーに Docker のアイコンが表示されていれば OK です。起動していない場合は Docker Desktop アプリを先に開いてください。
 
@@ -203,12 +219,13 @@ service_role key: eyJ...
 
 > **このターミナルは閉じないでください。** `npx supabase start` はデータベースを動かし続けるプロセスです。開発中はこのターミナルを開いたままにしておいてください。
 
-### 3-4. ローカル Studio で確認する
+### 3-5. ローカル Studio で確認する
 
 `http://127.0.0.1:54323` をブラウザで開いてください。ローカルの Supabase Studio が表示されれば成功です。
 
 **確認ポイント**
 
+- [ ] Supabase CLI にログインした
 - [ ] Claude Code の指示で `supabase/` フォルダが作成された
 - [ ] Claude Code の指示でクラウドプロジェクトとのリンクが完了した
 - [ ] 別のターミナルで `npx supabase start` を実行し、Studio URL とローカルの Publishable Key が表示された
@@ -233,6 +250,7 @@ claude
 以下を入力してください。
 
 ```plaintext
+# claude
 Supabase の todos プロジェクト向けに、todos テーブルを作るマイグレーションファイルを supabase/migrations/ に作って。
 Row Level Security (RLS) を有効化して。ログインしたユーザーが自分の TODO だけを見れる・作れる・更新できる・削除できるようにして
 ```
@@ -246,6 +264,7 @@ Claude Code が `supabase/migrations/YYYYMMDDHHMMSS_create_todos.sql` という�
 Claude Code に指示します。
 
 ```plaintext
+# claude
 マイグレーションをローカルの Supabase に反映して
 ```
 
@@ -555,48 +574,6 @@ Claude Code を終了します。
 - [ ] Supabase ダッシュボードで Google Provider が有効になっている
 - [ ] `supabase/config.toml` に `[auth.external.google]` が追加されている
 - [ ] `supabase/.env` が作成されてクライアント ID・シークレットが設定されている
-
----
-
-## トラブルシューティング
-
-### Supabase プロジェクト作成時のエラー
-
-**「Database password is too weak」と表示される場合:**
-
-大文字・小文字・数字・記号を組み合わせた 8 文字以上のパスワードを設定してください（例: `MyPass123!`）。
-
-**プロジェクト作成が何分経っても完了しない場合:**
-
-ブラウザをリロードして確認してください。バックグラウンドで完了している場合があります。
-
----
-
-### MCP サーバー関連のトラブル
-
-**「接続エラーが出る」または「Supabase の情報が取得できない」場合:**
-
-Claude Code を再起動して `claude mcp add` からやり直してください。
-
----
-
-### ローカル Supabase 関連のトラブル
-
-**「Docker is not running」と表示される場合:**
-
-Docker Desktop が起動していないため、Docker Desktop アプリを起動してから再度 `npx supabase start` を実行してください。
-
-**`npx supabase link` でエラーになる場合:**
-
-`<PROJECT_REF>` が正しいか確認してください。Supabase ダッシュボードの URL（`https://supabase.com/dashboard/project/xxxxxxxxxx`）の `xxxxxxxxxx` の部分です。
-
-**`npx supabase db push` でエラーになる場合:**
-
-Supabase にログインしていない可能性があります。以下を実行してログインしてください。
-
-```bash
-npx supabase login
-```
 
 ---
 

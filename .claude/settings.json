@@ -3,6 +3,7 @@
     "allow": [
       "Edit(/docs/**)",
       "Write(/docs/**)",
+      "Bash(code .)",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:https://code.claude.com/)"
     ]

@@ -69,3 +69,8 @@
 - 専門用語には必ず平易な説明をつける
 - 記事の構成は「結論 → たとえ話 → 詳細 → まとめ」を基本とする
 - ファイルの配置: `docs/curriculum/module-NN-<topic>.md`
+- コードブロックは次のルールで先頭に # bash などを書く
+  - bash -> # bash
+  - claude -> # claude
+  - output -> # output
+  - other -> (なし)

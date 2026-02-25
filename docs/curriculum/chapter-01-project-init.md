@@ -35,6 +35,7 @@ Claude Code を起動する前に、まずターミナルで Next.js プロジ�
 ターミナルを開いて、以下のコマンドを実行してください。
 
 ```bash
+# bash
 yes | npx create-next-app@latest todos \
   --typescript --eslint --tailwind \
   --src-dir --app --import-alias "@/*" --rc
@@ -76,6 +77,7 @@ Next.js の最新のページ管理方式です。`src/app/` フォルダの中�
 ターミナルでプロジェクトフォルダ（`todos`）の中に移動してから、以下を実行します。
 
 ```bash
+# bash
 code .
 ```
 
@@ -125,6 +127,7 @@ VS Code のエクスプローラーで、以下のファイルが存在するこ
 確認してみましょう。Claude Code のセッション内で、あるいは別ターミナルからプロジェクトフォルダで以下を実行してください。
 
 ```bash
+# bash
 git log --oneline
 ```
 
@@ -133,6 +136,7 @@ git log --oneline
 以下のように、すでにコミットが 1 件表示されるはずです。
 
 ```text
+# output
 a1b2c3d Initial commit
 ```
 
@@ -143,6 +147,7 @@ a1b2c3d Initial commit
 次に、`.gitignore`（ドット ギット イグノア）が正しく設定されているか確認します。
 
 ```bash
+# bash
 cat .gitignore
 ```
 
@@ -163,6 +168,7 @@ Git はローカル（自分のパソコン）でバージョン管理するツ�
 以下のコマンドを実行してください。
 
 ```bash
+# bash
 gh repo create todos --private --source=. --remote=origin
 ```
 
@@ -178,6 +184,7 @@ gh repo create todos --private --source=. --remote=origin
 リポジトリが作成できたら、コードを GitHub に送ります。
 
 ```bash
+# bash
 git push -u origin main
 ```
 
@@ -203,6 +210,7 @@ git push -u origin main
 ここからは Claude Code を使って作業します。ターミナルで `todos` フォルダにいることを確認してから、以下のコマンドを実行してください。
 
 ```bash
+# bash
 claude
 ```
 
@@ -222,7 +230,7 @@ Claude Code のセッションで、以下を入力してください。
 
 ```plaintext
 # claude
-/init WebアプリでTODO管理をしたいです
+/init WebアプリでTODO管理をしたいです。コードは書かずに CLAUDE.md だけ準備して。
 ```
 
 > **体験ポイント:** 「TODO 管理アプリを作りたい」という一言を添えるだけで、Claude Code がプロジェクトのコンテキスト（文脈）を理解した上で CLAUDE.md を生成してくれます。ファイル構造も自動で読み取るので、ゼロから書く必要がありません。
@@ -249,6 +257,7 @@ Claude Code のセッションで、以下を入力してください。
 `/init` で CLAUDE.md が生成されましたが、まだコミット（変更の保存）はされていません。Claude Code に以下のように指示してください。
 
 ```plaintext
+# claude
 コミットして
 ```
 
@@ -257,6 +266,7 @@ Claude Code はコミットメッセージを自動で考えて、実行して�
 期待される出力の例:
 
 ```bash
+# bash
 git add CLAUDE.md
 git commit -m "docs: add CLAUDE.md for project context"
 ```
@@ -268,6 +278,7 @@ git commit -m "docs: add CLAUDE.md for project context"
 コミットが完了したら、GitHub に反映させます。
 
 ```plaintetxt
+# claude
 プッシュして
 ```
 
@@ -291,6 +302,7 @@ git commit -m "docs: add CLAUDE.md for project context"
 新しいターミナルウィンドウを開いて、プロジェクトフォルダに移動してから以下を実行します。
 
 ```bash
+# bash
 npm run dev
 ```
 
@@ -317,6 +329,7 @@ Next.js のウェルカムページが表示されれば、アプリが正常に
 Claude Code のセッション（別のターミナル）に戻り、以下のように指示します。
 
 ```plaintext
+# claude
 src/ の中身を説明して
 ```
 
@@ -327,6 +340,7 @@ Claude Code からは以下のような応答が期待されます。
 **期待される応答の概要:**
 
 ```text
+# output
 src/ ディレクトリには Next.js App Router の主要ファイルが含まれています。
 
 app/layout.tsx
@@ -353,6 +367,7 @@ app/globals.css
 時間があれば、以下の質問も試してみてください。Claude Code がプロジェクトのことをどれだけ理解しているか体感できます。
 
 ```plaintext
+# claude
 このプロジェクトで TODO アプリを作るとしたら、どんなファイルを作ればいい?
 
 layout.tsx と page.tsx の違いを教えて
@@ -381,59 +396,6 @@ Claude Code がプロジェクトのコンテキスト（文脈）を踏まえ�
 - [ ] `CLAUDE.md` がプロジェクトルートに存在し、GitHub にも反映されている
 - [ ] `http://localhost:3000` でページが表示される
 - [ ] Claude Code にプロジェクト構造を説明してもらう体験ができた
-
----
-
-## トラブルシューティング
-
-### `npx create-next-app` が失敗する
-
-まず Node.js のバージョンを確認してください。v18 以上が必要です。
-
-```bash
-# Node.js のバージョンを確認（v18 以上が必要）
-node --version
-
-# npm を最新版に更新
-npm install -g npm@latest
-```
-
-### `gh` コマンドが見つからない
-
-GitHub CLI がインストールされていない可能性があります。Chapter 0 の手順を参照してインストールしてください。
-
-インストール後、GitHub アカウントとの連携が必要です。
-
-```bash
-gh auth login
-```
-
-画面の指示に従い、ブラウザで認証を完了してください。
-
-### `npm run dev` でエラーが出る
-
-```bash
-# node_modules を再インストール
-rm -rf node_modules
-npm install
-```
-
-> **`rm -rf node_modules`（アールエム）とは?** `node_modules` フォルダを削除するコマンドです。その後 `npm install` を実行すると、`package.json` の内容を元に再生成されます。エラーが出たときの「おまじない」として覚えておいてください。
-
-### ポートが使用中と表示される
-
-```bash
-# 別のポートで起動
-npx next dev -p 3001
-```
-
-### Claude Code が `git` コマンドを実行しない
-
-以下のように明示的に許可を伝えてください。
-
-```plaintext
-git コマンドの実行を許可します。git log を実行してコミット履歴を確認して
-```
 
 ---
 
