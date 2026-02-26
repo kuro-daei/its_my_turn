@@ -269,44 +269,6 @@ npm run dev
 
 ---
 
-#### トラブルシュート
-
-**ブラウザに何も表示されない、またはエラーになる場合:**
-
-```bash
-# bash
-# 開発サーバーが起動しているか確認
-# 別ターミナルで実行
-npm run dev
-```
-
-Claude Code に以下のように聞いてみてください。
-
-```plaintext
-# claude
-ブラウザで localhost:3000 を開いたらエラーになった。ターミナルのエラーメッセージを確認して修正して
-```
-
-**Tailwind CSS のスタイルが当たっていない場合:**
-
-```plaintext
-# claude
-Tailwind CSS のスタイルが反映されていない。tailwind.config.ts の設定を確認して
-```
-
-**Supabase にデータが入らない、または一覧が表示されない場合:**
-
-Claude Code に以下のように聞いてみてください。
-
-```plaintext
-# claude
-Supabase との接続でエラーが起きているかもしれない。各操作（追加・取得・更新・削除）のエラーをコンソールに出力して確認して
-```
-
-ブラウザの開発者ツール（F12 → Console タブ）でエラーメッセージを確認します。
-
----
-
 #### ビルドチェック
 
 4 つの機能が揃ったら、ビルドエラーがないか確認します。
@@ -331,7 +293,7 @@ npm run build
 
 ---
 
-## Step 3: 通し確認・コミット・マージ
+## Step 3: 通し確認・コミット
 
 ### テストシナリオ
 
@@ -431,30 +393,6 @@ git commit -m "feat: implement todo app with CRUD and Google authentication"
 >
 > **体験:** 「コミットして」と一言指示するだけで、Claude Code は変更内容を把握した上で適切な Conventional Commits 形式のメッセージを生成します。何をコミットするかの説明を別途書く必要はありません。
 
-コミットが完了したら、PR を作成して main にマージします。
-
-```plaintext
-# claude
-push して、PR を作って main にマージして
-```
-
-Claude Code は以下のような操作を自動で行います。
-
-```bash
-# bash
-git push -u origin <現在のブランチ名>
-gh pr create --title "feat: implement todo app with CRUD" --body "TODO アプリの基本機能（CRUD）を実装。"
-gh pr merge --merge
-```
-
-マージが完了したら、main ブランチを最新状態にします。
-
-```bash
-# bash
-git checkout main
-git pull
-```
-
 #### 確認ポイント
 
 - [ ] `git log --oneline` でコミットが記録されている
@@ -470,7 +408,6 @@ git pull
 - [ ] Plan Mode で設計を確認してから実装を始めた
 - [ ] TODO の追加・表示・完了切り替え・削除がすべて動作する
 - [ ] `npm run build` がエラーなく完了する
-- [ ] PR を作成して main にマージした
 
 ---
 

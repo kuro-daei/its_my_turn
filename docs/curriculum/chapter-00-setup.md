@@ -88,11 +88,6 @@ brew --version
 > eval "$(/opt/homebrew/bin/brew shellenv)"
 > ```
 
-**うまくいかない場合は**
-
-- `curl: command not found` と表示された場合: ターミナルを一度閉じて開き直してから再試行してください。
-- わからない場合はメンターに声をかけてください。
-
 - [ ] `brew --version` でバージョン番号が表示された
 
 ---
@@ -118,11 +113,6 @@ claude --version
 ```
 
 バージョン番号が表示されれば OK です。
-
-**うまくいかない場合は**
-
-- ブラウザが開かない場合: ターミナルに表示された URL を手動でブラウザに貼り付けてください。
-- メンターに声をかけてください。
 
 - [ ] `claude --version` でバージョン番号が表示された
 
@@ -583,13 +573,9 @@ Windows Terminal で Ubuntu を開き直したあと、確認してください�
 ```bash
 # bash
 docker --version
-docker run hello-world
 ```
 
-`docker run hello-world` で「Hello from Docker!」が表示されれば OK です。
-
 - [ ] `docker --version` でバージョン番号が表示された
-- [ ] `docker run hello-world` で「Hello from Docker!」が表示された
 
 ---
 
@@ -630,11 +616,6 @@ claude
 ```
 
 Claude から返答が来れば完璧です。終了するには `/exit` と入力するか `Ctrl + C` を押してください。
-
-**うまくいかない場合は**
-
-- 認証エラーが表示された場合: `claude --version` でインストールを確認してください。
-- それでも解決しない場合は、メンターに声をかけてください。
 
 - [ ] `claude` コマンドで Claude Code が起動した
 - [ ] Claude に話しかけて返答が来た
