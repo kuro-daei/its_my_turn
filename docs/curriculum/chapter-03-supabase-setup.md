@@ -1,8 +1,8 @@
 # Chapter 3: Supabase と Google OAuth の初期設定
 
-**所要時間**: 約 60 分
-**ゴール**: Supabase MCP サーバーが設定済み + ローカル Supabase が起動 + データベースのテーブルが作成された状態にする
-**学ぶ Claude Code 機能**: MCP サーバー（外部サービス連携）、マイグレーション（データベース変更管理）
+**所要時間**: 約 45 分
+**ゴール**: Supabase MCP サーバーが設定済み + クラウドデータベースに `todos` テーブルが作成された状態にする
+**学ぶ Claude Code 機能**: MCP サーバー（外部サービス連携）
 
 ---
 
@@ -14,13 +14,12 @@
 
 - Supabase のアカウントを作成し、プロジェクトを立ち上げる
 - MCP サーバーをインストールし、ブラウザ認証で Claude Code と Supabase を接続する
-- ローカル（自分のパソコン上）に Supabase を起動する
-- マイグレーションファイルを使って `todos` テーブルを作成し、クラウドに同期する
-- `.env.local` にローカル接続情報を設定する
+- Claude Code + MCP でクラウドの `todos` テーブルを直接作成する
+- `.env.local` にクラウド接続情報を設定する
 - Google Cloud Console と Supabase で Google OAuth を設定する
 - コミットする
 
-全部終わったら、ローカル Supabase が動いてテーブルが作成され、次のチャプターでアプリと接続できる準備が整います。
+全部終わったら、クラウドの Supabase にテーブルが作成され、次のチャプターでアプリと接続できる準備が整います。
 
 ---
 
@@ -87,22 +86,9 @@ MCP サーバーがない場合、Claude Code が生成した SQL をコピー�
 
 ---
 
-### 2-1. npm パッケージをインストールする
+### 2-1. MCP サーバーを追加する
 
-ターミナルでプロジェクトフォルダにいることを確認し、以下を実行してください。
-
-```bash
-# bash
-npm install --save-dev supabase
-```
-
-> **`--save-dev` とは？** このプロジェクトの開発用ツールとして追加する、という意味です。アプリ本体には含まれず、開発中にだけ使う道具として管理されます。
-
----
-
-### 2-2. MCP サーバーを追加する
-
-続けて以下のコマンドを実行します。
+ターミナルでプロジェクトフォルダにいることを確認し、以下のコマンドを実行します。
 
 ```bash
 claude mcp add supabase --transport http https://mcp.supabase.com/mcp
@@ -112,7 +98,7 @@ claude mcp add supabase --transport http https://mcp.supabase.com/mcp
 
 ---
 
-### 2-3. Claude Code を起動して認証する
+### 2-2. Claude Code を起動して認証する
 
 ターミナルで Claude Code を起動します。
 
@@ -134,174 +120,48 @@ MCP サーバーの一覧が表示されるので、Supabase を選んで認証�
 
 **確認ポイント**
 
-- [ ] Supabase の npm パッケージがインストールされた（`npm install` が完了した）
 - [ ] MCP サーバーが登録された（`claude mcp add` が完了した）
 - [ ] `/mcp` コマンドで認証を実行した
 - [ ] ブラウザでの認証が完了した
 
 ---
 
-## Step 3: ローカル Supabase の起動（10分）
+## Step 3: todos テーブルの作成（5分）
 
-### なぜローカルで開発するの？
+Claude Code は MCP サーバーを通じて、クラウドの Supabase に直接テーブルを作成できます。マイグレーションファイルの作成やローカル環境の起動は不要です。「テーブルを作って」と日本語で指示するだけで完了します。
 
-> クラウドの管理画面（`https://supabase.com/dashboard`）でも確認できますが、ローカルで Supabase を動かすと**ページを切り替えることなくすぐ確認でき**、開発のリズムが崩れません。また、接続が速く、本番データを誤って変更するリスクもありません。
-
-Step 2 で `npm install --save-dev supabase` は完了しているので、追加のインストールは不要です。
-
-### 3-1. Supabase CLI にログインする
-
-ターミナルで以下を実行してください。
-
-```bash
-# bash
-npx supabase login
-```
-
-ブラウザが開き、Supabase のログイン画面が表示されます。Supabase アカウントでログインしてください。
-
-> **なぜ必要？** `supabase link`（次のステップ）でクラウドプロジェクトと接続するために、Supabase CLI がアカウント情報を必要とします。
-
-### 3-2. Claude Code に supabase を初期化させる
-
-**ターミナルでコマンドを打つのではなく、Claude Code（Step 2-3 で起動済み）に指示します。**
+> **体験:** SQL を自分で書く必要はありません。要件を日本語で伝えるだけで、Claude Code が適切なテーブル設計とセキュリティ設定を含んだテーブルをクラウドに直接作ってくれます。
 
 Claude Code のプロンプトに以下を入力してください。
 
 ```plaintext
-# claude
-supabase のローカル環境を初期化して。サーバーは起動しないで
-```
-
-Claude Code が `npx supabase init` を実行し、`supabase/` フォルダを作成します。
-
-> **何が起きる？** `supabase/` というフォルダが作成されます。これがローカル開発の設定フォルダです。
-
-### 3-3. クラウドプロジェクトとリンクさせる
-
-引き続き Claude Code に指示します。
-
-```plaintext
-# claude
-Supabase のプロジェクト「todos」とローカルをリンクして
-```
-
-> **たとえ:** クラウドの倉庫（Supabase プロジェクト）と手元の作業場（ローカル環境）を「同じプロジェクトのもの」として結びつける操作です。
-
-Supabase MCP がすでに認証済みなので、Claude Code がプロジェクト名からプロジェクト ID を自動で調べて `npx supabase link` を実行してくれます。URL から文字列を探す必要はありません。
-
-### 3-4. ローカル Supabase を起動する
-
-> **事前確認:** Docker Desktop が起動していることを確認してください。タスクバーまたは画面上部のメニューバーに Docker のアイコンが表示されていれば OK です。起動していない場合は Docker Desktop アプリを先に開いてください。
-
-**新しいターミナルを開いて**（Claude Code を使っているターミナルとは別に）、以下を実行してください。
-
-```bash
-npx supabase start
-```
-
-しばらくすると、以下のような出力が表示されます。
-
-```text
-Started supabase local development setup.
-
-         API URL: http://127.0.0.1:54321
-     GraphQL URL: http://127.0.0.1:54321/graphql/v1
-  S3 Storage URL: http://127.0.0.1:54321/storage/v1/s3
-          DB URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
-      Studio URL: http://127.0.0.1:54323
-    Inbucket URL: http://127.0.0.1:54324
-      anon key: eyJ...
-service_role key: eyJ...
-```
-
-`Studio URL` と ローカルの Publishable Key（出力の `anon key`）の値をメモしておいてください（Step 5 で使います）。
-
-> **このターミナルは閉じないでください。** `npx supabase start` はデータベースを動かし続けるプロセスです。開発中はこのターミナルを開いたままにしておいてください。
-
-### 3-5. ローカル Studio で確認する
-
-`http://127.0.0.1:54323` をブラウザで開いてください。ローカルの Supabase Studio が表示されれば成功です。
-
-**確認ポイント**
-
-- [ ] Supabase CLI にログインした
-- [ ] Claude Code の指示で `supabase/` フォルダが作成された
-- [ ] Claude Code の指示でクラウドプロジェクトとのリンクが完了した
-- [ ] 別のターミナルで `npx supabase start` を実行し、Studio URL とローカルの Publishable Key が表示された
-- [ ] `http://127.0.0.1:54323` をブラウザで開くと Supabase Studio が表示された
-
----
-
-## Step 4: todos テーブルの作成（10分）
-
-### マイグレーションって何？
-
-> データベースへの変更内容を「変更手順書」としてファイルに記録しておく仕組みです。「いつ・どんな変更をしたか」が履歴として残るため、ローカルで作った手順書をクラウドに送るだけで同じ状態を再現できます。
-
-### 4-1. マイグレーションファイルを Claude Code に作らせる
-
-Claude Code を起動します。
-
-```bash
-claude
-```
-
-以下を入力してください。
-
-```plaintext
-# claude
-Supabase の todos プロジェクト向けに、todos テーブルを作るマイグレーションファイルを supabase/migrations/ に作って。
+Supabase の todos プロジェクトに、todos テーブルを作って。
 Row Level Security (RLS) を有効化して。ログインしたユーザーが自分の TODO だけを見れる・作れる・更新できる・削除できるようにして
 ```
 
-Claude Code が `supabase/migrations/YYYYMMDDHHMMSS_create_todos.sql` というファイルを作成します。
+> **RLS（Row Level Security）とは？** 「行レベルのセキュリティ」という意味です。データベースの各行（各 TODO）に対して「誰が見られるか」を制御する仕組みです。これを有効にしておくと、ユーザー A のデータをユーザー B が覗けなくなります。
 
-> **体験:** SQL を自分で書く必要はありません。要件を日本語で伝えるだけで、Claude Code が正しい SQL とセキュリティ設定を含んだマイグレーションファイルを作ってくれます。
+### テーブルを確認する
 
-### 4-2. ローカルに反映する
-
-Claude Code に指示します。
-
-```plaintext
-# claude
-マイグレーションをローカルの Supabase に反映して
-```
-
-> **何が起きる？** 作成されたマイグレーションファイルがローカルのデータベースに適用され、`todos` テーブルが作成されます。
-
-### 4-3. ローカル Studio でテーブルを確認する
-
-`http://127.0.0.1:54323` をブラウザで開き、左サイドバーの「Table Editor」をクリックします。`todos` テーブルが表示されていれば成功です。
-
-### 4-4. クラウドに同期する
-
-Claude Code に指示します。
-
-```plaintext
-マイグレーションをクラウドの Supabase に同期して
-```
-
-> **体験:** ローカルで作ったデータベースの設計を、一言指示するだけでクラウドに反映できました。これがマイグレーションを使った開発の強みです。
+Supabase ダッシュボードを開き、左サイドバーの「Table Editor」をクリックします。`todos` テーブルが表示されていれば成功です。
 
 **確認ポイント**
 
-- [ ] `supabase/migrations/` にファイルが作成されている
-- [ ] ローカル Studio の Table Editor に `todos` テーブルが表示されている
-- [ ] Claude Code の指示でクラウドへの同期が完了した
-- [ ] クラウドのダッシュボードの Table Editor にも `todos` テーブルが表示されている
+- [ ] Claude Code の指示でクラウドの Supabase に `todos` テーブルが作成された
+- [ ] Supabase ダッシュボードの Table Editor に `todos` テーブルが表示されている
+- [ ] RLS が有効になっている
 
 ---
 
-> **ここで一度、立ち止まってください。Step 5 からは「全く違う種類の作業」に切り替わります。**
+> **ここで一度、立ち止まってください。Step 4 からは「全く違う種類の作業」に切り替わります。**
 
-ここまでの Step 2〜4 では、**あなた（開発者）として** Supabase に接続していました。Claude Code が MCP サーバーを通じて Supabase にアクセスし、テーブルを作ったりプロジェクト情報を確認しました。
+ここまでの Step 2〜3 では、**あなた（開発者）として** Supabase に接続していました。Claude Code が MCP サーバーを通じて Supabase にアクセスし、テーブルを作ったりプロジェクト情報を確認しました。
 
-これから行う Step 5 は、**TODO アプリ（プログラム）が** Supabase に接続するための設定です。アプリが実際にデータを読み書きするために必要な接続情報を用意します。
+これから行う Step 4 は、**TODO アプリ（プログラム）が** Supabase に接続するための設定です。アプリが実際にデータを読み書きするために必要な接続情報を用意します。
 
 この 2 つは全く別物です。下の表で整理しておきます。
 
-| | 開発者としての接続（Step 2〜4） | アプリとしての接続（Step 5） |
+| | 開発者としての接続（Step 2〜3） | アプリとしての接続（Step 4） |
 |---|---|---|
 | **誰が接続するか** | あなた（Claude Code 経由） | TODO アプリ |
 | **何のために** | テーブル作成・DB 管理 | データの読み書き |
@@ -310,43 +170,41 @@ Claude Code に指示します。
 
 ---
 
-## Step 5: 接続情報の設定（5分）
+## Step 4: 接続情報の設定（5分）
 
-### 5-1. Publishable Key をメモしておく（Chapter 6 で使います）
+### 4-1. Publishable Key を確認する
 
-本番デプロイ（Chapter 6）では、クラウドの Supabase に接続します。そのときに `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` の値をクラウドのキーに差し替えます。今のうちにメモしておきましょう。
-
-1. ブラウザで Step 1 で作成したプロジェクトのダッシュボードを開く
+1. ブラウザで Supabase ダッシュボードを開く
 2. 左サイドバーの「Project Settings」→「API Keys」を開く
 3. 「Publishable key」セクションから `sb_publishable_...` から始まるキーをコピーする
-4. コピーしたキーをメモしておく（Chapter 6 で使います）
 
 > **Publishable Key とは？** 「公開しても安全」に設計された低権限のキーです。RLS（Row Level Security）を正しく機能させながら認証フローを動かします。もし仮に `sb_secret_` から始まるキー（service_role key）を使ってしまうと、管理者権限で RLS がバイパスされ「誰でも全ユーザーのデータを見られる」状態になってしまいます。
 
-### 5-2. `.env.local` ファイルを作成する
+---
+
+### 4-2. `.env.local` ファイルを作成する
 
 > **`.env.local` って何？** アプリの「秘密のメモ帳」のようなものです。パスワードや接続情報など、他の人に見せたくない設定値を保存するファイルです。このファイルは Git に含まれないため、インターネット上に公開される心配がありません。
 
-今は**ローカル開発用**の接続情報を設定します。Claude Code に以下を指示してください。
+Claude Code に以下を指示してください。
 
 ```plaintext
-.env.local をローカル接続用に設定して。NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY にはローカルの Publishable Key を使って
+.env.local をクラウド接続用に設定して。NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY にはクラウドの Publishable Key を使って
 ```
 
 Claude Code が作成する `.env.local` は以下のようになります。
 
-```dotenv
-# .env.local
-NEXT_PUBLIC_SUPABASE_URL=http://127.0.0.1:54321
+```text
+NEXT_PUBLIC_SUPABASE_URL=https://xxxxxxxxxx.supabase.co
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=eyJ...（ローカルの Publishable Key）
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...（クラウドの Publishable Key）
 ```
 
-> **ローカルとクラウドで変数名を統一する理由:** ローカルの Supabase が発行するキー（`supabase start` 出力の `anon key`）が、ローカル版の Publishable Key です。Chapter 6 でクラウドに切り替えるときは、同じ変数 `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` の値を `sb_publishable_...` に差し替えるだけです。アプリのコードを変える必要はありません。
->
-> **注意:** `NEXT_PUBLIC_SUPABASE_URL` が `http://127.0.0.1:54321`（ローカル）になっていることを確認してください。クラウドの URL（`https://xxxxxxxxxx.supabase.co`）ではありません。
+> **注意:** `NEXT_PUBLIC_SUPABASE_URL` が `https://xxxxxxxxxx.supabase.co`（クラウド）になっていることを確認してください。`http://127.0.0.1:54321` のようなローカルの URL ではありません。
 
-### 5-3. `.gitignore` を確認する
+---
+
+### 4-3. `.gitignore` を確認する
 
 `.env.local` には接続情報が含まれているため、Git に含めてはいけません。プロジェクトルートの `.gitignore`（Git が無視するファイルのリスト）に `.env.local` が含まれていることを確認します。
 
@@ -361,19 +219,19 @@ cat .gitignore | grep env
 **確認ポイント**
 
 - [ ] `.env.local` ファイルがプロジェクトルートに作成された
-- [ ] `NEXT_PUBLIC_SUPABASE_URL` が `http://127.0.0.1:54321`（ローカル）に設定されている
-- [ ] `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` が設定されている（`eyJ` から始まる長い文字列）
+- [ ] `NEXT_PUBLIC_SUPABASE_URL` が `https://xxxxxxxxxx.supabase.co`（クラウド）に設定されている
+- [ ] `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` が設定されている（`sb_publishable_` から始まる文字列）
 - [ ] `.gitignore` に `.env.local`（または `.env*.local`）が含まれている
 
 ---
 
-## Step 6: Google OAuth のセットアップ（20分）
+## Step 5: Google OAuth のセットアップ（20分）
 
 Google ログインの実装は Chapter 5 で行いますが、Google Cloud Console と Supabase の設定は**事前に完了させておく**ことで、Chapter 5 での作業がスムーズになります。
 
 ---
 
-### 6-1. Google Cloud Console で OAuth クライアント ID を取得
+### 5-1. Google Cloud Console で OAuth クライアント ID を取得
 
 Supabase に Google ログインを設定するには、まず Google 側で「このアプリを Google が認識するための ID」を発行してもらう必要があります。これを Google Cloud Console という管理画面で行います。
 
@@ -394,16 +252,12 @@ Supabase に Google ログインを設定するには、まず Google 側で「�
 http://localhost:3000
 ```
 
-9. 「承認済みのリダイレクト URI」に **2 件** 追加する
+9. 「承認済みのリダイレクト URI」に以下を追加する
 
    **クラウド用**（Supabase ダッシュボード → Authentication → Providers → Google の「Callback URL」欄に表示されている URL）:
+
    ```plaintext
    https://xxxxx.supabase.co/auth/v1/callback
-   ```
-
-   **ローカル用**:
-   ```plaintext
-   http://127.0.0.1:54321/auth/v1/callback
    ```
 
    > クラウド用の正確な URL は、Supabase ダッシュボード（`https://supabase.com/dashboard`）→ プロジェクトを選択 → 「Authentication」→「Providers」→「Google」を展開すると「Callback URL（for OAuth）」欄に表示されています。
@@ -413,7 +267,7 @@ http://localhost:3000
 
 ---
 
-### 6-2. Supabase（クラウド）で Google Provider を有効化
+### 5-2. Supabase（クラウド）で Google Provider を有効化
 
 Google ログインを使えるようにするには、Supabase 側でも設定が必要です。ブラウザで Supabase ダッシュボードを操作します。
 
@@ -424,10 +278,10 @@ Google ログインを使えるようにするには、Supabase 側でも設定�
 3. 「Providers」タブを選択
 4. 「Google」を見つけてクリックして展開する
 5. 「Enable Sign in with Google」のトグルをオンにする
-6. 6-1 でメモした「クライアント ID」と「クライアントシークレット」を入力する
+6. 5-1 でメモした「クライアント ID」と「クライアントシークレット」を入力する
 7. 「Save」ボタンをクリックして保存する
 
-> **Callback URL（for OAuth）** という欄も画面に表示されていますが、これは表示のみで編集できません。6-1 の手順 9 でここに表示されている URL を Google Cloud Console に貼り付けました。
+> **Callback URL（for OAuth）** という欄も画面に表示されていますが、これは表示のみで編集できません。5-1 の手順 9 でここに表示されている URL を Google Cloud Console に貼り付けました。
 
 8. 続けて、左サイドバーの「URL Configuration」をクリックする
 9. 「Redirect URLs」の欄に以下を追加して「Save」をクリックする
@@ -440,51 +294,9 @@ http://localhost:3000/**
 
 ---
 
-### 6-3. ローカル Supabase の設定
+### 5-3. `.env.local` に `NEXT_PUBLIC_SITE_URL` を確認する
 
-クラウドの Supabase で Google Provider を有効化しましたが、**ローカルの Supabase にも同じ設定**が必要です。ローカル Supabase は `supabase/config.toml` というファイルで管理されています。
-
-Claude Code に以下を指示してください。
-
-```plaintext
-supabase/config.toml に Google の外部認証設定を追加して。
-クライアント ID は SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID、
-シークレットは SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET という環境変数から読み込むように設定して。
-supabase/.env に SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID と SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET も作って、
-値には 6-1 でメモしたクライアント ID とシークレットを入れて
-```
-
-Claude Code が生成する内容のイメージ：
-
-`supabase/config.toml` に追加：
-```toml
-[auth.external.google]
-enabled = true
-client_id = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID)"
-secret = "env(SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET)"
-```
-
-`supabase/.env` を新規作成：
-```dotenv
-SUPABASE_AUTH_EXTERNAL_GOOGLE_CLIENT_ID=your_client_id
-SUPABASE_AUTH_EXTERNAL_GOOGLE_SECRET=your_client_secret
-```
-
-> **なぜ `supabase/.env` に書く？** `supabase/config.toml` は Git に含まれるため、シークレットを直書きしてはいけません。`env(変数名)` という形式で参照先を書いておき、実際の値は `.env` に分離します。
-
-続けて、`.gitignore` に `supabase/.env` が含まれているか確認します。
-
-```bash
-cat .gitignore | grep supabase
-```
-
-`supabase/.env` が出力に含まれていれば OK です。含まれていない場合は `.gitignore` に追加してください。
-
----
-
-### 6-4. `.env.local` に `NEXT_PUBLIC_SITE_URL` を確認・追記
-
-Step 5 で作成した `.env.local` に `NEXT_PUBLIC_SITE_URL=http://localhost:3000` が含まれているか確認します。
+Step 4 で作成した `.env.local` に `NEXT_PUBLIC_SITE_URL=http://localhost:3000` が含まれているか確認します。
 
 ```bash
 cat .env.local
@@ -498,35 +310,16 @@ cat .env.local
 
 ---
 
-### 6-5. CLAUDE.md にローカル Supabase 利用の注記を追加
-
-今後 Chapter 5・Chapter 6 でコーディングを進める Claude Code が、「ローカルと本番の切り替え」について正しく理解できるよう、プロジェクトの CLAUDE.md に注記を追加します。
-
-Claude Code に以下を指示してください。
-
-```plaintext
-CLAUDE.md に以下を追加して:
-- ローカル開発中は .env.local の NEXT_PUBLIC_SUPABASE_URL が http://127.0.0.1:54321 を向いていること（ローカル Supabase を使う）
-- クラウドの Supabase への切り替えは Chapter 6（デプロイ）で行うこと
-- ローカルの Supabase Studio は http://127.0.0.1:54323 で確認できること
-```
-
----
-
-#### 確認ポイント（Step 6）
+#### 確認ポイント（Step 5）
 
 - [ ] Google Cloud Console で OAuth クライアント ID が作成されている
-- [ ] リダイレクト URI にクラウド用とローカル用の 2 件が追加されている
+- [ ] リダイレクト URI にクラウド用の 1 件が追加されている
 - [ ] Supabase ダッシュボードで Google Provider が有効になっている
-- [ ] `supabase/config.toml` に `[auth.external.google]` が追加されている
-- [ ] `supabase/.env` が作成されてクライアント ID・シークレットが設定されている
-- [ ] `.gitignore` に `supabase/.env` が含まれている
 - [ ] `.env.local` に `NEXT_PUBLIC_SITE_URL` がある
-- [ ] CLAUDE.md にローカル Supabase の注記が追加されている
 
 ---
 
-## Step 7: コミット（5分）
+## Step 6: コミット（5分）
 
 確認が取れたら、作業内容をコミットします。
 
@@ -566,14 +359,11 @@ Claude Code を終了します。
 
 - [ ] Supabase プロジェクトが作成されている
 - [ ] Supabase MCP サーバーが設定・認証されている
-- [ ] ローカル Supabase が起動している（`http://127.0.0.1:54323` でアクセスできる）
-- [ ] `supabase/migrations/` に todos テーブルのマイグレーションファイルがある
-- [ ] ローカルとクラウドの Table Editor に `todos` テーブルが存在する
-- [ ] `.env.local` に `NEXT_PUBLIC_SUPABASE_URL`（ローカル）と `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` が設定されている
+- [ ] クラウドの Table Editor に `todos` テーブルが存在する
+- [ ] `.env.local` の `NEXT_PUBLIC_SUPABASE_URL` が `https://xxxxxxxxxx.supabase.co`（クラウド）に設定されている
+- [ ] `.env.local` に `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` が設定されている
 - [ ] Google Cloud Console で OAuth クライアント ID が作成されている
 - [ ] Supabase ダッシュボードで Google Provider が有効になっている
-- [ ] `supabase/config.toml` に `[auth.external.google]` が追加されている
-- [ ] `supabase/.env` が作成されてクライアント ID・シークレットが設定されている
 
 ---
 
@@ -581,15 +371,13 @@ Claude Code を終了します。
 
 | 機能 | 体験した内容 |
 |------|-------------|
-| **MCP サーバー（外部サービス連携）** | `claude mcp add` で Supabase の MCP サーバーを追加し、ブラウザ認証して Claude Code から直接データベースを操作できる状態を作った |
-| **ローカル Supabase** | `npx supabase start` でパソコン上に Supabase を起動し、ブラウザでデータを直接確認できる環境を作った |
-| **マイグレーション** | データベースの変更内容をファイルに記録し、ローカルで確認してからクラウドに同期するフローを体験した |
-| **DB 設計指示** | 日本語でテーブル要件を伝えるだけで、適切な SQL（RLS ポリシー含む）を含んだマイグレーションファイルを作成してもらえることを体験した |
+| **MCP サーバー（外部サービス連携）** | `claude mcp add` で Supabase の MCP サーバーを追加し、ブラウザ認証して Claude Code からクラウドデータベースを直接操作できる状態を作った |
+| **DB 設計指示** | 日本語でテーブル要件を伝えるだけで、適切な SQL（RLS ポリシー含む）を含んだテーブルをクラウドに直接作成してもらえることを体験した |
 
 ---
 
 ## 次のチャプターへ
 
-Supabase のセットアップが完了しました。ローカル Supabase が動いている状態のまま、次のチャプターに進みます。
+Supabase のセットアップが完了しました。次のチャプターに進みます。
 
 次の **Chapter 4: Vibe Coding で TODO アプリを作る** では、このデータベースと画面を実際につなぎ、TODO の追加・一覧表示・完了切り替え・削除が動く状態にします。さらにログイン機能も組み込み、自分専用のアプリが完成します。
