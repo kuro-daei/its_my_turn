@@ -118,7 +118,7 @@ Supabase の Auth が提供するログイン方式は複数あります。
 | **Google ログイン** | Google アカウントでワンクリックでログインする |
 | **GitHub ログイン** | GitHub アカウントでワンクリックでログインする |
 
-このカリキュラムでは Google ログインを使います。
+このカリキュラムではメール/パスワード認証を使います。
 
 ### 認証情報はデータベースに保存される
 
@@ -285,7 +285,7 @@ https://xxxxxxxxxx.supabase.co
 # output
 # .env.local の中身（イメージ）
 NEXT_PUBLIC_SUPABASE_URL=https://xxxxxxxxxx.supabase.co
-SUPABASE_SECRET_KEY=sb_secret_...
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 ```
 
 このファイルは Git で管理されません（`.gitignore` に含まれている）。GitHub などに公開されることなく、自分のパソコンにのみ存在します。

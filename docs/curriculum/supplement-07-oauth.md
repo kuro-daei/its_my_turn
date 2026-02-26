@@ -1,7 +1,7 @@
 # 補足 7: OAuth とは — ソーシャルログインの仕組みをやさしく解説
 
 **種別**: 概念解説（読み物）
-**関連チャプター**: Chapter 3「Supabase のセットアップ」、Chapter 4「機能実装」
+**関連チャプター**: Chapter 3「Supabase のセットアップ」、Chapter 5「認証機能の実装」
 
 ---
 
@@ -147,9 +147,9 @@ Supabase Auth はこれらを**ほとんど自動でやってくれます。**
 
 ### このカリキュラムでの位置づけ
 
-Chapter 4 では、このカリキュラムの TODO アプリに Google ログインを追加します。Supabase のおかげで、OAuth の細かい仕組みを理解していなくても実装できます。
+このカリキュラムの TODO アプリでは、Chapter 5 でメール/パスワード認証を実装します。Google ログインのような OAuth は採用していません。
 
-ただ、「自分のアプリで何が起きているか」をざっくりと知っておくと、エラーが出たときに状況を把握しやすくなります。この記事はそのための背景知識として書きました。
+ただし、将来的に「Google でログイン」機能を追加したい場合、Supabase Auth は OAuth にも対応しています。この記事で OAuth の仕組みを理解しておけば、その際の実装や設定変更をスムーズに進めるための土台になります。**この記事は、OAuth を追加したくなったときの参考資料として活用してください。**
 
 ---
 
@@ -171,5 +171,5 @@ Chapter 4 では、このカリキュラムの TODO アプリに Google ログ�
 ## 関連資料
 
 - [Chapter 3: Supabase 初期設定](chapter-03-supabase-setup.md) — Supabase プロジェクトのセットアップとデータベース作成
-- [Chapter 4: Vibe Coding で TODO アプリを作る](chapter-04-development.md) — Google ログインを実際に組み込むハンズオン
+- [Chapter 5: 認証機能を実装する](chapter-05-auth.md) — メール/パスワード認証を実際に組み込むハンズオン
 - [補足 4: Supabase 仕様ガイド](supplement-04-supabase.md) — Supabase のデータベースと認証の全体像
