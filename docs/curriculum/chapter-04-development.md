@@ -40,7 +40,6 @@
 
 - [ ] Chapter 0〜3 が完了している
 - [ ] Supabase の `todos` テーブルが作成済みである
-- [ ] `.env.local` にローカル Supabase の接続情報が設定済みである
 - [ ] Google アカウントを持っている
 
 確認できたら、Step 1 に進みます。
@@ -91,30 +90,6 @@ npx skills add https://github.com/sickn33/antigravity-awesome-skills \
 | `web-design-guidelines` | 約 115,000 | Vercel 公式のウェブデザインガイドライン。美しく使いやすい UI の原則 |
 | `nextjs-supabase-auth` | — | Next.js + Supabase の認証実装ベストプラクティス。Chapter 5 の Google ログイン実装で自動的に活用される |
 
----
-
-#### インストールしたスキルの安全性をチェックする
-
-スキルをインストールしたら、安全性をチェックしておくと安心です。Cisco（シスコ）が提供する **Skill Scanner**（スキル スキャナー）は、インストール済みスキルの中身を自動で検査して、プロンプトインジェクション（AIを騙す攻撃）やデータ流出などの危険なパターンがないかを検出するツールです。
-
-Global で使えるようにインストールします。
-
-```bash
-# bash
-uv tool install cisco-ai-skill-scanner
-```
-
-スキャンの実行:
-
-```bash
-# bash
-uv run skill-scanner scan-all .claude/skills/
-```
-
-GitHub: <https://github.com/cisco-ai-defense/skill-scanner>
-
-> **補足:** Skill Scanner は「ベストエフォート」の検出ツールです。スキャン結果が「問題なし」でも完全な安全性を保証するものではありません。公式スキル + 高インストール数 + スキャンの3点セットで安全性を高めましょう。
-
 #### 確認ポイント
 
 - [ ] vercel-react-best-practices スキルがインストールされた
@@ -158,7 +133,7 @@ Plan Mode に切り替えたら、以下の指示を入力してください。
 
 ```plaintext
 # claude
- Next.js + TypeScript + Tailwind CSS v4 を使って、TODO アプリを設計・実装して。データは ローカルの supabase に保存すること
+ Next.js + TypeScript + Tailwind CSS v4 を使って、TODO アプリを設計・実装して。データは Supabase に保存すること
 
   機能要件（CRUD）：
   - Create：タスクを入力して追加できる（空文字は送信不可）
@@ -227,8 +202,6 @@ src/
 - [ ] 設計内容を確認して承認した
 
 ---
-
-> **補足:** ローカル Supabase は Chapter 3 で起動済みです。`.env.local` もローカル接続用に設定済みのため、このまま動作確認に進めます。
 
 #### 動作確認方法
 
@@ -308,7 +281,7 @@ npm run build
 - [ ] テキスト欄に「買い物に行く」と入力して「追加」ボタンをクリックする
 - [ ] 「買い物に行く」が一覧に表示される
 - [ ] Supabase の `todos` テーブルに行が追加されている
-- [ ] `http://127.0.0.1:54323` の Table Editor を開くと `todos` テーブルに行が追加されている
+- [ ] Supabase ダッシュボードの Table Editor を開くと `todos` テーブルに行が追加されている
 
 ---
 
@@ -332,7 +305,7 @@ npm run build
 - [ ] 「買い物に行く」の削除ボタンをクリックする
 - [ ] 一覧から「買い物に行く」が消える
 - [ ] Supabase の `todos` テーブルからも行が削除されている
-- [ ] `http://127.0.0.1:54323` の Table Editor を開くと `todos` テーブルから行が削除されている
+- [ ] Supabase ダッシュボードの Table Editor を開くと `todos` テーブルから行が削除されている
 
 ---
 

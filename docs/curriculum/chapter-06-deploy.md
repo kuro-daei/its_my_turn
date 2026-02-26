@@ -107,57 +107,13 @@ vercel --version
 
 > **注意:** `command not found` と表示された場合は、ターミナルを再起動してから再度確認してください。それでも解決しない場合はメンターに声をかけてください。
 
-### 1-3. GitHub にリポジトリを作成する
+### 1-3. GitHub のリポジトリと Vercel を連携する
 
-Vercel は GitHub と連携して動作します。まず GitHub にリポジトリ（コードの保管場所）を作成します。
-
-> **リポジトリとは？** コードとその変更履歴をまとめて保管する「コードの倉庫」です。GitHub はこの倉庫をインターネット上で管理してくれるサービスです。
-
-**GitHub リポジトリがまだない場合:**
-
-1. ブラウザで `https://github.com/new` を開く
-2. 「Repository name」に `todos`（またはプロジェクト名）を入力する
-3. Public または Private を選択する（どちらでも動作します）
-4. 「Create repository」をクリックする
-5. 表示された URL（`https://github.com/あなたのユーザー名/todos.git`）をメモしておく
-
-### 1-4. GitHub にコードを push する
-
-Claude Code を起動して、以下のように依頼します。
-
-```bash
-# bash
-claude
-```
-
-```plaintext
-# claude
-GitHub にコードを push する準備をして。リモートリポジトリの URL は `https://github.com/あなたのユーザー名/todos.git`
-```
-
-または、Claude Code を使わずターミナルで直接実行することもできます。
-
-```bash
-# bash
-# リモートリポジトリを登録する
-git remote add origin https://github.com/あなたのユーザー名/todos.git
-
-# 現在のブランチを確認する
-git branch --show-current
-
-# main ブランチに push する（初回のみ -u オプションが必要）
-git push -u origin main
-```
-
-> **push とは？** ローカル（自分のパソコン）にあるコードを、GitHub のサーバー（リモート）に送信することです。手元で書いた原稿を出版社に送るイメージです。
->
-> **注意:** `feature/vercel-deploy` ブランチで作業している場合は、先に main にマージしてから push するか、Vercel にはブランチを直接連携することもできます。メンターに確認してください。
-
-### 1-5. Vercel と GitHub を連携する
+Chapter 1 で作成した GitHub リポジトリと Vercel を連携します。
 
 1. Vercel ダッシュボード（`https://vercel.com/dashboard`）を開く
 2. 「Add New Project」をクリックする
-3. 「Import Git Repository」のセクションに、先ほど作成した GitHub リポジトリが表示されているはずです
+3. 「Import Git Repository」のセクションに、Chapter 1 で作成した GitHub リポジトリが表示されているはずです
 4. 「Import」をクリックする
 5. プロジェクトの設定画面が表示される。現時点では「Deploy」ボタンは押さず、次のステップに進む
 
@@ -179,9 +135,6 @@ Vercel にデプロイする準備をして。環境変数に何を設定すれ�
 
 - [ ] Vercel アカウントが作成できている
 - [ ] `vercel --version` でバージョン番号が表示される
-- [ ] GitHub にリポジトリが作成されている
-- [ ] `git remote -v` でリモートリポジトリの URL が表示される
-- [ ] `git push` が成功している
 - [ ] Vercel ダッシュボードで GitHub リポジトリの Import 画面が開いている
 
 ---
