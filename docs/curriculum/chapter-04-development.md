@@ -40,7 +40,6 @@
 
 - [ ] Chapter 0〜3 が完了している
 - [ ] Supabase の `todos` テーブルが作成済みである
-- [ ] Google アカウントを持っている
 
 確認できたら、Step 1 に進みます。
 
@@ -88,7 +87,7 @@ npx skills add https://github.com/sickn33/antigravity-awesome-skills \
 |---|---|---|
 | `vercel-react-best-practices` | 約 152,000 | Vercel 公式の React / Next.js パフォーマンス最適化ガイドライン |
 | `web-design-guidelines` | 約 115,000 | Vercel 公式のウェブデザインガイドライン。美しく使いやすい UI の原則 |
-| `nextjs-supabase-auth` | — | Next.js + Supabase の認証実装ベストプラクティス。Chapter 5 の Google ログイン実装で自動的に活用される |
+| `nextjs-supabase-auth` | — | Next.js + Supabase の認証実装ベストプラクティス。Chapter 5 のログイン実装で自動的に活用される |
 
 #### 確認ポイント
 

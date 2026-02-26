@@ -1,4 +1,4 @@
-# Chapter 3: Supabase と Google OAuth の初期設定
+# Chapter 3: Supabase の初期設定
 
 **所要時間**: 約 45 分
 **ゴール**: Supabase MCP サーバーが設定済み + クラウドデータベースに `todos` テーブルが作成された状態にする
@@ -16,7 +16,6 @@
 - MCP サーバーをインストールし、ブラウザ認証で Claude Code と Supabase を接続する
 - Claude Code + MCP でクラウドの `todos` テーブルを直接作成する
 - `.env.local` にクラウド接続情報を設定する
-- Google Cloud Console と Supabase で Google OAuth を設定する
 - コミットする
 
 全部終わったら、クラウドの Supabase にテーブルが作成され、次のチャプターでアプリと接続できる準備が整います。
@@ -225,101 +224,7 @@ cat .gitignore | grep env
 
 ---
 
-## Step 5: Google OAuth のセットアップ（20分）
-
-Google ログインの実装は Chapter 5 で行いますが、Google Cloud Console と Supabase の設定は**事前に完了させておく**ことで、Chapter 5 での作業がスムーズになります。
-
----
-
-### 5-1. Google Cloud Console で OAuth クライアント ID を取得
-
-Supabase に Google ログインを設定するには、まず Google 側で「このアプリを Google が認識するための ID」を発行してもらう必要があります。これを Google Cloud Console という管理画面で行います。
-
-> **OAuth クライアント ID って何？** Google が「このアプリは信頼できる」と認識するための身分証明書のようなものです。アプリが Google のログイン機能を使う許可を申請するために必要です。
-
-#### 手順（ブラウザで操作）
-
-1. [Google Cloud Console](https://console.cloud.google.com/) を開く
-2. 画面上部のプロジェクト選択から「新しいプロジェクト」を作成する（名前は何でもOK）
-3. 左メニューの「APIとサービス」→「OAuth 同意画面」を選択する
-4. User Type は「外部」を選択して「作成」
-5. アプリ名・サポートメール・デベロッパーの連絡先メールを入力して「保存して次へ」（残りはスキップしてOK）
-6. OAuth 同意画面の設定が完了すると、メイン画面に「Auth クライアント作成」が表示されるのでクリックする
-7. アプリケーションの種類は「ウェブアプリケーション」を選択する
-8. 「承認済みの JavaScript オリジン」に以下を追加する
-
-```plaintext
-http://localhost:3000
-```
-
-9. 「承認済みのリダイレクト URI」に以下を追加する
-
-   **クラウド用**（Supabase ダッシュボード → Authentication → Providers → Google の「Callback URL」欄に表示されている URL）:
-
-   ```plaintext
-   https://xxxxx.supabase.co/auth/v1/callback
-   ```
-
-   > クラウド用の正確な URL は、Supabase ダッシュボード（`https://supabase.com/dashboard`）→ プロジェクトを選択 → 「Authentication」→「Providers」→「Google」を展開すると「Callback URL（for OAuth）」欄に表示されています。
-
-10. 「作成」ボタンをクリックする
-11. 「クライアント ID」と「クライアントシークレット」が表示されるので、両方をコピーしてどこかにメモしておく（次の手順で使います）
-
----
-
-### 5-2. Supabase（クラウド）で Google Provider を有効化
-
-Google ログインを使えるようにするには、Supabase 側でも設定が必要です。ブラウザで Supabase ダッシュボードを操作します。
-
-#### 手順（ブラウザで操作）
-
-1. Supabase ダッシュボード（`https://supabase.com/dashboard`）を開く
-2. 左サイドバーの「Authentication」をクリック
-3. 「Providers」タブを選択
-4. 「Google」を見つけてクリックして展開する
-5. 「Enable Sign in with Google」のトグルをオンにする
-6. 5-1 でメモした「クライアント ID」と「クライアントシークレット」を入力する
-7. 「Save」ボタンをクリックして保存する
-
-> **Callback URL（for OAuth）** という欄も画面に表示されていますが、これは表示のみで編集できません。5-1 の手順 9 でここに表示されている URL を Google Cloud Console に貼り付けました。
-
-8. 続けて、左サイドバーの「URL Configuration」をクリックする
-9. 「Redirect URLs」の欄に以下を追加して「Save」をクリックする
-
-```plaintext
-http://localhost:3000/**
-```
-
-> **Redirect URL って何？** Google 認証が完了した後、Supabase がアプリのどの URL に戻ってよいかを許可リストで管理しています。`/**` は「このドメインの全ページを許可する」という意味です。ローカル開発中は `localhost:3000` を、本番公開後は本番の URL も追加します。
-
----
-
-### 5-3. `.env.local` に `NEXT_PUBLIC_SITE_URL` を確認する
-
-Step 4 で作成した `.env.local` に `NEXT_PUBLIC_SITE_URL=http://localhost:3000` が含まれているか確認します。
-
-```bash
-cat .env.local
-```
-
-`NEXT_PUBLIC_SITE_URL=http://localhost:3000` の行があれば OK です。
-
-> **なぜ `NEXT_PUBLIC_SITE_URL` が必要？** Google OAuth の認証が完了した後、ユーザーをアプリのどの URL に戻すかを指定するために使います。ローカル開発では `http://localhost:3000`、本番環境では本番の URL を設定します（Chapter 6 で変更します）。
-
-既に含まれている場合は次の手順に進んでください。含まれていない場合は Claude Code に追加を依頼してください。
-
----
-
-#### 確認ポイント（Step 5）
-
-- [ ] Google Cloud Console で OAuth クライアント ID が作成されている
-- [ ] リダイレクト URI にクラウド用の 1 件が追加されている
-- [ ] Supabase ダッシュボードで Google Provider が有効になっている
-- [ ] `.env.local` に `NEXT_PUBLIC_SITE_URL` がある
-
----
-
-## Step 6: コミット（5分）
+## Step 5: コミット（5分）
 
 確認が取れたら、作業内容をコミットします。
 
@@ -362,8 +267,6 @@ Claude Code を終了します。
 - [ ] クラウドの Table Editor に `todos` テーブルが存在する
 - [ ] `.env.local` の `NEXT_PUBLIC_SUPABASE_URL` が `https://xxxxxxxxxx.supabase.co`（クラウド）に設定されている
 - [ ] `.env.local` に `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` が設定されている
-- [ ] Google Cloud Console で OAuth クライアント ID が作成されている
-- [ ] Supabase ダッシュボードで Google Provider が有効になっている
 
 ---
 
