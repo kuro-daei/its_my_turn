@@ -2,7 +2,7 @@
 description: docs/curriculum/ のチャプターを横断的にレビューする。chief が整合性を確認し、技術的な事実確認は tech に委ねる
 ---
 
-# /review コマンド
+# /doc-review コマンド
 
 `docs/curriculum/` 以下のカリキュラムドキュメントを横断的にレビューします。
 
