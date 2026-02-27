@@ -59,7 +59,7 @@ Git の基本的な構成：
 # output
 main ブランチ（本体・常に安全な状態）
   │
-  ├── feat_google_auth（作業用コピー A）
+  ├── feat_user_auth（作業用コピー A）
   │
   └── fix_issue_3（作業用コピー B）
 ```
@@ -78,7 +78,7 @@ main ブランチ（本体・常に安全な状態）
 
 ```text
 # output
-feat: Google ログインを実装する (#1)
+feat: ログイン機能を実装する (#1)
  ↑     ↑                        ↑
 種類   何をしたか              関連 Issue 番号
 ```
@@ -144,13 +144,13 @@ Closes #1
 
 GitHub Issues は、「やること・バグ・気になること」を記録する仕組みです。
 
-> **たとえ話:** 仕事で使う付箋や、タスク管理ツールの「チケット」をイメージしてください。「ボタンの色が地味」「ログイン画面でエラーが出た」といった小さな気づきから、「Google ログインを実装する」といった大きなタスクまで、すべて Issue に残しておきます。Issue には番号が自動でつくため、コミットや PR と紐付けて追跡できます。
+> **たとえ話:** 仕事で使う付箋や、タスク管理ツールの「チケット」をイメージしてください。「ボタンの色が地味」「ログイン画面でエラーが出た」といった小さな気づきから、「ログイン機能を実装する」といった大きなタスクまで、すべて Issue に残しておきます。Issue には番号が自動でつくため、コミットや PR と紐付けて追跡できます。
 
 ### Issue の構成要素
 
 | 要素 | 説明 | 例 |
 |------|------|----|
-| **タイトル** | 何をするか一言で | `feat: Google ログインを実装する` |
+| **タイトル** | 何をするか一言で | `feat: ログイン機能を実装する` |
 | **本文** | 詳細・背景・完了条件など | 実装の目的や手順 |
 | **ラベル** | 種類の分類 | `bug`, `enhancement`, `documentation` |
 | **担当者（Assignee）** | 誰がやるか | 一人に絞るのがベスト |
@@ -164,7 +164,7 @@ Claude Code に指示するだけで Issue を作れます。
 
 ```plaintext
 # claude
-GitHub に Issue を立てて。タイトルは「feat: Google ログインを実装する」、内容は「Supabase Auth で Google ログインを実装する」にして
+GitHub に Issue を立てて。タイトルは「feat: ログイン機能を実装する」、内容は「Supabase Auth でメール・パスワード認証を実装する」にして
 ```
 
 Claude Code が自動で実行するコマンド:
@@ -172,8 +172,8 @@ Claude Code が自動で実行するコマンド:
 ```bash
 # bash
 gh issue create \
-  --title "feat: Google ログインを実装する" \
-  --body "Supabase Auth で Google ログインを実装する"
+  --title "feat: ログイン機能を実装する" \
+  --body "Supabase Auth でメール・パスワード認証を実装する"
 ```
 
 > **`gh` コマンドとは？** GitHub 公式のコマンドラインツール（GitHub CLI）です。Issue や PR をターミナルから操作できます。Claude Code が自動で使うため、自分で打つ必要はほとんどありません。
@@ -186,7 +186,7 @@ gh issue create \
 
 ```text
 # output
-feat: Google ログインを実装する (#1)
+feat: ログイン機能を実装する (#1)
                                  ↑
                          Issue #1 と紐付く
 ```
@@ -247,7 +247,7 @@ gh issue view 1
 
 | パターン | 意味 | 例 |
 |---------|------|----|
-| `feat_機能名` | 新機能の追加 | `feat_google_auth` |
+| `feat_機能名` | 新機能の追加 | `feat_user_auth` |
 | `fix_issue_番号` | Issue 対応の修正 | `fix_issue_3` |
 | `docs_説明` | ドキュメント修正 | `docs_readme` |
 
@@ -275,7 +275,7 @@ Claude Code が `claude -w 名前` で起動すると、この命名規則に沿
 プロジェクトフォルダ（main ブランチ）
   │
   └── .claude/worktrees/
-        ├── feat_google_auth/（feat_google_auth ブランチ）
+        ├── feat_user_auth/（feat_user_auth ブランチ）
         └── fix_issue_3/（fix_issue_3 ブランチ）
 ```
 
@@ -290,7 +290,7 @@ Claude Code が `claude -w 名前` で起動すると、この命名規則に沿
 ```bash
 # bash
 # このコマンド 1 行で「新しい机の用意」と「その机での作業開始」が完了する
-claude -w feat_google_auth
+claude -w feat_user_auth
 ```
 
 > **Claude Code と Worktree の相性がいい理由:** AI エージェントは「今どのブランチにいるか」を常に把握して作業します。Worktree で独立したフォルダを用意することで、複数の修正タスクを並行させても混線しません。「この Claude Code セッションはこの机専用」が明確になります。
@@ -305,7 +305,7 @@ Worktree を直接操作する場面は少ないですが、トラブルシュ�
 git worktree list
 
 # 削除する（PR マージ後に実行）
-git worktree remove .claude/worktrees/feat_google_auth
+git worktree remove .claude/worktrees/feat_user_auth
 
 # 古い参照を整理する（定期メンテナンス）
 git worktree prune
@@ -320,10 +320,10 @@ PR をマージしたら、使い終わった Worktree を必ず片付けます�
 ```bash
 # bash
 # Step 1: Worktree フォルダを削除する
-git worktree remove .claude/worktrees/feat_google_auth
+git worktree remove .claude/worktrees/feat_user_auth
 
 # Step 2: ブランチも削除する
-git branch -d feat_google_auth
+git branch -d feat_user_auth
 
 # Step 3: 片付いたか確認する
 git worktree list
@@ -340,7 +340,7 @@ git worktree list
 
 **1. タスクがわかる名前をつける**
 
-`feat_google_auth`、`fix_issue_3` のように、「何のための作業か」が名前を見てわかるようにします。`temp` や `test` のような曖昧な名前は避けてください。
+`feat_user_auth`、`fix_issue_3` のように、「何のための作業か」が名前を見てわかるようにします。`temp` や `test` のような曖昧な名前は避けてください。
 
 **2. アクティブなタスクのみ作成する**
 
@@ -356,7 +356,7 @@ PR をマージしたその日のうちに `git worktree remove` → `git branch
 
 ### 注意点
 
-- **同じブランチを複数の Worktree で同時に使うことはできません。** `feat_google_auth` の Worktree が存在するとき、同じブランチ名で `claude -w feat_google_auth` を実行すると既存の Worktree が使われます（新規作成されません）。
+- **同じブランチを複数の Worktree で同時に使うことはできません。** `feat_user_auth` の Worktree が存在するとき、同じブランチ名で `claude -w feat_user_auth` を実行すると既存の Worktree が使われます（新規作成されません）。
 - **未コミットの変更があると `git worktree remove` が失敗します。** 「変更が残っているけど削除したい」場合は `--force` オプションで強制削除できますが、変更内容が消えるので注意してください。
 - **`.claude/worktrees/` フォルダは Claude Code が自動管理します。** 直接ファイルを触ったり手動で削除したりしないでください。
 
@@ -388,13 +388,13 @@ git worktree list
 ```bash
 # bash
 # ブランチを作成して移動する
-git checkout -b feat_google_auth
+git checkout -b feat_user_auth
 
 # 別のブランチに移動する
 git checkout main
 
 # ブランチを削除する（マージ済みのみ）
-git branch -d feat_google_auth
+git branch -d feat_user_auth
 ```
 
 ### コミット操作
@@ -405,7 +405,7 @@ git branch -d feat_google_auth
 git add .
 
 # コミットする
-git commit -m "feat: Google ログインを実装する (#1)"
+git commit -m "feat: ログイン機能を実装する (#1)"
 
 # コミットメッセージを修正する（push 前のみ）
 git commit --amend -m "feat: 正しいメッセージ (#1)"
@@ -416,7 +416,7 @@ git commit --amend -m "feat: 正しいメッセージ (#1)"
 ```bash
 # bash
 # リモートに push する
-git push -u origin feat_google_auth
+git push -u origin feat_user_auth
 
 # リモートから最新を取り込む
 git pull origin main
@@ -447,7 +447,7 @@ gh pr merge 2 --merge
 git worktree list
 
 # Worktree を削除する
-git worktree remove .claude/worktrees/feat_google_auth
+git worktree remove .claude/worktrees/feat_user_auth
 
 # 古い参照を整理する
 git worktree prune

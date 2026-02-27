@@ -636,6 +636,8 @@ git worktree remove .claude/worktrees/feat_email_auth
 git branch -d feat_email_auth
 ```
 
+> **`-d` オプションとは？** `delete`（削除）の略で、**マージ済みのブランチのみ**削除できる安全なオプションです。まだマージされていないブランチを削除しようとするとエラーになるため、誤って作業中のブランチを消してしまうリスクがありません。なお `--force`（または `-D`）を使えば強制削除できますが、未コミットの変更ごと消えてしまうため、マージ完了後に使うようにしてください。
+
 片付いたか確認します。
 
 ```bash
@@ -751,3 +753,9 @@ git branch -d fix_issue_[番号]
 Issue とワークツリーを使った修正サイクルが身につきました。
 
 次の **Chapter 6: Vercel デプロイ** では、このアプリをインターネット上に公開します。あなたが作った TODO アプリに、世界中からアクセスできる URL が割り当てられます。「自分の部屋で作った料理を、レストランでみんなに提供する」感覚を体験しましょう。
+
+---
+
+前のチャプターへ: [Chapter 4: Vibe Coding で TODO アプリを作る](./chapter-04-development.md)
+
+次のチャプターへ: [Chapter 6: Vercel デプロイ](./chapter-06-deploy.md)

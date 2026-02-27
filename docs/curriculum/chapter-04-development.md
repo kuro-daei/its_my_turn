@@ -1,7 +1,7 @@
-
 # Chapter 4: Vibe Coding で TODO アプリを作る
 
-**ゴール**: TODO アプリが一通り動く状態にする（UI + CRUD + Google ログイン）
+**所要時間**: 約 3 時間
+**ゴール**: TODO アプリが一通り動く状態にする（UI + CRUD）
 **学ぶ Claude Code 機能**: Plan Mode、プラグイン・スキル、マルチファイル生成、統合的な指示、タスク分解
 
 ---
@@ -12,7 +12,7 @@
 - Plan Mode を使って「作る前に設計する」習慣を身につける
 - 1 つの指示で Supabase に接続した TODO アプリの UI と CRUD をまとめて実装する
 
-全部終わったら、Google でログインした自分だけが操作できる TODO アプリが動く状態になります。
+全部終わったら、Supabase に接続した TODO アプリが動く状態になります。
 
 ---
 
@@ -28,7 +28,7 @@
 
 料理のたとえでいえば、「パスタが食べたい。トマトベースで」と言えば、シェフ（Claude Code）が献立を考え、材料を揃え、調理してくれる、そんな感覚です。細かいレシピを知らなくても、食べたいものを言葉にするだけでいい。
 
-このチャプターでは Vibe Coding をフルに活用して、TODO アプリを「UI の作成」から「データベース接続」「Google ログイン」まで一気に仕上げます。
+このチャプターでは Vibe Coding をフルに活用して、TODO アプリを「UI の作成」から「データベース接続」まで一気に仕上げます。
 
 間違えても大丈夫です。途中でわからなくなったら、すぐメンターに声をかけてください。
 
@@ -358,7 +358,7 @@ git status
 git add src/ package.json package-lock.json
 
 # コミット（Claude Code がメッセージを自動生成）
-git commit -m "feat: implement todo app with CRUD and Google authentication"
+git commit -m "feat: implement todo app with CRUD"
 ```
 
 > **Conventional Commits って何？** コミットメッセージの「書き方のルール」です。`feat:`（新機能）、`fix:`（バグ修正）、`docs:`（ドキュメント）など、変更の種類をプレフィックス（先頭の文字列）で表現します。

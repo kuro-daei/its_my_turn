@@ -306,7 +306,7 @@ rm -r myproject
 claude
 
 # Worktree を作って起動する
-claude -w feat_google_auth
+claude -w feat_user_auth
 
 # 前の作業を続ける
 claude --continue

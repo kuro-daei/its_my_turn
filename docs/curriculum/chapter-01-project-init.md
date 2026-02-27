@@ -277,7 +277,7 @@ git commit -m "docs: add CLAUDE.md for project context"
 
 コミットが完了したら、GitHub に反映させます。
 
-```plaintetxt
+```plaintext
 # claude
 プッシュして
 ```
@@ -409,6 +409,6 @@ Claude Code がプロジェクトのコンテキスト（文脈）を踏まえ�
 - **`/init` で CLAUDE.md 生成**: `/init` コマンドで Claude Code がプロジェクトを読み取り、CLAUDE.md を自動生成しました。引き継ぎメモが一瞬で完成しました
 - **動作確認**: ブラウザで `http://localhost:3000` にアクセスし、アプリが実際に動くことを確認しました
 
-次の Chapter 2 では、Supabase のデータベースを立ち上げて、作成した Next.js アプリから実際に接続できるようにします。「データを保存・取得できるアプリ」への第一歩です。
+次の Chapter 2 では、Claude Code をプロジェクトに合わせて整えます。CLAUDE.md にプロジェクトのルールを書き込み、プラグインを追加して機能を拡張し、専用エージェントを作る方法を学びます。「Claude Code を自分のプロジェクト仕様に育てる」ステップです。
 
-> **Chapter 3 に進む前に:** 開発サーバーを停止してください。ターミナルで `Ctrl + C` を押すと停止できます。
+> **Chapter 2 に進む前に:** 開発サーバーを停止してください。ターミナルで `Ctrl + C` を押すと停止できます。

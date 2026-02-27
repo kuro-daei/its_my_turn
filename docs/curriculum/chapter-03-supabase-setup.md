@@ -93,7 +93,9 @@ MCP サーバーがない場合、Claude Code が生成した SQL をコピー�
 claude mcp add supabase --transport http https://mcp.supabase.com/mcp
 ```
 
-これで Supabase の MCP サーバーが Claude Code に登録されます。この時点ではまだ認証は行われていません。
+> **`--transport http` とは？** 「HTTP という通信方式で接続する」という指定です。インターネット上のサービスと話すときに使う一般的な方法で、「どのルートで情報を届けるか」を指定しているイメージです。
+
+このコマンドを実行すると、ブラウザが自動的に開いて Supabase へのログイン画面が表示されます。これは Claude Code に「Supabase へのアクセス許可を与える」ための認証ステップです。画面に従ってログインすると、MCP サーバーの登録と認証がまとめて完了します。
 
 ---
 
