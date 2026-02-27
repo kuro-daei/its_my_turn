@@ -6,7 +6,7 @@
       "Bash(code .)",
       "WebFetch(domain:github.com)",
       "WebFetch(domain:code.claude.com)",
-      "WebSearch(**)"
+      "WebSearch"
     ]
   },
   "hooks": {
