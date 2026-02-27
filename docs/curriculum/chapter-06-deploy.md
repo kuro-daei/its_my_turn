@@ -357,10 +357,10 @@ TODO リストのスタイルを少し改善して、feature/style-tweak ブラ�
 | 0 | CLI インストール、初期設定 |
 | 1 | スキャフォールド、Git 操作 |
 | 2 | CLAUDE.md、エージェント設定、MCP サーバー |
-| 3 | DB 設計、SQL 生成 |
-| 4 | 統合指示、エージェント活用、タスク分解 |
+| 3 | DB 設計、SQL 生成（Supabase MCP） |
+| 4 | 統合指示、Plan Mode、タスク分解 |
 | 5 | Issue 管理、ワークツリー、PR レビュー |
-| 6 | CI/CD、本番設定 |
+| 6 | CI/CD、本番設定、デプロイ |
 
 **このカリキュラムで体験したこと:**
 
@@ -432,7 +432,7 @@ TODO リストのスタイルを少し改善して、feature/style-tweak ブラ�
 - デザインを変更してみる（Figma MCP サーバーを使って）
 - 別のプロジェクトで同じ手順を試してみる
 
-Claude Code は今後も継続的に機能が追加されています。公式ドキュメント（`https://docs.anthropic.com/claude/docs/claude-code`）を確認して、新しい機能を取り入れてみてください。
+Claude Code は今後も継続的に機能が追加されています。公式ドキュメント（`https://docs.anthropic.com/en/docs/claude-code/overview`）を確認して、新しい機能を取り入れてみてください。
 
 ---
 

@@ -251,16 +251,16 @@ Supabase のダッシュボードで操作する主な画面を整理します�
 
 このカリキュラムでは `todos` という名前のプロジェクトを 1 つ作ります。
 
-### API キー（anon key / service_role key）
+### API キー（publishable key / service_role key）
 
 アプリが Supabase に接続するために必要な「パスワード」のようなものです。2 種類あります。
 
 | キー | 用途 | 注意点 |
 |-----|------|-------|
-| **anon key** | ブラウザ（フロントエンド）からの読み取りに使う | ブラウザに公開される（RLS で保護する） |
+| **publishable key** | ブラウザ（フロントエンド）からの読み取りに使う | ブラウザに公開される（RLS で保護する） |
 | **service_role key** | サーバーサイドでのデータ操作に使う | **絶対に公開してはいけない** |
 
-> **anon key は「公開鍵」ではない:** anon key はブラウザから見えますが、それ自体でデータが盗まれるわけではありません。RLS（Row Level Security）が設定されていれば、anon key を使ってもアクセスできるのは「その認証ユーザーが許可されたデータのみ」です。ただし RLS が未設定の場合は全データにアクセスできてしまうため、テーブル作成時に必ず RLS を有効にしてください。
+> **publishable key は「公開鍵」ではない:** publishable key はブラウザから見えますが、それ自体でデータが盗まれるわけではありません。RLS（Row Level Security）が設定されていれば、publishable key を使ってもアクセスできるのは「その認証ユーザーが許可されたデータのみ」です。ただし RLS が未設定の場合は全データにアクセスできてしまうため、テーブル作成時に必ず RLS を有効にしてください。なお、Supabase はかつてこのキーを anon key と呼んでいましたが、現在は publishable key に変更されました。
 
 > **service_role key は絶対に公開してはいけない:** このキーは RLS を無視して全データにアクセスできます。`.env.local` に保存して、絶対にブラウザには公開しないでください。Next.js の環境変数に `NEXT_PUBLIC_` をつけると自動でブラウザに公開されてしまうため、service_role key の変数名には絶対に `NEXT_PUBLIC_` をつけないでください。
 
@@ -285,7 +285,7 @@ https://xxxxxxxxxx.supabase.co
 # output
 # .env.local の中身（イメージ）
 NEXT_PUBLIC_SUPABASE_URL=https://xxxxxxxxxx.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
 ```
 
 このファイルは Git で管理されません（`.gitignore` に含まれている）。GitHub などに公開されることなく、自分のパソコンにのみ存在します。

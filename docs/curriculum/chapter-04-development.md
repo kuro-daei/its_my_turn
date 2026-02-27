@@ -1,4 +1,3 @@
-
 # Chapter 4: Vibe Coding で TODO アプリを作る
 
 **所要時間**: 約 3 時間
@@ -359,7 +358,7 @@ git status
 git add src/ package.json package-lock.json
 
 # コミット（Claude Code がメッセージを自動生成）
-git commit -m "feat: implement todo app with CRUD and Google authentication"
+git commit -m "feat: implement todo app with CRUD"
 ```
 
 > **Conventional Commits って何？** コミットメッセージの「書き方のルール」です。`feat:`（新機能）、`fix:`（バグ修正）、`docs:`（ドキュメント）など、変更の種類をプレフィックス（先頭の文字列）で表現します。

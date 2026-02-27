@@ -171,5 +171,5 @@ Supabase Auth はこれらを**ほとんど自動でやってくれます。**
 ## 関連資料
 
 - [Chapter 3: Supabase 初期設定](chapter-03-supabase-setup.md) — Supabase プロジェクトのセットアップとデータベース作成
-- [Chapter 5: 認証機能を実装する](chapter-05-auth.md) — メール/パスワード認証を実際に組み込むハンズオン
+- [Chapter 5: Issue とワークツリー](chapter-05-git-workflow.md) — Issue を起点にした開発フローとワークツリーの活用方法
 - [補足 4: Supabase 仕様ガイド](supplement-04-supabase.md) — Supabase のデータベースと認証の全体像

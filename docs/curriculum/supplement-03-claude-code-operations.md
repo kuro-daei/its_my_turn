@@ -182,16 +182,16 @@ Claude Code は長い会話を続けていると、「コンテキスト（一�
 claude -w
 
 # 名前をつけて起動（推奨）
-claude -w feat_google_auth
+claude -w feat_user_auth
 ```
 
-> **同じ名前で起動した場合:** すでに `feat_google_auth` という名前の Worktree が存在している場合、同じ名前で `claude -w feat_google_auth` を実行すると**新しく作成されず、既存の Worktree が使われます**。これは「途中の作業机に戻る」という操作になります。
+> **同じ名前で起動した場合:** すでに `feat_user_auth` という名前の Worktree が存在している場合、同じ名前で `claude -w feat_user_auth` を実行すると**新しく作成されず、既存の Worktree が使われます**。これは「途中の作業机に戻る」という操作になります。
 
 ### Worktree の名前のつけ方
 
 | パターン | 意味 | 例 |
 |---------|------|----|
-| `feat_機能名` | 新機能の追加 | `feat_google_auth` |
+| `feat_機能名` | 新機能の追加 | `feat_user_auth` |
 | `fix_issue_番号` | Issue 対応の修正 | `fix_issue_3` |
 | `docs_説明` | ドキュメント修正 | `docs_readme` |
 
@@ -209,7 +209,7 @@ claude -w feat_google_auth
 claude
 
 # Worktree（別の机）を作って起動
-claude -w feat_google_auth
+claude -w feat_user_auth
 
 # 直前の作業を再開
 claude --continue
