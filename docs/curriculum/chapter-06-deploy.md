@@ -147,24 +147,6 @@ vercel env add NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY production
 
 > **自分で設定する場合:** Claude Code を使わず手動で実行することもできます。コマンドを実行するたびに、対応する値（`https://...` や `eyJ...` の長い文字列）を貼り付けて Enter を押してください。
 
-### 2-2-5. ローカルで動作確認する
-
-環境変数を設定したら、本番デプロイの前にローカル環境で最終確認します。Claude Code に以下を入力してください。
-
-```plaintext
-# claude
-npm run dev で起動して動作を確認して
-```
-
-ブラウザで `http://localhost:3000` を開き、以下を確認します。
-
-- [ ] ログインできる
-- [ ] TODO を追加・表示・完了切り替え・削除できる
-
-問題がなければ次のステップに進みます。エラーが出た場合は、Claude Code に状況を伝えて修正を依頼してください。
-
----
-
 ### 2-3. ビルドを確認してデプロイする
 
 環境変数の設定が完了したら、ビルドの確認とデプロイを Claude Code に依頼します。
@@ -311,6 +293,14 @@ Chapter 5 と同じように `claude -w` でワークツリーを立ち上げ、
 ```bash
 # bash
 claude -w fix_page_title
+```
+
+別のターミナルを開いて、ワークツリーに移動し `.env.local` のショートカットを作成します。ワークツリーでアプリを動かして動作確認するために必要です。
+
+```bash
+# bash
+cd .claude/worktrees/fix_page_title
+ln -s ../../../.env.local .env.local
 ```
 
 ワークツリーが起動したら、Issue の修正を依頼します。
