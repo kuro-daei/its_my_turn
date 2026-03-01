@@ -118,18 +118,38 @@ Chapter 1 の `/init` コマンドにより、プロジェクトルートには�
 
 > **スマホにアプリを追加するイメージです。** スマホを買ったばかりのときは基本的な機能しか使えませんが、アプリを追加するほどできることが増えます。プラグインも同じで、インストールするだけで Claude Code の能力が広がります。
 
-### 3つのプラグインをまとめてインストールする
+### プラグインの「範囲」を使い分ける
+
+プラグインをインストールするとき、`-s`（スコープ）オプションで「どの範囲で有効にするか」を指定できます。
+
+| オプション | 範囲 | 使い所 |
+|---|---|---|
+| `-s user` | 自分のすべてのプロジェクトで有効 | どのプロジェクトでも使いたい汎用プラグイン |
+| `-s local` | このプロジェクトのみ有効 | このプロジェクト専用のプラグイン |
+
+Git 操作や CLAUDE.md の管理など汎用的なものは `-s user`、Vercel や Supabase など特定のサービスと連携するものは `-s local` でインストールします。
+
+### 10 個のプラグインをインストールする
 
 プラグインのインストールはターミナルで行います。Claude Code を終了した状態で、以下のコマンドを順番に実行してください。
 
 ```bash
 # bash
-claude plugin install claude-md-management
-claude plugin install commit-commands
-claude plugin install context7
+claude plugin install -s user claude-md-management@claude-plugins-official
+claude plugin install -s user code-review@claude-plugins-official
+claude plugin install -s user commit-commands@claude-plugins-official
+claude plugin install -s user context7@claude-plugins-official
+claude plugin install -s user feature-dev@claude-plugins-official
+claude plugin install -s user security-guidance@claude-plugins-official
+claude plugin install -s user superpowers@claude-plugins-official
+claude plugin install -s local typescript-lsp@claude-plugins-official
+claude plugin install -s local vercel@claude-plugins-official
+claude plugin install -s local supabase@claude-plugins-official
 ```
 
-インストールが完了したら、ターミナルで以下を実行して 3 つとも表示されることを確認しましょう。
+> **`@claude-plugins-official` とは?** Anthropic が公式に提供するプラグインのソースです。このソースからインストールすることで、品質と安全性が保証されたプラグインを使えます。
+
+インストールが完了したら、ターミナルで以下を実行して 10 個すべて表示されることを確認しましょう。
 
 ```bash
 # bash
@@ -137,6 +157,23 @@ claude plugin list
 ```
 
 ### インストールしたプラグインの紹介
+
+**一覧:**
+
+| プラグイン | スコープ | 概要 |
+|---|---|---|
+| `claude-md-management` | ユーザー | CLAUDE.md の自動改善・品質チェック |
+| `code-review` | ユーザー | コードレビューの自動化 |
+| `commit-commands` | ユーザー | コミット・PR 作成の自動化 |
+| `context7` | ユーザー | 1,000 以上のライブラリの最新ドキュメントを自動参照 |
+| `feature-dev` | ユーザー | 機能開発のワークフローを体系化 |
+| `security-guidance` | ユーザー | セキュリティ上の問題を指摘・ガイド |
+| `superpowers` | ユーザー | TDD・計画立案・コードレビューの一連フローを自動化 |
+| `typescript-lsp` | プロジェクト | TypeScript の型チェック・コード補完を強化 |
+| `vercel` | プロジェクト | Vercel のデプロイ・設定を Claude Code から操作 |
+| `supabase` | プロジェクト | Supabase のテーブル・認証を Claude Code から操作 |
+
+主要なプラグインを詳しく紹介します。
 
 #### **claude-md-management** — CLAUDE.md の自動改善
 
@@ -177,7 +214,7 @@ claude plugin list
 
 > **ライブラリとは?** プログラムを作るときに使える「部品集」です。Next.js や React などが代表的なライブラリです。
 
-- 1000 以上のライブラリの最新マニュアルを瞬時に参照できます
+- 1,000 以上のライブラリの最新マニュアルを瞬時に参照できます
 - Claude Code が古い情報で答えるのを防ぎます
 
 インストール後は、Claude Code に普通に質問するだけで自動的に最新ドキュメントを参照します。
@@ -189,10 +226,25 @@ Next.js の App Router について教えてください
 
 > **体験ポイント:** context7 なしで同じ質問をしたときと比べてみましょう。最新の公式ドキュメントをもとに回答するようになり、情報の正確さが上がります。
 
+#### **superpowers** — 正しい手順で開発を進めるルールブック
+
+**TDD（テスト駆動開発）を Claude Code に強制し、計画立案 → 実装 → コードレビューの一連フローを自動化するプラグインです。**
+
+> **TDD（テスト駆動開発）とは?** 「先にテストを書いてから、そのテストが通るようにコードを書く」という開発スタイルです。手順を守ることで、品質の高いコードが生まれやすくなります。
+>
+> **たとえ話:** 料理のレシピ本のようなものです。「まず材料を揃えて、次に下ごしらえをして、最後に調理する」という正しい手順を強制することで、出来上がりの品質が安定します。superpowers は Claude Code が「なんとなく実装を始めてしまう」のを防ぎ、計画 → 実装 → レビューの順番で作業を進めさせます。
+
+インストール後に使えるようになるコマンドの例:
+
+```plaintext
+# claude
+/superpowers:test-driven-development
+```
+
 ### Step 2 の確認ポイント
 
-- [ ] 3 つのプラグインがインストールされている（ターミナルで `claude plugin list` を実行して確認）
-- [ ] `/commit-commands:commit` コマンドが認識される（Claude Code 起動後にプロンプトで `/commit-commands:commit` と入力して補完が出るか確認）
+- [ ] `claude plugin list` で 10 個のプラグインが表示される
+- [ ] `/commit-commands:commit` コマンドが認識される（Claude Code 起動後に入力して補完が出るか確認）
 
 ---
 
@@ -305,14 +357,12 @@ Claude Code の 基本的な操作方法を確認しましょう。
 ```bash
 # bash
 claude --continue
+
+# または
+claude -c
 ```
 
 作業の途中で一度終了して再開するときは `--continue` を、新しいタスクに切り替えるときはオプションなしの `claude` を使いましょう。
-
-```bash
-# bash
-claude -c
-```
 
 `--continue` をつけると、直前のセッションの会話内容を引き継いだ状態でスタートします。ただし、意図的に新しい文脈でゼロから始めたいときは `--continue` なしで `claude` だけで起動してください。
 
@@ -433,6 +483,8 @@ Claude Code を長時間使い続けると、回答の質が徐々に落ちて�
 
 Windows の WSL（Windows Subsystem for Linux）環境では、ターミナルの設定によって `Shift+Enter` が改行として認識されないことがあります。そのときは **行末に `\`（バックスラッシュ）を入力してから `Enter` を押す**方法が使えます。すべての環境で動作するため、覚えておくと便利です。
 
+※バックスラッシュは日本語キーボードでは「￥」です。
+
 ```plaintext
 このプロジェクトについて以下を教えてください: \
 - どんなアプリか \
@@ -490,7 +542,7 @@ push して
 
 - [ ] **CLAUDE.md（ユーザースコープ）**: `~/.claude/CLAUDE.md` が作成されており、自分の共通ルールが記載されている
 - [ ] **CLAUDE.md（プロジェクトスコープ）**: プロジェクトルートの `CLAUDE.md` にプロジェクト概要・Git ルールが記載されている
-- [ ] **プラグイン**: 3 つのプラグイン（claude-md-management・commit-commands・context7）がインストールされている
+- [ ] **プラグイン**: 10 個のプラグインがインストールされている（`claude plugin list` で確認）
 - [ ] **エージェント**: `coder.md` が `.claude/agents/` に配置されており、呼び出せる
 - [ ] **基本操作**: 履歴呼び出し・`Ctrl+U`・`!` コマンド・`@` ファイル指定が使える
 - [ ] **コミット & プッシュ**: 変更が GitHub に反映されている
@@ -520,7 +572,7 @@ push して
 このチャプターでは、Claude Code を「使えるツール」から「プロジェクトに合わせて動く環境」に整えました。
 
 - **CLAUDE.md（2 種類）**: `~/.claude/CLAUDE.md` に自分の共通ルールを、プロジェクトルートの `CLAUDE.md` にチーム共通のプロジェクトルールを書くことで、毎回同じことを説明しなくて済むようになりました
-- **プラグイン**（claude-md-management・commit-commands・context7）: Claude Code に機能を追加し、CLAUDE.md の自動改善・Git 操作の自動化・最新ドキュメントの参照ができるようになりました
+- **プラグイン**（10 個）: ユーザースコープに汎用プラグイン 7 個、プロジェクトスコープに専用プラグイン 3 個をインストールしました。CLAUDE.md の自動改善・コードレビュー・Git 操作・最新ドキュメント参照などが Claude Code から直接できるようになりました
 - **エージェント**（coder）: プロジェクト専用のルールを持つ担当者を `.claude/agents/` に定義することで、役割を意識した一貫性のある作業を Claude Code にさせられるようになりました
 - **基本操作**: 履歴の呼び出し（↑↓）、入力クリア（`Ctrl+U`）、`!` でのコマンド実行、`@` でのファイル指定など、日常的に使うショートカットを覚えました。また、Context Rot に対処する `/clear` と `/compact` を使い分けられるようになりました
 - **コミット & プッシュ**: Claude Code に日本語で指示するだけで、Git 操作が完了することを体験しました
