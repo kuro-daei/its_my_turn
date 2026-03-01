@@ -1,7 +1,7 @@
 # Chapter 5: Issue とワークツリー — 修正・改善を習慣にする
 
-**所要時間**: 約 1 時間 20 分
-**ゴール**: ワークツリーでメール/パスワード認証を安全に実装し、PR を出してマージするサイクルを体験する
+**所要時間**: 約 1 時間 30 分
+**ゴール**: ワークツリーで TODO に締め切り日機能を安全に追加し、PR を出してマージするサイクルを体験する
 **学ぶ Claude Code 機能**: `gh issue create`、`claude -w`（ワークツリー起動）、PR 作成・マージ
 
 ---
@@ -23,16 +23,15 @@
 >
 > **ワークツリーって何？** 「別の机を用意して、そこだけで作業する」仕組みです。`claude -w` というオプションをつけて Claude Code を起動すると、新しい机（ワークツリー）が自動で用意され、その机の上で Claude Code が動き始めます。本体（main ブランチ）の机には一切触れず、完成したら本体に取り込みます。
 
-**6 つのステップの流れ:**
+**5 つのステップの流れ:**
 
 ```text
 # output
 Step 1: Claude Code で Issue を立てる                    （15分）
 Step 2: ワークツリーを作って作業場所を分離する             （15分）
 Step 3: Claude Code に計画を立てさせる                   （5分）
-Step 4: @supabase/ssr のインストールと認証フロー実装       （20分）
-Step 5: RLS の更新と user_id の保存                     （10分）
-Step 6: PR を作ってレビューしてマージする                 （30分）
+Step 4: 締め切り日の実装                                （25分）
+Step 5: PR を作ってレビューしてマージする                 （30分）
 ```
 
 間違えても大丈夫です。途中でわからなくなったらすぐメンターに声をかけてください。
@@ -49,14 +48,14 @@ Step 6: PR を作ってレビューしてマージする                 （30�
 
 ### Claude Code への指示
 
-Claude Code のチャット画面に、自分が直したいことを入力してください。以下はその例です。
+Claude Code のチャット画面に、自分が追加したいことを入力してください。以下はその例です。
 
 ```plaintext
 # claude
-GitHub に Issue を立てて。タイトルは「メール/パスワードでログインできるようにする」、内容は「メールアドレスとパスワードでサインアップ・ログインできるようにする。ログインしていない状態でアプリを開いたときは、ログイン画面に移動するようにする。」にして
+GitHub に Issue を立てて。タイトルは「TODO に締め切り日をつけられるようにする」、内容は「各 TODO に締め切り日（日付）を設定・表示できるようにする。締め切りが過ぎた TODO は色が変わると嬉しい。」にして
 ```
 
-今回はメール/パスワード認証の実装を Issue として立てます。
+今回は締め切り日機能の追加を Issue として立てます。
 
 Claude Code は以下のようなコマンドを自動で実行します。
 
@@ -125,10 +124,10 @@ Claude Code を起動します。
 
 ```bash
 # bash
-claude -w feat_email_auth
+claude -w feat_due_date
 ```
 
-> **`-w` オプションとは？** `--worktree` の略です。`claude -w feat_email_auth` と実行すると、`.claude/worktrees/feat_email_auth/` というフォルダが自動で作成され、その中で Claude Code が起動します。名前（`feat_email_auth` の部分）は自分でわかりやすい名前をつけてください。
+> **`-w` オプションとは？** `--worktree` の略です。`claude -w feat_due_date` と実行すると、`.claude/worktrees/feat_due_date/` というフォルダが自動で作成され、その中で Claude Code が起動します。名前（`feat_due_date` の部分）は自分でわかりやすい名前をつけてください。
 
 Claude Code が起動したら、現在どの作業場所にいるかを確認しましょう。
 
@@ -141,10 +140,10 @@ Claude Code が起動したら、現在どの作業場所にいるかを確認�
 
 ```text
 # output
-worktree-feat_email_auth
+worktree-feat_due_date
 ```
 
-> **名前なしで起動した場合:** `claude -w` とだけ入力すると、ランダムな名前のワークツリーが自動で作られます。名前を指定したほうが後から何のための作業場所かわかりやすいため、`claude -w feat_email_auth` のように名前をつけることをおすすめします。
+> **名前なしで起動した場合:** `claude -w` とだけ入力すると、ランダムな名前のワークツリーが自動で作られます。名前を指定したほうが後から何のための作業場所かわかりやすいため、`claude -w feat_due_date` のように名前をつけることをおすすめします。
 
 ### ワークツリーの確認
 
@@ -159,19 +158,56 @@ Claudeで以下を実行してください。
 
 ```text
 # output
-/home/yourname/myproject                                    abc1234 [main]
-/home/yourname/myproject/.claude/worktrees/feat_email_auth     def5678 [feat_email_auth]
+/home/yourname/myproject                                 abc1234 [main]
+/home/yourname/myproject/.claude/worktrees/feat_due_date    def5678 [feat_due_date]
 ```
 
-> **2 つの机が並んでいる:** main（元の机）と feat_email_auth（作業用の新しい机）が同時に存在しています。それぞれ独立しているため、片方での変更がもう片方に影響することはありません。
+> **2 つの机が並んでいる:** main（元の机）と feat_due_date（作業用の新しい机）が同時に存在しています。それぞれ独立しているため、片方での変更がもう片方に影響することはありません。
 >
 > **注意:** `.claude/worktrees/` は Claude Code が自動で管理するフォルダです。直接触ったり削除したりしないようにしてください。
 
 #### 確認ポイント
 
-- [ ] `claude -w feat_email_auth` を実行して Claude Code が起動した
-- [ ] `git branch --show-current` で `feat_email_auth` と表示される
+- [ ] `claude -w feat_due_date` を実行して Claude Code が起動した
+- [ ] `git branch --show-current` で `feat_due_date` と表示される
 - [ ] `git worktree list` でワークツリーが 2 つ表示される
+
+### 別のターミナルを開いて準備する
+
+`claude -w feat_due_date` を実行したターミナルは Claude Code が動いています。ここからの操作は**別のターミナルを開いて**行います。
+
+ワークツリーのフォルダに移動します。
+
+```bash
+# bash
+cd .claude/worktrees/feat_due_date
+```
+
+続けて、以下の 2 つを実行してください。
+
+**① .env.local のショートカットを作成する**
+
+```bash
+# bash
+ln -s ../../.env.local .env.local
+```
+
+> **`ln -s` って何？** 「ショートカットを作る」コマンドです。元のプロジェクトにある `.env.local`（Supabase の接続情報などが入ったファイル）は `.gitignore` で管理対象外のため、ワークツリーには自動でコピーされません。`ln -s` で元のファイルへのショートカットを作ることで、ワークツリーからも同じ設定を参照できます。コピーではなくショートカットなので、元のファイルを更新すればワークツリー側にも自動で反映されます。
+
+**② VS Code でワークツリーを開く**
+
+```bash
+# bash
+code .
+```
+
+VS Code が開いたら、左のファイルツリーにワークツリーのファイルが表示されていることを確認してください。
+
+#### 確認ポイント
+
+- [ ] ワークツリーのフォルダに移動できた（`.claude/worktrees/feat_due_date`）
+- [ ] `.env.local` がワークツリーに作成されている
+- [ ] VS Code がワークツリーのフォルダで開いた
 
 ### ワークツリー内で最初にすること：CLAUDE.md にブランチルールを追加する
 
@@ -185,6 +221,11 @@ Claudeで以下を実行してください。
 - main ブランチには直接コミットしない
 - main ブランチで直接作業しない。必ずブランチを切ってから作業すること
 - コミットメッセージは Conventional Commits 形式で書く（例: feat: 機能追加、fix: バグ修正）
+
+# Git worktree環境での注意
+- PRマージ時は `gh pr merge` ではなく `gh api` を使うこと
+  - 例: gh api repos/{owner}/{repo}/pulls/{number}/merge --method PUT -f merge_method=merge
+- PRマージ後、リモートブランチ削除まで自動で行い、ワークツリーの削除確認は不要（セッション終了時に判断する）
 ```
 
 Claude Code が CLAUDE.md を更新したら、コミットします。
@@ -210,7 +251,7 @@ CLAUDE.md の変更をコミットして
 
 > **終了時にワークツリーを削除するか確認が出る場合があります:** 変更やコミットがある状態で `/exit` すると、「この机（ワークツリー）を残しておきますか、それとも片付けますか？」という確認が表示されます。Step 3 でまだ作業を続けるので、ここでは**「残す（keep）」**を選んでください。
 >
-> - **残す（keep）**: ワークツリーとブランチがそのまま保持され、次回 `claude -w feat_email_auth` で再開できます
+> - **残す（keep）**: ワークツリーとブランチがそのまま保持され、次回 `claude -w feat_due_date` で再開できます
 > - **削除する（remove）**: ワークツリーとブランチが完全に削除されます。コミット済みの変更も含めてすべて消えるため、取り消せません。マージが済んでから選ぶようにしてください
 >
 > なお、何も変更していない状態で `/exit` した場合は、確認なしに自動でワークツリーが削除されます。
@@ -223,15 +264,15 @@ CLAUDE.md の変更をコミットして
 
 ```bash
 # bash
-claude -w feat_email_auth
+claude -w feat_due_date
 ```
 
 > **`-c` をつけるかどうかで「Claude が何を覚えているか」が変わります:**
 >
 > | コマンド | 挙動 |
 > |---|---|
-> | `claude -w feat_email_auth`（`-c` なし） | 前回の作業ファイルはそのまま残っていますが、Claude との会話は白紙から始まります |
-> | `claude -w feat_email_auth -c`（`-c` あり） | 前回のセッションで Claude と話した内容がそのまま復元されます |
+> | `claude -w feat_due_date`（`-c` なし） | 前回の作業ファイルはそのまま残っていますが、Claude との会話は白紙から始まります |
+> | `claude -w feat_due_date -c`（`-c` あり） | 前回のセッションで Claude と話した内容がそのまま復元されます |
 >
 > 新しいタスクとして作業を始めるなら `-c` なし、「昨日の続きをやろう」と文脈を引き継ぎたいなら `-c` ありを選びましょう。ここでは `-c` なしで進めます。
 >
@@ -243,7 +284,7 @@ claude -w feat_email_auth
 
 ```plaintext
 # claude
-Supabase Auth でメール/パスワード認証を実装したい。まず何をすべきか手順を教えて
+TODO に締め切り日を追加したい。まず何をすべきか手順を教えて
 ```
 
 Claude Code から以下のような計画が返ってきます。
@@ -254,16 +295,14 @@ Claude Code から以下のような計画が返ってきます。
 
 ```text
 # output
-メール/パスワード認証を実装するには、以下の手順が必要です。
+TODO に締め切り日を追加するには、以下の手順が必要です。
 
-1. @supabase/ssr パッケージのインストール
-2. Supabase クライアントの設定（ブラウザ用・サーバー用）
-3. サインアップ画面の作成（メール・パスワード入力フォーム）
-4. ログイン画面の作成（メール・パスワード入力フォーム）
-5. 認証状態に基づくリダイレクト処理（Middleware）
-6. メール確認コールバック処理の実装
+1. Supabase の todos テーブルに due_date カラムを追加
+2. TODO の追加フォームに日付入力欄を追加
+3. TODO 一覧に締め切り日を表示
+4. 締め切りが過ぎた TODO をハイライト表示（色を変える）
 
-まず @supabase/ssr のインストールから始めましょうか？
+まず Supabase のテーブル変更から始めましょうか？
 ```
 
 ---
@@ -272,46 +311,36 @@ Claude Code から以下のような計画が返ってきます。
 
 ---
 
-## Step 4: @supabase/ssr のインストールと認証フロー実装（20分）
+## Step 4: 締め切り日の実装（25分）
 
-Chapter 4 でインストールした `nextjs-supabase-auth` スキルが、このステップで自動的に活用されます。Claude Code はこのスキルの知識を使って、Next.js + Supabase の認証実装を最適なパターンで行います。
-
-#### @supabase/ssr って何？
-
-> **`@supabase/ssr` とは？** Next.js のような「サーバー側でも動く」フレームワークに対応した Supabase の認証ライブラリです。Cookie ベース認証を採用しており、2025 年以降の推奨パターンです。
-
-#### 認証フローの実装
-
-実装の前に、**Plan Mode** で設計を確認します。`Shift+Tab` を 2 回押して Plan Mode に切り替えてから、以下を入力してください。
+実装の前に、**Plan Mode** で設計を確認してから進めます。`Shift+Tab` を 2 回押して Plan Mode に切り替えてから、以下を入力してください。
 
 ```plaintext
 # claude
-Supabase Auth のメール/パスワード認証を実装して。@supabase/ssr を使って。サインアップとログインのフォームを /signup と /login に作って。未ログインの場合は /login にリダイレクトして
+TODO に締め切り日（日付）を追加して。Supabase の todos テーブルに due_date カラムを追加して、追加フォームに日付入力をつけて、一覧に日付を表示して。締め切りが過ぎた TODO は文字色を赤にして
 ```
 
 Claude Code が「どのファイルを作成・変更するか」という計画を提示します。内容を確認して問題なければ承認してください。承認すると実装が始まります。
 
-> **なぜ Plan Mode で確認するの？** メール/パスワード認証の実装は複数のファイルにまたがる変更です。いきなり実装させるより、「どこに何を作るか」を先に確認することで、意図しない変更を防げます。Chapter 4 で習った「設計図を確認してから工事を始める」習慣をここでも使います。
+> **なぜ Plan Mode で確認するの？** 締め切り日の実装は複数のファイルにまたがる変更です。いきなり実装させるより、「どこに何を変えるか」を先に確認することで、意図しない変更を防げます。Chapter 4 で習った「設計図を確認してから工事を始める」習慣をここでも使います。
 
 実装が完了すると、Claude Code は以下のファイルを作成・更新しています。
 
 | ファイル | 概要 |
 |---|---|
-| `src/lib/supabase/server.ts` | サーバーサイド用 Supabase クライアント |
-| `src/middleware.ts` | 未ログイン時のリダイレクト処理（関所） |
-| `src/app/login/page.tsx` | メール・パスワード入力のログイン画面 |
-| `src/app/signup/page.tsx` | メール・パスワード入力のサインアップ画面 |
-| `src/app/auth/confirm/route.ts` | メール確認後のコールバック処理 |
+| Supabase マイグレーション | todos テーブルに `due_date` カラム（date 型、NULL 可）を追加 |
+| `src/components/AddTodoForm.tsx` | 日付入力欄（`<input type="date">`）を追加 |
+| `src/components/TodoItem.tsx` | 締め切り日の表示・締め切り超過時の赤字表示 |
 
-> **Middleware（ミドルウェア）って何？** ユーザーがどのページを開こうとしても、まず通る「関所」のようなものです。「ログインしていますか？していなければログイン画面へ」という判断をここで行います。
+> **マイグレーションって何？** データベースの「テーブルの構造を変更する」操作の記録です。「テーブルに列を追加する」「列の名前を変える」といった変更を、後からやり直せるように手順として残しておくものです。
 
 #### アプリを起動して確認する
 
-実装が完了したら、アプリを起動します。**ワークツリーのディレクトリ**（`.claude/worktrees/feat_email_auth/`）で実行してください。Claude Code のターミナルで直接実行しても、別のターミナルを開いて実行しても、どちらでも構いません。
+実装が完了したら、アプリを起動します。**ワークツリーのディレクトリ**（`.claude/worktrees/feat_due_date/`）で実行してください。Claude Code のターミナルで直接実行しても、別のターミナルを開いて実行しても、どちらでも構いません。
 
 ```bash
 # bash
-cd .claude/worktrees/feat_email_auth
+cd .claude/worktrees/feat_due_date
 npm run dev
 ```
 
@@ -321,41 +350,11 @@ npm run dev
 
 #### 確認ポイント
 
-- [ ] `package.json` に `@supabase/ssr` が追加されている
-- [ ] `src/middleware.ts` が作成されている
-- [ ] `src/app/login/page.tsx` が作成されている
-- [ ] `src/app/signup/page.tsx` が作成されている
-- [ ] `http://localhost:3000` にアクセスすると `/login` にリダイレクトされる
-- [ ] ログイン画面にメール・パスワード入力フォームが表示されている
-- [ ] サインアップ画面にメール・パスワード入力フォームが表示されている
-
----
-
-## Step 5: RLS の更新と user_id の保存（10分）
-
-Chapter 3 で設定した RLS は「ログインユーザーが自分の TODO だけ操作できる」ポリシーです。メール/パスワード認証が完了したので、TODO 追加時にログインユーザーの `user_id` も一緒に保存するよう修正します。
-
-```plaintext
-# claude
-TODO を追加するとき、ログインユーザーの user_id も一緒に保存するようにして
-```
-
-#### 確認ポイント
-
-- [ ] TODO 追加時に `user_id` が保存されている
-- [ ] ログイン → TODO 追加 → ログアウト → 再ログインしても自分の TODO だけ表示される
-
----
-
-### 動作確認
-
-以下をブラウザで確認します。
-
-- [ ] `http://localhost:3000` にアクセスすると `/login` にリダイレクトされる
-- [ ] `/signup` でメールアドレスとパスワードを入力してサインアップできる
-- [ ] 登録したメールアドレスとパスワードでログインすると TODO リスト画面に遷移する
-- [ ] TODO の追加・表示・完了切り替え・削除がすべて動作する
-- [ ] ヘッダーの「ログアウト」ボタンでログアウトできる
+- [ ] Supabase の `todos` テーブルに `due_date` カラムが追加されている
+- [ ] TODO 追加フォームに日付入力欄が表示されている
+- [ ] 日付を指定して TODO を追加すると、一覧に日付が表示される
+- [ ] 締め切りが過ぎた TODO の文字色が赤くなっている
+- [ ] 日付なしでも TODO を追加できる（due_date は任意）
 
 ---
 
@@ -365,7 +364,7 @@ TODO を追加するとき、ログインユーザーの user_id も一緒に保
 
 ```plaintext
 # claude
-今の変更をコミットして。コミットメッセージは「feat: implement email/password authentication (#1)」にして
+今の変更をコミットして。コミットメッセージは「feat: add due date to todos (#1)」にして
 ```
 
 ---
@@ -383,20 +382,20 @@ git log --oneline
 
 ```text
 # output
-a3f2c1d feat: implement email/password authentication (#1)
+a3f2c1d feat: add due date to todos (#1)
 b8e4d2a feat: [前のチャプターまでのコミット]
 ...
 ```
 
 - [ ] `feat:` プレフィックスのコミットが 1 件以上ある
 - [ ] コミットメッセージに `(#1)` が含まれている
-- [ ] ブラウザでアプリが正常に動作している
+- [ ] ブラウザでアプリが正常に動作している（TODO の締め切り日が表示される）
 
 > **体験:** コミットメッセージに `(#1)` を付けると、GitHub の Issue ページにこのコミットが自動的に紐付きます。「この Issue に対してどんな修正がされたか」が一目でわかる開発の記録が残ります。
 
 ---
 
-## Step 6: PR を作ってレビューしてマージする（30分）
+## Step 5: PR を作ってレビューしてマージする（30分）
 
 ### PR とは
 
@@ -410,24 +409,23 @@ PR（プルリクエスト）は「この修正を本体（main ブランチ）�
 
 ```plaintext
 # claude
-ワークツリーの変更を push して、PR を作って。タイトルは「feat: メール/パスワードログインを実装する」、Issue #1 をクローズする形にして
+ワークツリーの変更を push して、PR を作って。タイトルは「feat: TODO に締め切り日を追加する」、Issue #1 をクローズする形にして
 ```
 
 Claude Code は以下の操作を自動で行います。
 
 ```bash
 # bash
-git push -u origin feat_email_auth
+git push -u origin feat_due_date
 
 gh pr create \
-  --title "feat: メール/パスワードログインを実装する" \
+  --title "feat: TODO に締め切り日を追加する" \
   --body "## 変更内容
 
-- Supabase Auth でメール/パスワード認証を実装
-- @supabase/ssr を使って Cookie ベース認証に対応
-- サインアップ・ログイン画面を作成
-- 未ログイン時は /login にリダイレクト
-- TODO 追加時に user_id を保存するよう更新
+- todos テーブルに due_date カラムを追加
+- 締め切り日の入力フォームを追加
+- TODO 一覧に締め切り日を表示
+- 締め切り超過の TODO をハイライト表示
 
 Closes #1"
 ```
@@ -461,7 +459,7 @@ gh pr list
 
 ```text
 # output
-#2  fix: [修正内容]  feat_email_auth  about now
+#2  feat: TODO に締め切り日を追加する  feat_due_date  about now
 ```
 
 ### PR をレビューする
@@ -520,10 +518,10 @@ Claude Code を起動します。
 
 ```bash
 # bash
-claude -w feat_email_auth
+claude -w feat_due_date
 ```
 
-> **`-w` で再起動しても大丈夫:** すでに `feat_email_auth` ワークツリーが存在する場合、同じ名前で `claude -w feat_email_auth` を実行すると既存のワークツリーで Claude Code が起動します。作業内容は消えていません。
+> **`-w` で再起動しても大丈夫:** すでに `feat_due_date` ワークツリーが存在する場合、同じ名前で `claude -w feat_due_date` を実行すると既存のワークツリーで Claude Code が起動します。作業内容は消えていません。
 
 **2. 指摘内容を Claude Code に伝えて修正を依頼する**
 
@@ -536,7 +534,7 @@ PR のレビューで「[指摘された内容]」を指摘されたので修正
 
 ```plaintext
 # claude
-PR のレビューで「エラー時にもローディング表示が残ったままになる」と指摘されたので修正して
+PR のレビューで「日付が未設定の TODO で締め切り日の列が崩れる」と指摘されたので修正して
 ```
 
 Claude Code がコードを修正します。
@@ -586,7 +584,7 @@ gh pr merge 2 --merge
 
 > **`--merge`（マージ方式）について:** PR のマージには複数の方式があります。`--merge` は通常のマージで、コミット履歴がそのまま残ります。チームのルールに合わせて `--squash`（コミットをまとめる）や `--rebase` を使い分けることもあります。このチュートリアルでは `--merge` を使います。
 
-マージが完了すると、`feat_email_auth` ブランチの変更が main に取り込まれます。
+マージが完了すると、`feat_due_date` ブランチの変更が main に取り込まれます。
 
 #### 確認ポイント
 
@@ -616,9 +614,9 @@ git log --oneline
 
 ```text
 # output
-e5f1a2b Merge pull request #2 from yourname/feat_email_auth
-a3f2c1d fix: [追加の修正内容] (#1)
-b8e4d2a fix: [最初の修正内容] (#1)
+e5f1a2b Merge pull request #2 from yourname/feat_due_date
+a3f2c1d feat: add due date to todos (#1)
+b8e4d2a feat: [前のチャプターまでのコミット]
 ...
 ```
 
@@ -632,8 +630,8 @@ b8e4d2a fix: [最初の修正内容] (#1)
 
 ```bash
 # bash
-git worktree remove .claude/worktrees/feat_email_auth
-git branch -d feat_email_auth
+git worktree remove .claude/worktrees/feat_due_date
+git branch -d feat_due_date
 ```
 
 > **`-d` オプションとは？** `delete`（削除）の略で、**マージ済みのブランチのみ**削除できる安全なオプションです。まだマージされていないブランチを削除しようとするとエラーになるため、誤って作業中のブランチを消してしまうリスクがありません。なお `--force`（または `-D`）を使えば強制削除できますが、未コミットの変更ごと消えてしまうため、マージ完了後に使うようにしてください。
@@ -739,12 +737,12 @@ git branch -d fix_issue_[番号]
 このチャプターの全作業が終わったら、以下をまとめて確認してください。
 
 - [ ] `gh issue list` で少なくとも 1 件の Issue が作成されている
-- [ ] `git log --oneline` で `fix:` プレフィックスのコミットが 1 件以上ある
+- [ ] `git log --oneline` で `feat:` プレフィックスのコミットが 1 件以上ある
 - [ ] `gh pr diff` または GitHub の「Files changed」タブで差分を確認した
 - [ ] PR がマージされている（`gh pr list --state merged`）
 - [ ] Issue が「Closed」になっている（`gh issue list --state closed`）
 - [ ] `git worktree list` でワークツリーが 1 つ（main のみ）になっている
-- [ ] ブラウザでアプリが正常に動作している
+- [ ] ブラウザでアプリが正常に動作している（TODO の締め切り日が表示される）
 
 ---
 

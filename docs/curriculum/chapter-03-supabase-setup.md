@@ -90,6 +90,7 @@ MCP サーバーがない場合、Claude Code が生成した SQL をコピー�
 ターミナルでプロジェクトフォルダにいることを確認し、以下のコマンドを実行します。
 
 ```bash
+# bash
 claude mcp add supabase --transport http https://mcp.supabase.com/mcp
 ```
 
@@ -210,6 +211,7 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...（クラウドの Publis
 `.env.local` には接続情報が含まれているため、Git に含めてはいけません。プロジェクトルートの `.gitignore`（Git が無視するファイルのリスト）に `.env.local` が含まれていることを確認します。
 
 ```bash
+# bash
 cat .gitignore | grep env
 ```
 
