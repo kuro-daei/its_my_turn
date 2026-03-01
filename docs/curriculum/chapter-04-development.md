@@ -154,7 +154,7 @@ Claude Code から以下のような設計案が返ってきます。
 
 **期待される応答の概要:**
 
-```plaintext
+```text
 # output
 TODO アプリの構成を提案します。
 
@@ -209,7 +209,7 @@ src/
 4. 右上の **Add user** → **Create new user** をクリックする
 5. メールアドレスとパスワードを入力して **Create user** をクリックする
 
-```plaintext
+```text
 # output
 例：
   Email    : yourname@example.com
@@ -235,7 +235,7 @@ npm run dev
 
 ブラウザで `http://localhost:3000` を開きます。以下のような画面が表示されれば成功です。
 
-```plaintext
+```text
 # output
 ┌────────────────────────────────────┐
 │  TODO アプリ           [ログアウト] │
@@ -352,7 +352,7 @@ npm run build
 
 以下のような出力が出ればビルド成功です。
 
-```plaintext
+```text
 # output
 ▲ Next.js 15.x.x
 
@@ -368,6 +368,8 @@ Route (app)                  Size     First Load JS
 ---
 
 ### Git コミット・プッシュ
+
+> **このチャプターでは main ブランチに直接コミットしています。** Chapter 5 では「ブランチを切って作業し、PR でマージする」という本格的な開発フローを学びます。
 
 テストとビルドが通ったら、作業内容をコミットします。
 
