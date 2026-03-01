@@ -78,9 +78,9 @@ main ブランチ（本体・常に安全な状態）
 
 ```text
 # output
-feat: ログイン機能を実装する (#1)
- ↑     ↑                        ↑
-種類   何をしたか              関連 Issue 番号
+feat: 締め切り日を追加する (#1)
+ ↑     ↑                   ↑
+種類   何をしたか         関連 Issue 番号
 ```
 
 よく使う種類の一覧：
@@ -150,7 +150,7 @@ GitHub Issues は、「やること・バグ・気になること」を記録す
 
 | 要素 | 説明 | 例 |
 |------|------|----|
-| **タイトル** | 何をするか一言で | `feat: ログイン機能を実装する` |
+| **タイトル** | 何をするか一言で | `TODO に締め切り日をつけられるようにする` |
 | **本文** | 詳細・背景・完了条件など | 実装の目的や手順 |
 | **ラベル** | 種類の分類 | `bug`, `enhancement`, `documentation` |
 | **担当者（Assignee）** | 誰がやるか | 一人に絞るのがベスト |
@@ -164,7 +164,7 @@ Claude Code に指示するだけで Issue を作れます。
 
 ```plaintext
 # claude
-GitHub に Issue を立てて。タイトルは「feat: ログイン機能を実装する」、内容は「Supabase Auth でメール・パスワード認証を実装する」にして
+GitHub に Issue を立てて。タイトルは「TODO に締め切り日をつけられるようにする」、内容は「各 TODO に締め切り日（日付）を設定・表示できるようにする。締め切りが過ぎた TODO は色が変わると嬉しい。」にして
 ```
 
 Claude Code が自動で実行するコマンド:
@@ -172,8 +172,8 @@ Claude Code が自動で実行するコマンド:
 ```bash
 # bash
 gh issue create \
-  --title "feat: ログイン機能を実装する" \
-  --body "Supabase Auth でメール・パスワード認証を実装する"
+  --title "TODO に締め切り日をつけられるようにする" \
+  --body "各 TODO に締め切り日（日付）を設定・表示できるようにする。締め切りが過ぎた TODO は色が変わると嬉しい。"
 ```
 
 > **`gh` コマンドとは？** GitHub 公式のコマンドラインツール（GitHub CLI）です。Issue や PR をターミナルから操作できます。Claude Code が自動で使うため、自分で打つ必要はほとんどありません。
@@ -186,9 +186,9 @@ gh issue create \
 
 ```text
 # output
-feat: ログイン機能を実装する (#1)
-                                 ↑
-                         Issue #1 と紐付く
+feat: TODO に締め切り日を追加する (#1)
+                                   ↑
+                           Issue #1 と紐付く
 ```
 
 **PR 本文に `Closes #番号` を書く場合:**
@@ -405,7 +405,7 @@ git branch -d feat_user_auth
 git add .
 
 # コミットする
-git commit -m "feat: ログイン機能を実装する (#1)"
+git commit -m "feat: TODO に締め切り日を追加する (#1)"
 
 # コミットメッセージを修正する（push 前のみ）
 git commit --amend -m "feat: 正しいメッセージ (#1)"
