@@ -163,6 +163,30 @@ nvm --version
 - [ ] `gh --version` でバージョンが表示された
 - [ ] `nvm --version` でバージョンが表示された
 
+**Git のグローバル設定:**
+
+インストール後、コミット時に使われる名前とメールアドレスを設定します。
+
+```bash
+# bash
+git config --global user.name "あなたの名前"
+git config --global user.email "your@email.com"
+```
+
+> **なぜ必要？** Git は変更を記録するとき「誰が変更したか」を一緒に保存します。この設定がないと、コミット（変更の保存）ができない場合があります。
+
+**確認:**
+
+```bash
+# bash
+git config --global user.name
+git config --global user.email
+```
+
+設定した名前とメールアドレスが表示されれば OK です。
+
+- [ ] Git のグローバル設定（user.name / user.email）を完了した
+
 ---
 
 ### Step 6: Node.js のインストール
@@ -216,6 +240,8 @@ gh auth status
 ---
 
 ## Windows の場合（WSL + Ubuntu 24）
+
+> **重要**: Windows の場合、コマンドはすべて **WSL の Ubuntu ターミナル内**で実行します。PowerShell や コマンドプロンプトでは動作しません。
 
 Windows では **WSL（Windows Subsystem for Linux）** 上の Ubuntu 24 で作業します。
 
@@ -391,6 +417,30 @@ gh --version
 - [ ] `git --version` でバージョンが表示された
 - [ ] `gh --version` でバージョンが表示された
 
+**Git のグローバル設定:**
+
+インストール後、コミット時に使われる名前とメールアドレスを設定します。
+
+```bash
+# bash
+git config --global user.name "あなたの名前"
+git config --global user.email "your@email.com"
+```
+
+> **なぜ必要？** Git は変更を記録するとき「誰が変更したか」を一緒に保存します。この設定がないと、コミット（変更の保存）ができない場合があります。
+
+**確認:**
+
+```bash
+# bash
+git config --global user.name
+git config --global user.email
+```
+
+設定した名前とメールアドレスが表示されれば OK です。
+
+- [ ] Git のグローバル設定（user.name / user.email）を完了した
+
 ---
 
 ### Step 8: nvm のインストール
@@ -454,12 +504,17 @@ gh auth status
 
 ## Claude Code の初回起動
 
-Claude Code を起動します。
+> **Windows の方へ**: 以下のコマンドは **WSL の Ubuntu ターミナル**で実行してください。Windows Terminal で Ubuntu タブを開いた状態で操作します。
+
+まず、作業用ディレクトリに移動してから起動します。**ホームディレクトリ（`~`）で直接起動しないように注意してください。**
 
 ```bash
 # bash
+cd ~/projects
 claude
 ```
+
+> **なぜプロジェクトディレクトリで起動するの?** Claude Code は起動したフォルダを「作業場所」として認識します。ホームディレクトリで起動してしまうと、すべてのファイルが見える状態になり、意図しない場所にファイルが作られることがあります。
 
 `>` プロンプトが表示されたら起動成功です。試しに話しかけてみてください。
 
