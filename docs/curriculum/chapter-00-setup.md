@@ -241,6 +241,8 @@ gh auth status
 
 ## Windows の場合（WSL + Ubuntu 24）
 
+> **重要**: Windows の場合、コマンドはすべて **WSL の Ubuntu ターミナル内**で実行します。PowerShell や コマンドプロンプトでは動作しません。
+
 Windows では **WSL（Windows Subsystem for Linux）** 上の Ubuntu 24 で作業します。
 
 > **WSL（ダブリュー・エス・エル）とは?** Windows の中で Linux（リナックス）を動かす仕組みです。Web 開発の多くのツールは Linux 向けに作られているため、Mac と同じコマンドが使えるようになります。
@@ -501,6 +503,8 @@ gh auth status
 ---
 
 ## Claude Code の初回起動
+
+> **Windows の方へ**: 以下のコマンドは **WSL の Ubuntu ターミナル**で実行してください。Windows Terminal で Ubuntu タブを開いた状態で操作します。
 
 Claude Code を起動します。
 
