@@ -67,6 +67,7 @@ vercel link
 | `What's your project's name?` | `todos` のまま Enter（または好みの名前） |
 | `In which directory is your code located?` | `./` のまま Enter |
 | `Want to modify these settings?` | `n` を入力して Enter |
+| `Do you want to change additional project settings?` | `n` を入力して Enter |
 | `Detected a repository. Connect it to this project?` | `y` を入力して Enter ← **ここが GitHub 連携の肝** |
 
 最後に以下の 2 行が表示されれば成功です。

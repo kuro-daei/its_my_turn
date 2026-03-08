@@ -243,7 +243,7 @@ Claude Code のセッションで、以下を入力してください。
 
 ```bash
 # bash
-cd ~/projects/todos
+cd ~/works/todos
 code .
 ```
 

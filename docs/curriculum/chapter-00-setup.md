@@ -121,12 +121,12 @@ Claude Code はホームディレクトリ（`~`）ではなく、専用の作�
 
 ```bash
 # bash
-mkdir ~/projects
+mkdir ~/works
 ```
 
-> **`mkdir` とは?** 「make directory」の略で、新しいフォルダを作成するコマンドです。`~/projects` は「ホームフォルダの中に projects フォルダを作る」という意味です。
+> **`mkdir` とは?** 「make directory」の略で、新しいフォルダを作成するコマンドです。`~/works` は「ホームフォルダの中に works フォルダを作る」という意味です。
 
-- [ ] `~/projects` フォルダを作成した
+- [ ] `~/works` フォルダを作成した
 
 ---
 
@@ -379,12 +379,12 @@ claude --version
 
 ```bash
 # bash
-mkdir ~/projects
+mkdir ~/works
 ```
 
-> **`mkdir` とは?** 「make directory」の略で、新しいフォルダを作成するコマンドです。`~/projects` は「ホームフォルダの中に projects フォルダを作る」という意味です。
+> **`mkdir` とは?** 「make directory」の略で、新しいフォルダを作成するコマンドです。`~/works` は「ホームフォルダの中に works フォルダを作る」という意味です。
 
-- [ ] `~/projects` フォルダを作成した
+- [ ] `~/works` フォルダを作成した
 
 ---
 
@@ -510,7 +510,7 @@ gh auth status
 
 ```bash
 # bash
-cd ~/projects
+cd ~/works
 claude
 ```
 
@@ -552,7 +552,7 @@ Chapter 0 が完了したら、以下がすべてチェックできているは�
 - **Git（ギット）** で変更履歴の管理ができるようになりました
 - **gh** で GitHub 操作がターミナルからできるようになりました
 - **nvm + Node.js** で JavaScript の実行環境を整えました
-- 作業用ディレクトリ `~/projects` を用意しました
+- 作業用ディレクトリ `~/works` を用意しました
 
 次の Chapter 1 では、Next.js アプリのスキャフォールドを実行し、GitHub にリポジトリを作成して `/init` コマンドで CLAUDE.md を生成します。
 
@@ -578,16 +578,6 @@ Chapter 3 で Supabase（データベースと認証を提供するクラウド�
 # bash
 npm install @supabase/supabase-js
 ```
-
-3. Chapter 3 で Supabase プロジェクトを作成した後、`.env.local` に接続情報を設定します:
-
-```text
-# output
-NEXT_PUBLIC_SUPABASE_URL=your-project-url
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-publishable-key
-```
-
-> **注意:** `.env.local` は `.gitignore` に含まれていることを確認してください。秘密の情報が外部に漏れるのを防ぎます。
 
 - [ ] Supabase アカウントを作成した
 - [ ] `@supabase/supabase-js` をインストールした
