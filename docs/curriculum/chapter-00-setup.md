@@ -163,6 +163,30 @@ nvm --version
 - [ ] `gh --version` でバージョンが表示された
 - [ ] `nvm --version` でバージョンが表示された
 
+**Git のグローバル設定:**
+
+インストール後、コミット時に使われる名前とメールアドレスを設定します。
+
+```bash
+# bash
+git config --global user.name "あなたの名前"
+git config --global user.email "your@email.com"
+```
+
+> **なぜ必要？** Git は変更を記録するとき「誰が変更したか」を一緒に保存します。この設定がないと、コミット（変更の保存）ができない場合があります。
+
+**確認:**
+
+```bash
+# bash
+git config --global user.name
+git config --global user.email
+```
+
+設定した名前とメールアドレスが表示されれば OK です。
+
+- [ ] Git のグローバル設定（user.name / user.email）を完了した
+
 ---
 
 ### Step 6: Node.js のインストール
@@ -390,6 +414,30 @@ gh --version
 
 - [ ] `git --version` でバージョンが表示された
 - [ ] `gh --version` でバージョンが表示された
+
+**Git のグローバル設定:**
+
+インストール後、コミット時に使われる名前とメールアドレスを設定します。
+
+```bash
+# bash
+git config --global user.name "あなたの名前"
+git config --global user.email "your@email.com"
+```
+
+> **なぜ必要？** Git は変更を記録するとき「誰が変更したか」を一緒に保存します。この設定がないと、コミット（変更の保存）ができない場合があります。
+
+**確認:**
+
+```bash
+# bash
+git config --global user.name
+git config --global user.email
+```
+
+設定した名前とメールアドレスが表示されれば OK です。
+
+- [ ] Git のグローバル設定（user.name / user.email）を完了した
 
 ---
 
