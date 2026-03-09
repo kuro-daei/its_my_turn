@@ -3,3 +3,4 @@
 .env*.local
 .claude/worktrees
 .worktrees/
+docs/plans/

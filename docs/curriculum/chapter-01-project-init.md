@@ -422,3 +422,7 @@ Claude Code がプロジェクトのコンテキスト（文脈）を踏まえ�
 次の Chapter 2 では、Claude Code をプロジェクトに合わせて整えます。CLAUDE.md にプロジェクトのルールを書き込み、プラグインを追加して機能を拡張し、専用エージェントを作る方法を学びます。「Claude Code を自分のプロジェクト仕様に育てる」ステップです。
 
 > **Chapter 2 に進む前に:** 開発サーバーを停止してください。ターミナルで `Ctrl + C` を押すと停止できます。
+
+---
+
+[← Chapter 0: 環境準備](chapter-00-setup.md) | [Chapter 2: Claude Code を整える →](chapter-02-claude-code.md)

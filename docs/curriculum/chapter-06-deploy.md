@@ -289,7 +289,7 @@ Issue が作成されると番号（例: `#3`）が発行されます。
 
 #### Step 2: ワークツリーで実装する
 
-Chapter 5 と同じように `claude -w` でワークツリーを立ち上げ、Claude Code に実装を依頼します。詳細な手順は [Chapter 5: Step 2〜Step 4](./chapter-05-git-workflow.md) を参照してください。
+Chapter 5 と同じように `claude -w` でワークツリーを立ち上げ、Claude Code に実装を依頼します。詳細な手順は [Chapter 5: Step 2〜Step 4](chapter-05-git-workflow.md) を参照してください。
 
 ```bash
 # bash
@@ -320,7 +320,7 @@ Issue #3 の対応として、ページタイトルを「My Todos」に変更し
 
 #### Step 3: PR を作成する
 
-Chapter 5 と同じように PR を作成します。詳細な手順は [Chapter 5: Step 5](./chapter-05-git-workflow.md) を参照してください。
+Chapter 5 と同じように PR を作成します。詳細な手順は [Chapter 5: Step 5](chapter-05-git-workflow.md) を参照してください。
 
 ```plaintext
 # claude
@@ -433,4 +433,4 @@ Claude Code は今後も継続的に機能が追加されています。公式�
 
 ---
 
-前のチャプターへ: [Chapter 5: Issue とワークツリー](./chapter-05-git-workflow.md)
+[← Chapter 5: Issue とワークツリー — 修正・改善を習慣にする](chapter-05-git-workflow.md)

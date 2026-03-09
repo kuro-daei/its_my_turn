@@ -583,4 +583,4 @@ Chapter 2 で作った設定は、次の Chapter 3 以降で活きてきます�
 
 > **Chapter 3 に進む前に:** Claude Code を終了してください。`/exit` で終了できます。
 
-次のチャプターへ: [Chapter 3: Supabase 初期設定](./chapter-03-supabase-setup.md)
+[← Chapter 1: プロジェクト初期化](chapter-01-project-init.md) | [Chapter 3: Supabase の初期設定 →](chapter-03-supabase-setup.md)
