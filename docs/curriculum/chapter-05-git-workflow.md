@@ -746,14 +746,4 @@ git branch -d fix_issue_[番号]
 
 ---
 
-## 次のチャプターへ
-
-Issue とワークツリーを使った修正サイクルが身につきました。
-
-次の **Chapter 6: Vercel デプロイ** では、このアプリをインターネット上に公開します。あなたが作った TODO アプリに、世界中からアクセスできる URL が割り当てられます。「自分の部屋で作った料理を、レストランでみんなに提供する」感覚を体験しましょう。
-
----
-
-前のチャプターへ: [Chapter 4: Vibe Coding で TODO アプリを作る](./chapter-04-development.md)
-
-次のチャプターへ: [Chapter 6: Vercel デプロイ](./chapter-06-deploy.md)
+[← Chapter 4: Vibe Coding で TODO アプリを作る](chapter-04-development.md) | [Chapter 6: Vercel デプロイ →](chapter-06-deploy.md)

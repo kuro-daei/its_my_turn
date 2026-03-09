@@ -287,8 +287,4 @@ Claude Code を終了します。
 
 ---
 
-## 次のチャプターへ
-
-Supabase のセットアップが完了しました。次のチャプターに進みます。
-
-次の **Chapter 4: Vibe Coding で TODO アプリを作る** では、このデータベースと画面を実際につなぎ、TODO の追加・一覧表示・完了切り替え・削除が動く状態にします。さらにログイン機能も組み込み、自分専用のアプリが完成します。
+[← Chapter 2: Claude Code を整える](chapter-02-claude-code.md) | [Chapter 4: Vibe Coding で TODO アプリを作る →](chapter-04-development.md)

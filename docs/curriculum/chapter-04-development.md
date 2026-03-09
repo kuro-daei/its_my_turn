@@ -438,4 +438,4 @@ git push
 
 ---
 
-次のチャプターへ: [Chapter 5: Issue とワークツリー](./chapter-05-git-workflow.md)
+[← Chapter 3: Supabase の初期設定](chapter-03-supabase-setup.md) | [Chapter 5: Issue とワークツリー — 修正・改善を習慣にする →](chapter-05-git-workflow.md)
