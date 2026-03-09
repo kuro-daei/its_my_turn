@@ -1,5 +1,6 @@
 # Chapter 0: 環境準備
 
+> [!NOTE]
 > **この資料について**: 事前準備および保守用の参照資料です。ハンズオン当日は、この資料を閲覧できる状態で参加してください。
 
 **所要時間**: 約 1 時間
@@ -20,6 +21,7 @@
 | nvm | エヌ・ブイ・エム | Node.js のバージョン管理ツール |
 | Node.js | ノード ジェイエス | JavaScript の実行環境 |
 
+> [!IMPORTANT]
 > **ポイント**: Claude Code はネイティブアプリとして動作するため、Node.js がなくてもインストール・起動できます。Node.js は後から別途インストールします。
 
 間違えても大丈夫です。途中でわからなくなったら、すぐメンターに声をかけてください。
@@ -47,6 +49,7 @@ code --version
 
 バージョン番号が表示されれば OK です。
 
+> [!NOTE]
 > **Homebrew でもインストールできます**: Homebrew（次のステップでインストール）がすでに入っている場合は、`brew install --cask visual-studio-code` でインストールすることもできます。
 
 - [ ] `code --version` でバージョン番号が表示された
@@ -59,6 +62,7 @@ Homebrew（ホームブリュー）は Mac 用のパッケージ管理ツール�
 
 ターミナルを開いてください。
 
+> [!TIP]
 > **ターミナルの開き方**: `Cmd + Space` を押して「ターミナル」と入力し、Enter キーを押します。
 
 ```bash
@@ -77,6 +81,7 @@ brew --version
 
 `Homebrew 4.x.x` のようなバージョン番号が表示されれば OK です。
 
+> [!NOTE]
 > **Apple Silicon Mac（M1/M2/M3/M4）の場合**: インストール後に以下を実行してください。
 >
 > ```bash
@@ -100,6 +105,7 @@ curl -fsSL https://claude.ai/install.sh | bash
 
 インストール後、ブラウザが自動で開きます。Claude.ai のアカウントでログインしてください。
 
+> [!NOTE]
 > **Claude.ai のアカウントをお持ちでない場合**: [claude.ai](https://claude.ai) にアクセスしてサインアップしてください。Claude Code を使うには **Pro プラン以上**が必要です。
 
 **確認:**
@@ -124,6 +130,7 @@ Claude Code はホームディレクトリ（`~`）ではなく、専用の作�
 mkdir ~/works
 ```
 
+> [!NOTE]
 > **`mkdir` とは?** 「make directory」の略で、新しいフォルダを作成するコマンドです。`~/works` は「ホームフォルダの中に works フォルダを作る」という意味です。
 
 - [ ] `~/works` フォルダを作成した
@@ -173,6 +180,7 @@ git config --global user.name "あなたの名前"
 git config --global user.email "your@email.com"
 ```
 
+> [!NOTE]
 > **なぜ必要？** Git は変更を記録するとき「誰が変更したか」を一緒に保存します。この設定がないと、コミット（変更の保存）ができない場合があります。
 
 **確認:**
@@ -199,6 +207,7 @@ nvm install --lts
 nvm use --lts
 ```
 
+> [!NOTE]
 > **`--lts` とは?** 「Long Term Support（長期サポート版）」の略で、安定した推奨バージョンを自動で選んでインストールしてくれます。
 
 **確認:**
@@ -224,6 +233,7 @@ gh auth login
 
 ブラウザが自動で開くので、GitHub アカウントでログインしてください。
 
+> [!NOTE]
 > **GitHub アカウントをお持ちでない場合**: [github.com](https://github.com) でアカウントを作成してください（無料）。
 
 **確認:**
@@ -241,10 +251,12 @@ gh auth status
 
 ## Windows の場合（WSL + Ubuntu 24）
 
+> [!IMPORTANT]
 > **重要**: Windows の場合、コマンドはすべて **WSL の Ubuntu ターミナル内**で実行します。PowerShell や コマンドプロンプトでは動作しません。
 
 Windows では **WSL（Windows Subsystem for Linux）** 上の Ubuntu 24 で作業します。
 
+> [!NOTE]
 > **WSL（ダブリュー・エス・エル）とは?** Windows の中で Linux（リナックス）を動かす仕組みです。Web 開発の多くのツールは Linux 向けに作られているため、Mac と同じコマンドが使えるようになります。
 
 ### Step 1: Visual Studio Code のインストール
@@ -286,12 +298,14 @@ code --version
 
 PowerShell を**管理者として実行**して以下を入力してください。
 
+> [!TIP]
 > **管理者として実行するには**: スタートメニューで「PowerShell」を検索 → 右クリック → 「管理者として実行」
 
 ```powershell
 winget install Microsoft.WindowsTerminal
 ```
 
+> [!NOTE]
 > **すでにインストール済みの場合**: 「既にインストールされています」と表示されることがあります。その場合はそのまま次に進んでください。
 
 - [ ] Windows Terminal をインストールした
@@ -310,6 +324,7 @@ wsl --install -d Ubuntu-24.04
 
 再起動後、Ubuntu が自動起動してユーザー名とパスワードの設定を求められます。
 
+> [!WARNING]
 > **注意**: ここで設定するユーザー名・パスワードは WSL 内の Linux 専用です。Windows のアカウントとは別です。パスワードは入力中に文字が表示されません（正常です）。
 
 **確認:**
@@ -330,6 +345,7 @@ uname -a
 
 - [ ] WSL で Ubuntu が起動できた
 
+> [!IMPORTANT]
 > **重要**: 以降の手順はすべて **WSL の Ubuntu ターミナル内**で実行してください。
 
 ---
@@ -343,6 +359,7 @@ Ubuntu ターミナルで最初に以下を実行してください。
 sudo apt update && sudo apt upgrade -y
 ```
 
+> [!NOTE]
 > **`sudo` とは?** 「管理者として実行する」という意味です。パスワードを求められたら WSL セットアップ時に設定したパスワードを入力してください。
 
 ---
@@ -360,6 +377,7 @@ curl -fsSL https://claude.ai/install.sh | bash
 2. Claude.ai のアカウントでログイン
 3. 表示された認証コードをターミナルに貼り付けて Enter
 
+> [!NOTE]
 > **Claude.ai のアカウントをお持ちでない場合**: [claude.ai](https://claude.ai) でサインアップしてください（Pro プラン以上が必要）。
 
 **確認:**
@@ -382,6 +400,7 @@ claude --version
 mkdir ~/works
 ```
 
+> [!NOTE]
 > **`mkdir` とは?** 「make directory」の略で、新しいフォルダを作成するコマンドです。`~/works` は「ホームフォルダの中に works フォルダを作る」という意味です。
 
 - [ ] `~/works` フォルダを作成した
@@ -427,6 +446,7 @@ git config --global user.name "あなたの名前"
 git config --global user.email "your@email.com"
 ```
 
+> [!NOTE]
 > **なぜ必要？** Git は変更を記録するとき「誰が変更したか」を一緒に保存します。この設定がないと、コミット（変更の保存）ができない場合があります。
 
 **確認:**
@@ -504,6 +524,7 @@ gh auth status
 
 ## Claude Code の初回起動
 
+> [!NOTE]
 > **Windows の方へ**: 以下のコマンドは **WSL の Ubuntu ターミナル**で実行してください。Windows Terminal で Ubuntu タブを開いた状態で操作します。
 
 まず、作業用ディレクトリに移動してから起動します。**ホームディレクトリ（`~`）で直接起動しないように注意してください。**
@@ -514,6 +535,7 @@ cd ~/works
 claude
 ```
 
+> [!NOTE]
 > **なぜプロジェクトディレクトリで起動するの?** Claude Code は起動したフォルダを「作業場所」として認識します。ホームディレクトリで起動してしまうと、すべてのファイルが見える状態になり、意図しない場所にファイルが作られることがあります。
 
 `>` プロンプトが表示されたら起動成功です。試しに話しかけてみてください。
@@ -562,6 +584,7 @@ Chapter 0 が完了したら、以下がすべてチェックできているは�
 
 ## 事前準備リファレンス
 
+> [!NOTE]
 > このセクションには、後のチャプターで必要になるツールやアカウントをまとめています。
 > 各チャプターに進む前に、該当する項目を**必ず**準備してください。
 
