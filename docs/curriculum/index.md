@@ -14,8 +14,8 @@
 | 4 | [Claude Code を整える](chapter-04-claude-code.md) | 約 1 時間 |
 | 5 | [Supabase 初期設定](chapter-05-supabase-setup.md) | 約 30 分 |
 | 6 | [Vibe Coding で TODO アプリを作る](chapter-06-development.md) | 約 3 時間 |
-| 7 | [Issue とワークツリー](chapter-07-git-workflow.md) | 約 1.5 時間 |
-| 8 | [Vercel デプロイ](chapter-08-deploy.md) | 約 1 時間 |
+| 7 | [Vercel デプロイ](chapter-07-deploy.md) | 約 1 時間 |
+| 8 | [Issue とワークツリー](chapter-08-git-workflow.md) | 約 1.5 時間 |
 
 ## 補足資料
 

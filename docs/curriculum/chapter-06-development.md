@@ -451,4 +451,4 @@ git push
 
 ---
 
-[← Chapter 5: Supabase の初期設定](chapter-05-supabase-setup.md) | [Chapter 7: Issue とワークツリー — 修正・改善を習慣にする →](chapter-07-git-workflow.md)
+[← Chapter 5: Supabase の初期設定](chapter-05-supabase-setup.md) | [Chapter 7: Vercel デプロイ →](chapter-07-deploy.md)
