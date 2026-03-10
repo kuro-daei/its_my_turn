@@ -323,22 +323,15 @@ Chapter 0 が完了したら、以下がすべてチェックできているは�
 
 ### Git / GitHub
 
-このハンズオンでは Git でコードを管理し、GitHub にアップロードする操作を行います。
-「Git とは何か」「なぜ使うのか」を事前に概念レベルで理解しておきましょう。
+聞いたことも、なんとなくの概念も知ってると思いますが、改めてしっかり学習しましょう。
 
-| 動画 | ポイント |
+| リソース | ポイント |
 |---|---|
-| [git の目的や考え方など、現役エンジニアが解説（YouTube）](https://www.youtube.com/watch?v=EfWyidlfKxc) | 「なぜ Git が必要か」を概念から丁寧に解説 |
-| [【Git 入門】Git 使い方高速入門編（YouTube）](https://www.youtube.com/watch?v=i1L3A0SLDyg) | clone・commit・push などの基本操作を高速でひととおり体験できる |
+| [Git・GitHub 入門（YouTube）](https://youtu.be/LDOR5HfI_sQ?si=7Fk-xOXzeokFn4d2) | Git と GitHub の基礎を動画でしっかり学べる |
+| [初心者必読！GitHubの使い方を徹底解説【完全網羅版】](https://www.creativevillage.ne.jp/category/topcreators/web-creator/web-programmer/128504/) | リポジトリ作成からブランチ・マージまで、図解つきで網羅した記事 |
 
 > [!TIP]
-> **動画を見た後の確認ポイント**: リポジトリ、コミット、プッシュの 3 つの言葉の意味がわかれば OK
-
-### テキスト教材（動画より読むのが好きな人向け）
-
-| 教材 | ポイント |
-|---|---|
-| [サル先生の Git 入門（Backlog）](https://backlog.com/ja/git-tutorial/) | マンガ調で分かりやすい。入門編だけでも十分 |
+> **確認ポイント**: リポジトリ、コミット、プッシュ の 3 つの言葉の意味がわかれば OK
 
 ---
 
