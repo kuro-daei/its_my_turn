@@ -18,6 +18,8 @@
 
 ## エージェント運用ルール
 
+**このプロジェクトのドキュメント作業は、基本的に `doc-writer-team` エージェントが担当する。**
+
 - **メインエージェント（自分）の役割**: 指示の解釈、ブランチ管理、設定ファイルの編集、サブエージェントへの作業委譲
 - **`docs/` 以下のファイルを作成・編集するときは、必ず `doc-writer-team` スキルのエージェントに委譲する**
   - メインエージェントが直接 `docs/` を編集してはいけない
@@ -59,6 +61,7 @@
 | `claude-md-management:revise-claude-md` | CLAUDE.md の更新・改善 |
 | `claude-md-management:claude-md-improver` | CLAUDE.md の監査・品質チェック |
 | `doc-writer-team:doc-writer` | トピックを調査してドキュメント一式を作成する |
+| `doc-review` | カリキュラム全体の整合性・構成をレビューする |
 
 - スキルは `/スキル名` で呼び出す（例: `/commit-commands:commit`）
 - 詳細は `/help` で確認可能

@@ -778,15 +778,15 @@ git branch -d fix_issue_[番号]
 
 | Chapter | 学んだ機能 |
 |--------|-----------|
-| 0 | CLI インストール、初期設定 |
-| 1 | スキャフォールド、Git 操作 |
-| 2 | CLAUDE.md、エージェント設定、MCP サーバー |
-| 3 | DB 設計、SQL 生成（Supabase MCP） |
-| 4 | 統合指示、Plan Mode、タスク分解 |
-| 5 | Issue 管理、ワークツリー、PR レビュー |
-| 6 | Vibe Coding、スキル、Plan Mode |
-| 7 | デプロイ支援、環境変数設定、本番設定 |
-| 8 | Issue 管理、ワークツリー、PR レビュー（応用） |
+| 0 | 環境準備（Vercel / Supabase / Claude Code のアカウント作成、CLI インストール） |
+| 1 | ターミナル・Bash 入門 |
+| 2 | Git・GitHub 入門 |
+| 3 | プロジェクト初期化（Next.js プロジェクト作成、GitHub リポジトリ作成） |
+| 4 | Claude Code を整える（CLAUDE.md、MCP プラグイン、スキル設定） |
+| 5 | Supabase 初期設定（DB テーブル作成、RLS 設定） |
+| 6 | Vibe Coding で TODO アプリを作る（Plan Mode、マルチファイル実装、認証） |
+| 7 | Vercel デプロイ（ダッシュボードでプロジェクト作成、環境変数設定、本番公開） |
+| 8 | Issue とワークツリー（Issue 作成、claude -w、PR 作成・マージ） |
 
 **このカリキュラムで体験したこと:**
 
