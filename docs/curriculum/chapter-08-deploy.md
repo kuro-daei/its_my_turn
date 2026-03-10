@@ -2,7 +2,7 @@
 
 **所要時間**: 約 1 時間
 **ゴール**: 公開 URL で TODO アプリが動いている状態にする
-**学ぶ Claude Code 機能**: デプロイ支援、CI/CD 連携
+**学ぶ Claude Code 機能**: デプロイ支援、環境変数設定、本番設定
 
 ---
 
@@ -12,7 +12,6 @@
 - Vercel に環境変数を設定してデプロイを実行する
 - 公開 URL でアプリの動作を確認する
 - Supabase の本番用 URL 設定が必要なケースを理解する
-- GitHub への push が自動デプロイにつながる仕組みを体験する
 
 全部終わったら、インターネット上に公開された自分の TODO アプリが完成します。
 
@@ -34,9 +33,44 @@ Chapter 5 まででローカル環境（自分のパソコン）で動く TODO �
 > [!NOTE]
 > **ホスティングサービスとは？** アプリを動かし続けてくれるサーバーを貸してくれるサービスです。自分のパソコンを 24 時間稼働させなくても、Vercel のサーバーが代わりにアプリを動かし続けてくれます。
 >
-> **GitHub と連携すると何が嬉しいの？** コードを push（送信）するたびに Vercel が自動で新バージョンをデプロイしてくれます。「変更を保存してアップロードボタンを押す」という手間がなくなります。これを **CI/CD（継続的インテグレーション/継続的デリバリー）** と呼びます。
+> **GitHub と連携すると何が嬉しいの？** コードを push（送信）するたびに Vercel が自動で新バージョンをデプロイしてくれます。「変更を保存してアップロードボタンを押す」という手間がなくなります。
 
 間違えても大丈夫です。途中でわからなくなったら、すぐメンターに声をかけてください。
+
+---
+
+## 事前確認: ローカルビルドの確認
+
+デプロイの前に、ローカル環境でビルドが通ることを確認します。
+
+> [!NOTE]
+> **デプロイ先でも同じビルド処理が走るため、ローカルで通っていないと本番でも必ず失敗します。** ここで確認しておくことで、デプロイ後のトラブルを防げます。
+
+**メインブランチのターミナル**で、プロジェクトのルートディレクトリ（`todos/` フォルダ）に移動してから以下を実行してください。
+
+```bash
+# bash
+npm run build
+```
+
+ビルドが成功すると、以下のような出力が表示されます。
+
+```text
+# output
+✓ Compiled successfully
+✓ Linting and checking validity of types
+✓ Collecting page data
+✓ Generating static pages
+```
+
+ビルドエラーが出た場合は、Claude Code に修正を依頼してください。
+
+```plaintext
+# claude
+npm run build でエラーが出ています。修正してください
+```
+
+Claude Code がエラーの内容を確認して修正します。再度 `npm run build` を実行してエラーが出なくなったことを確認してから、次の Step 1 に進んでください。
 
 ---
 
@@ -129,32 +163,28 @@ NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=eyJhbGciO...（長い文字列）
 
 ### 2-2. Vercel に環境変数を設定する
 
-Claude Code を起動して、環境変数の設定を依頼します。**メインブランチのターミナル**で以下を実行してください。
+Vercel ダッシュボードから手動で環境変数を登録します。
 
-```bash
-# bash
-claude
-```
+> [!NOTE]
+> Claude で自動登録する方法もありますが、今回は確実に動作するダッシュボード操作で設定します。
 
-Claude Code が起動したら、以下のように入力します。
+1. Vercel ダッシュボード（`https://vercel.com/dashboard`）をブラウザで開く
+2. 対象プロジェクトをクリックする
+3. 「Settings」タブをクリックする
+4. 左メニューの「Environment Variables」をクリックする
+5. 「Add New」ボタンをクリックする
+6. 1 つ目の環境変数を登録する：
+   - 「Key」に `NEXT_PUBLIC_SUPABASE_URL` と入力する
+   - 「Value」に `cat .env.local` で確認した URL（`https://xxxxxxxxxxxxxx.supabase.co` の形式）を貼り付ける
+   - 「Production」にチェックが入っていることを確認する
+   - 「Save」をクリックする
+7. 再度「Add New」をクリックし、2 つ目の環境変数を登録する：
+   - 「Key」に `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` と入力する
+   - 「Value」に `cat .env.local` で確認した長い文字列（`eyJ...` から始まる）を貼り付ける
+   - 「Production」にチェックが入っていることを確認する
+   - 「Save」をクリックする
 
-```plaintext
-# claude
-.env.local の値を読み取って、Vercel の本番環境（production）に環境変数を設定して
-```
-
-Claude Code が内部で以下のようなコマンドを実行します。
-
-```bash
-# bash
-vercel env add NEXT_PUBLIC_SUPABASE_URL production
-vercel env add NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY production
-```
-
-各コマンドを実行するたびに「値を入力してください」と求められます。Claude Code に依頼した場合は、`.env.local` を読み取って自動で値を入力まで行ってくれます。
-
-> [!TIP]
-> **自分で設定する場合:** Claude Code を使わず手動で実行することもできます。コマンドを実行するたびに、対応する値（`https://...` や `eyJ...` の長い文字列）を貼り付けて Enter を押してください。
+登録後、「Environment Variables」の画面に 2 つの変数が表示されていれば設定完了です。
 
 ### 2-3. ビルドを確認してデプロイする
 
@@ -198,7 +228,7 @@ Production: https://todos-xxxxxxxxxxxx.vercel.app
 
 ### Step 2 の確認ポイント
 
-- [ ] Vercel のプロジェクト設定に 2 つの環境変数（`NEXT_PUBLIC_SUPABASE_URL`・`NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`）が登録されている
+- [ ] Vercel ダッシュボードの「Environment Variables」に 2 つの環境変数（`NEXT_PUBLIC_SUPABASE_URL`・`NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`）が登録されている
 - [ ] `vercel deploy --prod` が成功して `✓ Deployment completed` が表示されている
 - [ ] 公開 URL（`https://プロジェクト名.vercel.app` のような形式）が発行されている
 
@@ -265,116 +295,6 @@ Step 2 で発行された公開 URL（`https://プロジェクト名.vercel.app`
 > https://プロジェクト名.vercel.app/**
 > ```
 
-### 3-3. CI/CD の体験（自動デプロイ）
-
-> [!NOTE]
-> **CI/CD とは？** Continuous Integration / Continuous Delivery の略です。「コードを push すると自動でテスト・ビルド・デプロイが走る仕組み」のことです。注文（push）するだけで自動的に届けてくれるデリバリーサービスのイメージです。一度設定すれば、毎回手動でデプロイする必要がなくなります。
-
-> [!WARNING]
-> **事前確認: git の名前・メールアドレスが GitHub アカウントと一致しているか確認しましょう**
->
-> Vercel の無償プランでは、「コミットした人の情報」が Vercel アカウントのオーナーと同一人物と判定されないと、自動デプロイがブロックされます。Claude Code がコミットを作成する場合も、git に設定された名前・メールアドレスが GitHub アカウントのものと一致していれば問題ありません。
->
-> ターミナルで以下を実行して確認してください。
->
-> ```bash
-> # bash
-> git config user.name
-> git config user.email
-> ```
->
-> 表示された名前・メールアドレスが、GitHub アカウントの設定と一致していれば OK です。GitHub の名前・メールアドレスは `https://github.com/settings/profile` で確認できます。
->
-> **ブロックされたときのサイン:** PR をマージしても Vercel ダッシュボードの「Deployments」でデプロイが始まらない場合は、この設定のずれが原因の可能性があります。その場合は `git config --global user.email "あなたのGitHubメールアドレス"` で設定を合わせてから、再度 push してみてください。
-
-**Chapter 5 で学んだ「Issue → ワークツリー → 実装 → PR → マージ」のフローをもう一度やります。** ただし今回の目的は機能追加ではなく「PR をマージすると Vercel が自動でデプロイされる」という体験です。
-
-#### Step 1: 小さな改善を Issue として登録する
-
-Claude Code に以下のように依頼し、GitHub に Issue を立てます。題材は自分のアプリに合った小さな改善なら何でも構いません。
-
-```plaintext
-# claude
-GitHub に Issue を立てて。タイトルは「ページタイトルをアプリ名に変更する」、内容は「ブラウザのタブに表示されるページタイトルが "Create Next App" のままなので、アプリ名に変更する。」にして
-```
-
-Issue が作成されると番号（例: `#3`）が発行されます。
-
-> [!TIP]
-> **こんな Issue でも OK:** 「ボタンのラベルをわかりやすくする」「ローディング中に表示を出す」「フォントを変える」など、動作に影響しない小さな改善が最初は向いています。
-
-#### Step 2: ワークツリーで実装する
-
-Chapter 5 と同じように `claude -w` でワークツリーを立ち上げ、Claude Code に実装を依頼します。詳細な手順は [Chapter 5: Step 2〜Step 4](chapter-05-git-workflow.md) を参照してください。
-
-```bash
-# bash
-claude -w fix_page_title
-```
-
-別のターミナルを開いて、ワークツリーに移動し `.env.local` のショートカットを作成します。ワークツリーでアプリを動かして動作確認するために必要です。
-
-```bash
-# bash
-cd .claude/worktrees/fix_page_title
-ln -s ../../../.env.local .env.local
-```
-
-ワークツリーが起動したら、Issue の修正を依頼します。
-
-```plaintext
-# claude
-Issue #3 の対応として、ページタイトルを「My Todos」に変更して
-```
-
-実装が完了したら、コミットします。
-
-```plaintext
-# claude
-今の変更をコミットして。コミットメッセージは「fix: ページタイトルをアプリ名に変更する (#3)」にして
-```
-
-#### Step 3: PR を作成する
-
-Chapter 5 と同じように PR を作成します。詳細な手順は [Chapter 5: Step 5](chapter-05-git-workflow.md) を参照してください。
-
-```plaintext
-# claude
-ワークツリーの変更を push して、PR を作って。Issue #3 をクローズする形にして
-```
-
-#### Step 3.5: PR をレビューしてマージする
-
-PR を作ったら、すぐマージするのではなく、まず「意図した通りの変更になっているか」を確認します。
-
-レビューを Claude Code に依頼します。
-
-```plaintext
-# claude
-PR をレビューして
-```
-
-Claude Code がレビュー結果を返してくれます。問題がなければマージします。
-
-```plaintext
-# claude
-PR をマージして
-```
-
-> [!IMPORTANT]
-> **新しい気づき:** Chapter 5 では「PR をマージすると Issue がクローズされる」ことを体験しました。今回はそれに加えて、「PR をマージするたびに Vercel が本番環境に自動デプロイされる」ことを体験します。これが CI/CD の感覚です。コードを送り出す（push → merge）だけで、本番のアプリが自動的に最新版になります。
-
-#### Step 4: Vercel の自動デプロイを確認する
-
-PR がマージされると、Vercel が自動でデプロイを開始します。
-
-1. Vercel ダッシュボード（`https://vercel.com/dashboard`）をブラウザで開く
-2. 対象プロジェクトをクリックする
-3. 「Deployments」タブでデプロイが動いている様子を確認する（「Building...」や「Deploying...」と表示される）
-4. 数分後に「Ready」と表示されたら、デプロイ完了
-
-公開 URL を開いて、変更が反映されていることを確認してください。
-
 ---
 
 ### 振り返り: このカリキュラムで学んだ Claude Code 機能
@@ -387,7 +307,7 @@ PR がマージされると、Vercel が自動でデプロイを開始します�
 | 3 | DB 設計、SQL 生成（Supabase MCP） |
 | 4 | 統合指示、Plan Mode、タスク分解 |
 | 5 | Issue 管理、ワークツリー、PR レビュー |
-| 6 | デプロイ支援、CI/CD、本番設定 |
+| 6 | デプロイ支援、環境変数設定、本番設定 |
 
 **このカリキュラムで体験したこと:**
 
@@ -406,9 +326,6 @@ PR がマージされると、Vercel が自動でデプロイを開始します�
 - [ ] 公開 URL で TODO の追加・一覧・完了・削除ができる
 - [ ] 公開 URL でログアウトができる
 - [ ] Supabase の Site URL と Redirect URLs を設定した（メール確認・パスワードリセット機能を使う場合のみ）
-- [ ] Issue を立て、ワークツリーで実装し、PR をマージした
-- [ ] PR マージ後に Vercel ダッシュボードで自動デプロイが走る様子を確認できた
-- [ ] 公開 URL で PR の変更が反映されていることを確認できた
 
 ---
 
@@ -418,7 +335,6 @@ PR がマージされると、Vercel が自動でデプロイを開始します�
 
 - [ ] **Vercel デプロイ済み**: 公開 URL でアプリが動いている
 - [ ] **環境変数設定済み**: Vercel に Supabase の接続情報が登録されている
-- [ ] **CI/CD 構築済み**: GitHub への push で自動デプロイが動く
 - [ ] **Supabase 本番設定**: 本番 URL でサインアップ・ログインができる（メール確認・パスワードリセットを使う場合は Site URL・Redirect URLs も設定済み）
 - [ ] **全機能動作確認済み**: チェックリスト 7 項目がすべてクリア
 
@@ -429,9 +345,8 @@ PR がマージされると、Vercel が自動でデプロイを開始します�
 | 機能 | 体験した内容 |
 |------|-------------|
 | **デプロイ支援** | Claude Code に「ビルドを確認して本番デプロイして」と依頼するだけで、`npm run build` によるチェックから `vercel deploy --prod` による本番公開まで対応してもらえることを体験した |
-| **環境変数設定** | ローカル用の `.env.local` に書いた Supabase の接続情報を `vercel env add` で Vercel にも登録し、本番サーバーでアプリが動く状態にした |
+| **環境変数設定** | ローカル用の `.env.local` に書いた Supabase の接続情報を Vercel ダッシュボードから登録し、本番サーバーでアプリが動く状態にした |
 | **Supabase 本番設定** | 基本的な読み書き・ログインは設定なしで動作することを確認した。メール確認・パスワードリセット機能を追加する際は Site URL と Redirect URLs を設定する必要がある |
-| **CI/CD 連携** | GitHub への push が Vercel の自動デプロイにつながる仕組みを構築し、「コードを push するだけで公開される」体験をした |
 
 ---
 
