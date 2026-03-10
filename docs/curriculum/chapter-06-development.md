@@ -39,7 +39,7 @@
 
 作業を始める前に、以下を確認してください。
 
-- [ ] Chapter 0〜3 が完了している
+- [ ] Chapter 0〜5 が完了している
 - [ ] Supabase の `todos` テーブルが作成済みである
 
 確認できたら、Step 1 に進みます。
@@ -451,4 +451,4 @@ git push
 
 ---
 
-[← Chapter 5: Supabase の初期設定](chapter-05-supabase-setup.md) | [Chapter 7: Issue とワークツリー — 修正・改善を習慣にする →](chapter-07-git-workflow.md)
+[← Chapter 5: Supabase の初期設定](chapter-05-supabase-setup.md) | [Chapter 7: Vercel デプロイ →](chapter-07-deploy.md)
