@@ -217,4 +217,4 @@ Step 1 で発行された公開 URL（`https://プロジェクト名.vercel.app`
 
 ---
 
-[← Chapter 6: Vibe Coding で TODO アプリを作る](chapter-06-development.md) | [Chapter 8: Issue とワークツリー — 修正・改善を習慣にする →](chapter-08-git-workflow.md)
+[← Chapter 6: Vibe Coding で TODO アプリを作る](chapter-06-development.md) | [Chapter 8: ワークツリーと PR — 修正・改善を習慣にする →](chapter-08-git-workflow.md)
