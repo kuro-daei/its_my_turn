@@ -6,6 +6,8 @@
 |---|-----------|------|
 | - | [プロローグ: 今日から私は](chapter-prologue.md) | 事前読み物 |
 | 0 | [環境準備](chapter-00-setup.md) | 約 1 時間 |
+| 0-Mac | [環境準備（Mac）](chapter-00-setup-mac.md) | Mac 向け詳細手順 |
+| 0-Win | [環境準備（Windows）](chapter-00-setup-windows.md) | Windows 向け詳細手順 |
 | 1 | [プロジェクト初期化](chapter-01-project-init.md) | 約 1 時間 |
 | 2 | [Claude Code を整える](chapter-02-claude-code.md) | 約 1 時間 |
 | 3 | [Supabase 初期設定](chapter-03-supabase-setup.md) | 約 30 分 |
