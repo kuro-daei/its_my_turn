@@ -298,7 +298,7 @@ Chapter 0 が完了したら、以下がすべてチェックできているは�
 - **nvm + Node.js** で JavaScript の実行環境を整えました
 - 作業用ディレクトリ `~/works` を用意しました
 
-次の Chapter 1 では、Next.js アプリのスキャフォールドを実行し、GitHub にリポジトリを作成して `/init` コマンドで CLAUDE.md を生成します。
+次の Chapter 1 ではターミナル・Bash の基本操作を学び、Chapter 2 で Git・GitHub の使い方を体験します。Chapter 3 では Next.js アプリを作成して GitHub にリポジトリを公開します。
 
 すべてチェックできたら **Chapter 1** に進んでください。お疲れさまでした。
 
@@ -343,7 +343,7 @@ Chapter 0 が完了したら、以下がすべてチェックできているは�
 
 ---
 
-### Supabase アカウント + supabase-js（Chapter 3 で使用）
+### Supabase アカウント + supabase-js（Chapter 5 で使用）
 
 Chapter 3 で Supabase（データベースと認証を提供するクラウドサービス）を使います。
 
@@ -360,7 +360,7 @@ npm install @supabase/supabase-js
 
 ---
 
-### Vercel アカウント + Vercel CLI（Chapter 6 で使用）
+### Vercel アカウント + Vercel CLI（Chapter 8 で使用）
 
 Chapter 6 でアプリをインターネットに公開（デプロイ）します。
 
