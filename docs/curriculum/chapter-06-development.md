@@ -1,4 +1,4 @@
-# Chapter 4: Vibe Coding で TODO アプリを作る
+# Chapter 6: Vibe Coding で TODO アプリを作る
 
 **所要時間**: 約 3 時間
 **ゴール**: TODO アプリが一通り動く状態にする（UI + CRUD）
@@ -451,4 +451,4 @@ git push
 
 ---
 
-[← Chapter 3: Supabase の初期設定](chapter-03-supabase-setup.md) | [Chapter 5: Issue とワークツリー — 修正・改善を習慣にする →](chapter-05-git-workflow.md)
+[← Chapter 5: Supabase の初期設定](chapter-05-supabase-setup.md) | [Chapter 7: Issue とワークツリー — 修正・改善を習慣にする →](chapter-07-git-workflow.md)

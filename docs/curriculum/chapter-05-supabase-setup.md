@@ -1,4 +1,4 @@
-# Chapter 3: Supabase の初期設定
+# Chapter 5: Supabase の初期設定
 
 **所要時間**: 約 45 分
 **ゴール**: Supabase MCP サーバーが設定済み + クラウドデータベースに `todos` テーブルが作成された状態にする
@@ -299,4 +299,4 @@ Claude Code を終了します。
 
 ---
 
-[← Chapter 2: Claude Code を整える](chapter-02-claude-code.md) | [Chapter 4: Vibe Coding で TODO アプリを作る →](chapter-04-development.md)
+[← Chapter 4: Claude Code を整える](chapter-04-claude-code.md) | [Chapter 6: Vibe Coding で TODO アプリを作る →](chapter-06-development.md)

@@ -1,4 +1,4 @@
-# Chapter 5: Issue とワークツリー — 修正・改善を習慣にする
+# Chapter 7: Issue とワークツリー — 修正・改善を習慣にする
 
 **所要時間**: 約 1 時間 30 分
 **ゴール**: ワークツリーで TODO に締め切り日機能を安全に追加し、PR を出してマージするサイクルを体験する
@@ -774,4 +774,4 @@ git branch -d fix_issue_[番号]
 
 ---
 
-[← Chapter 4: Vibe Coding で TODO アプリを作る](chapter-04-development.md) | [Chapter 6: Vercel デプロイ →](chapter-06-deploy.md)
+[← Chapter 6: Vibe Coding で TODO アプリを作る](chapter-06-development.md) | [Chapter 8: Vercel デプロイ →](chapter-08-deploy.md)

@@ -448,4 +448,4 @@ vercel login
 
 ---
 
-[← プロローグ: 今日から私は](chapter-prologue.md) | [Chapter 1: プロジェクト初期化 →](chapter-01-project-init.md)
+[← プロローグ: 今日から私は](chapter-prologue.md) | [Chapter 1: ターミナル・Bash 入門 →](chapter-01-bash.md)

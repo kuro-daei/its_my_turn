@@ -1,4 +1,4 @@
-# Chapter 6: Vercel デプロイ
+# Chapter 8: Vercel デプロイ
 
 **所要時間**: 約 1 時間
 **ゴール**: 公開 URL で TODO アプリが動いている状態にする
@@ -451,4 +451,4 @@ Claude Code は今後も継続的に機能が追加されています。公式�
 
 ---
 
-[← Chapter 5: Issue とワークツリー — 修正・改善を習慣にする](chapter-05-git-workflow.md)
+[← Chapter 7: Issue とワークツリー — 修正・改善を習慣にする](chapter-07-git-workflow.md)

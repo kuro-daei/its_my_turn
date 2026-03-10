@@ -8,12 +8,14 @@
 | 0 | [環境準備](chapter-00-setup.md) | 約 1 時間 |
 | 0-Mac | [環境準備（Mac）](chapter-00-setup-mac.md) | Mac 向け詳細手順 |
 | 0-Win | [環境準備（Windows）](chapter-00-setup-windows.md) | Windows 向け詳細手順 |
-| 1 | [プロジェクト初期化](chapter-01-project-init.md) | 約 1 時間 |
-| 2 | [Claude Code を整える](chapter-02-claude-code.md) | 約 1 時間 |
-| 3 | [Supabase 初期設定](chapter-03-supabase-setup.md) | 約 30 分 |
-| 4 | [Vibe Coding で TODO アプリを作る](chapter-04-development.md) | 約 3 時間 |
-| 5 | [Issue とワークツリー](chapter-05-git-workflow.md) | 約 1.5 時間 |
-| 6 | [Vercel デプロイ](chapter-06-deploy.md) | 約 1 時間 |
+| 1 | [ターミナル・Bash 入門](chapter-01-bash.md) | 約 1 時間 |
+| 2 | [Git・GitHub 入門](chapter-02-git.md) | 約 1 時間 |
+| 3 | [プロジェクト初期化](chapter-03-project-init.md) | 約 1 時間 |
+| 4 | [Claude Code を整える](chapter-04-claude-code.md) | 約 1 時間 |
+| 5 | [Supabase 初期設定](chapter-05-supabase-setup.md) | 約 30 分 |
+| 6 | [Vibe Coding で TODO アプリを作る](chapter-06-development.md) | 約 3 時間 |
+| 7 | [Issue とワークツリー](chapter-07-git-workflow.md) | 約 1.5 時間 |
+| 8 | [Vercel デプロイ](chapter-08-deploy.md) | 約 1 時間 |
 
 ## 補足資料
 
