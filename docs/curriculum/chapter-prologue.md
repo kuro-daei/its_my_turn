@@ -41,56 +41,9 @@ Claude Code に代表される新しいアプローチでは、AI を「開発�
 
 ---
 
-## 開発環境・お作法を理解しよう
+## 事前学習リソースについて
 
-急がば回れ。やはり重要なのは基礎知識です。
-
-ターミナル（コマンドを入力する黒い画面）、Git（変更履歴の管理ツール）、認証の仕組みといった概念は、最初は難しく見えるかもしれません。しかし恐れる必要はありません。どれも長年にわたって世界中で使われてきた一般的な知識であり、生成 AI はそれらを非常によく理解しています。**概念さえ分かれば、コマンドを一字一句覚えていなくても大丈夫**です。Claude Code に「こういうことをしたい」と伝えれば、正しいコマンドを教えてくれます。
-
-事前学習の進め方として、以下のステップをおすすめします。
-
-1. YouTube で動画を観る
-2. Web ページを読む
-3. NotebookLM に取り込んで、QA を出してもらう
-
-NotebookLM（ノートブック エルエム）は Google が提供する AI ツールです。動画や記事を読み込ませると、内容をもとに質問・回答形式で理解を深めるコンテンツを自動生成してくれます。受け身で読むだけでなく、自分の疑問に答える形で学ぶと定着しやすくなります。
-
----
-
-## 事前に学習しておくこと
-
-### 認証・認可と MCP
-
-認証（Authentication）と認可（Authorization）は、Web アプリ開発の根幹となる概念です。「誰であるかを確認すること」が認証、「何をしてよいかを決めること」が認可です。この二つを混同したまま進めると、設計の段階で詰まることになります。基本に立ち返って確認しましょう。
-
-また、MCP（Model Context Protocol）は Claude Code がさまざまなツールやサービスと連携するための仕組みです。このカリキュラムでも登場するので、あわせて概念を把握しておいてください。
-
-- <https://youtu.be/bFdWK6yKNHE?si=2aKOW_hmXVBT5UQc>
-- <https://youtu.be/9sHOEDrHceo?si=qLXa3CGmLewIdky5>
-
-### Git / GitHub
-
-Git（ギット）と GitHub（ギットハブ）は、「聞いたことはある、なんとなくのイメージはある」という方が多いと思います。しかしこのカリキュラムでは実際に手を動かして使います。改めてしっかりと学習しておきましょう。
-
-Git はファイルの変更履歴を管理するツール、GitHub はその履歴をオンライン上で管理・共有するサービスです。「保存」ではなく「記録」という感覚で使います。
-
-- <https://youtu.be/LDOR5HfI_sQ?si=7Fk-xOXzeokFn4d2>
-- <https://www.creativevillage.ne.jp/category/topcreators/web-creator/webprogrammer/128504/>
-
-### Pull Request & Review
-
-Pull Request（プルリクエスト、通称「ぷるりく」）は、「この変更をプロジェクトに取り込んでください」と提案する仕組みです。チームで開発するときの「確認・承認フロー」にあたります。レビューの流れと合わせて使い方を知っておきましょう。
-
-- <https://www.youtube.com/watch?v=zeX2KASkOXY>
-- <https://youtu.be/euK7YazfN3w?si=AQolTtOoYHHYa6lh>
-- <https://qiita.com/obscure723/items/5265556d1b89e77c456b>
-
-### Claude Code Tips
-
-Claude Code の公式ドキュメントとベストプラクティスも、事前に目を通しておくことをおすすめします。全部を覚える必要はありません。「こういう情報がある」と把握しておくだけで、詰まったときに調べる手がかりになります。
-
-- <https://code.claude.com/docs/ja/overview>
-- <https://skills.sh/>
+ターミナルの使い方、Git / GitHub、Pull Request など、ハンズオンで必要になる知識の学習リソースは **[Chapter 0](chapter-00-setup.md)** にまとめています。環境構築を終えたら確認してください。
 
 ---
 

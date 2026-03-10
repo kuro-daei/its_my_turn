@@ -1,4 +1,4 @@
-# Chapter 2: Claude Code を整える
+# Chapter 4: Claude Code を整える
 
 Chapter 1 でプロジェクトを作成し、GitHub にプッシュした状態から始めます。
 
@@ -606,6 +606,6 @@ Chapter 2 で作った設定は、次の Chapter 3 以降で活きてきます�
 ---
 
 > [!WARNING]
-> **Chapter 3 に進む前に:** Claude Code を終了してください。`/exit` で終了できます。
+> **Chapter 5 に進む前に:** Claude Code を終了してください。`/exit` で終了できます。
 
-[← Chapter 1: プロジェクト初期化](chapter-01-project-init.md) | [Chapter 3: Supabase の初期設定 →](chapter-03-supabase-setup.md)
+[← Chapter 3: プロジェクト初期化](chapter-03-project-init.md) | [Chapter 5: Supabase の初期設定 →](chapter-05-supabase-setup.md)

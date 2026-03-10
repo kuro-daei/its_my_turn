@@ -1,4 +1,4 @@
-# Chapter 1: プロジェクト初期化
+# Chapter 3: プロジェクト初期化
 
 **所要時間**: 約 1 時間
 **ゴール**: Next.js アプリが `http://localhost:3000` で動いている + GitHub にリポジトリが作成されている + CLAUDE.md が生成されている
@@ -442,4 +442,4 @@ Claude Code がプロジェクトのコンテキスト（文脈）を踏まえ�
 
 ---
 
-[← Chapter 0: 環境準備](chapter-00-setup.md) | [Chapter 2: Claude Code を整える →](chapter-02-claude-code.md)
+[← Chapter 2: Git・GitHub 入門](chapter-02-git.md) | [Chapter 4: Claude Code を整える →](chapter-04-claude-code.md)

@@ -1,0 +1,451 @@
+# Chapter 0: 環境準備（Windows）
+
+> [!NOTE]
+> **この資料について**: 事前準備および保守用の参照資料です。ハンズオン当日は、この資料を閲覧できる状態で参加してください。
+
+**所要時間**: 約 1 時間
+**ゴール**: Claude Code でコードが書ける状態にする
+**対象者**: PC 操作に慣れた非エンジニア（ターミナルは少し使える程度）
+**形式**: メンター付きハンズオン（座学ほぼなし）
+
+> [!IMPORTANT]
+> **重要**: Windows の場合、コマンドはすべて **WSL の Ubuntu ターミナル内**で実行します。PowerShell や コマンドプロンプトでは動作しません。
+
+---
+
+## このチャプターでインストールするもの
+
+| ツール | 読み方 | 役割 |
+|--------|--------|------|
+| Visual Studio Code | ビジュアル スタジオ コード | コードエディタ。ファイルの閲覧・編集を快適にするツール |
+| Claude Code | クロード コード | 今回の主役。ターミナルから使う AI アシスタント |
+| Git | ギット | ファイルの変更履歴を管理するツール |
+| gh | ジーエイチ | GitHub をターミナルから操作するツール |
+| nvm | エヌ・ブイ・エム | Node.js のバージョン管理ツール |
+| Node.js | ノード ジェイエス | JavaScript の実行環境 |
+
+> [!IMPORTANT]
+> **ポイント**: Claude Code はネイティブアプリとして動作するため、Node.js がなくてもインストール・起動できます。Node.js は後から別途インストールします。
+
+間違えても大丈夫です。途中でわからなくなったら、すぐメンターに声をかけてください。
+
+---
+
+Windows では **WSL（Windows Subsystem for Linux）** 上の Ubuntu 24 で作業します。
+
+> [!NOTE]
+> **WSL（ダブリュー・エス・エル）とは?** Windows の中で Linux（リナックス）を動かす仕組みです。Web 開発の多くのツールは Linux 向けに作られているため、Mac と同じコマンドが使えるようになります。
+
+---
+
+## Step 1: Visual Studio Code のインストール
+
+Visual Studio Code（VS Code）は、コードを書いたりファイルを閲覧・編集したりするためのエディタです。高機能なメモ帳のようなもので、Claude Code が生成したファイルをわかりやすく確認するのに役立ちます。
+
+公式サイト <https://code.visualstudio.com/> にアクセスして、Windows 向けのインストーラーをダウンロードしてください。ダウンロードした `.exe` ファイルを実行し、画面の指示に従ってインストールしてください。
+
+または、PowerShell で以下を実行してもインストールできます。
+
+```powershell
+winget install Microsoft.VisualStudioCode
+```
+
+**WSL 拡張機能のインストール:**
+
+後の手順で WSL 内のファイルを VS Code で開くために、「WSL」拡張機能を入れておきます。
+
+1. VS Code を起動する
+2. 左サイドバーの拡張機能アイコン（四角が4つ並んだアイコン）をクリック
+3. 検索欄に「WSL」と入力
+4. 「WSL」（Microsoft 製）が表示されたら「インストール」をクリック
+
+**確認:**
+
+PowerShell で以下を実行してください。
+
+```powershell
+code --version
+```
+
+バージョン番号が表示されれば OK です。
+
+- [ ] `code --version` でバージョン番号が表示された
+
+---
+
+## Step 2: Windows Terminal のインストール
+
+PowerShell を**管理者として実行**して以下を入力してください。
+
+> [!TIP]
+> **管理者として実行するには**: スタートメニューで「PowerShell」を検索 → 右クリック → 「管理者として実行」
+
+```powershell
+winget install Microsoft.WindowsTerminal
+```
+
+> [!NOTE]
+> **すでにインストール済みの場合**: 「既にインストールされています」と表示されることがあります。その場合はそのまま次に進んでください。
+
+- [ ] Windows Terminal をインストールした
+
+---
+
+## Step 3: WSL + Ubuntu 24 のインストール
+
+PowerShell（管理者として実行）で以下を実行してください。
+
+```powershell
+wsl --install -d Ubuntu-24.04
+```
+
+インストール後、**PC を再起動** してください。
+
+再起動後、Ubuntu が自動起動してユーザー名とパスワードの設定を求められます。
+
+> [!WARNING]
+> **注意**: ここで設定するユーザー名・パスワードは WSL 内の Linux 専用です。Windows のアカウントとは別です。パスワードは入力中に文字が表示されません（正常です）。
+
+**確認:**
+
+Windows Terminal を開いて Ubuntu タブを開き:
+
+```bash
+# bash
+uname -a
+```
+
+`Linux ...` から始まる文字列が表示されれば OK です。
+
+**うまくいかない場合は**
+
+- Windows Update で最新版にアップデートしてから再試行してください。
+- BIOS で仮想化が無効になっている場合は、メンターに確認してください。
+
+- [ ] WSL で Ubuntu が起動できた
+
+> [!IMPORTANT]
+> **重要**: 以降の手順はすべて **WSL の Ubuntu ターミナル内**で実行してください。
+
+---
+
+## Step 4: パッケージの更新
+
+Ubuntu ターミナルで最初に以下を実行してください。
+
+```bash
+# bash
+sudo apt update && sudo apt upgrade -y
+```
+
+> [!NOTE]
+> **`sudo` とは?** 「管理者として実行する」という意味です。パスワードを求められたら WSL セットアップ時に設定したパスワードを入力してください。
+
+---
+
+## Step 5: Claude Code のインストール・認証
+
+```bash
+# bash
+curl -fsSL https://claude.ai/install.sh | bash
+```
+
+インストール後、ターミナルに URL と認証コードが表示されます。
+
+1. 表示された URL を **Windows のブラウザ**で開く
+2. Claude.ai のアカウントでログイン
+3. 表示された認証コードをターミナルに貼り付けて Enter
+
+> [!NOTE]
+> **Claude.ai のアカウントをお持ちでない場合**: [claude.ai](https://claude.ai) でサインアップしてください（Pro プラン以上が必要）。
+
+**確認:**
+
+```bash
+# bash
+claude --version
+```
+
+バージョン番号が表示されれば OK です。
+
+- [ ] `claude --version` でバージョン番号が表示された
+
+---
+
+## Step 6: 作業用ディレクトリの作成
+
+```bash
+# bash
+mkdir ~/works
+```
+
+> [!NOTE]
+> **`mkdir` とは?** 「make directory」の略で、新しいフォルダを作成するコマンドです。`~/works` は「ホームフォルダの中に works フォルダを作る」という意味です。
+
+- [ ] `~/works` フォルダを作成した
+
+---
+
+## Step 7: git, gh のインストール
+
+**git:**
+
+```bash
+# bash
+sudo apt install -y git
+```
+
+**gh（GitHub CLI）:**
+
+```bash
+# bash
+curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+sudo apt update && sudo apt install -y gh
+```
+
+**確認:**
+
+```bash
+# bash
+git --version
+gh --version
+```
+
+- [ ] `git --version` でバージョンが表示された
+- [ ] `gh --version` でバージョンが表示された
+
+**Git のグローバル設定:**
+
+インストール後、コミット時に使われる名前とメールアドレスを設定します。
+
+```bash
+# bash
+git config --global user.name "あなたの名前"
+git config --global user.email "your@email.com"
+```
+
+> [!NOTE]
+> **なぜ必要？** Git は変更を記録するとき「誰が変更したか」を一緒に保存します。この設定がないと、コミット（変更の保存）ができない場合があります。
+
+**確認:**
+
+```bash
+# bash
+git config --global user.name
+git config --global user.email
+```
+
+設定した名前とメールアドレスが表示されれば OK です。
+
+- [ ] Git のグローバル設定（user.name / user.email）を完了した
+
+---
+
+## Step 8: nvm のインストール
+
+```bash
+# bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash
+source ~/.bashrc
+```
+
+**確認:**
+
+```bash
+# bash
+nvm --version
+```
+
+- [ ] `nvm --version` でバージョンが表示された
+
+---
+
+## Step 9: Node.js のインストール
+
+```bash
+# bash
+nvm install --lts
+nvm use --lts
+```
+
+**確認:**
+
+```bash
+# bash
+node --version
+npm --version
+```
+
+- [ ] `node --version` でバージョン番号が表示された
+
+---
+
+## Step 10: gh の認証
+
+```bash
+# bash
+gh auth login
+```
+
+ターミナルに URL と認証コードが表示されます。URL を Windows のブラウザで開いて GitHub アカウントでログインし、表示されたコードをターミナルに貼り付けてください。
+
+**確認:**
+
+```bash
+# bash
+gh auth status
+```
+
+- [ ] `gh auth status` で認証済みと表示された
+
+---
+
+## Claude Code の初回起動
+
+> [!NOTE]
+> **Windows の方へ**: 以下のコマンドは **WSL の Ubuntu ターミナル**で実行してください。Windows Terminal で Ubuntu タブを開いた状態で操作します。
+
+まず、作業用ディレクトリに移動してから起動します。**ホームディレクトリ（`~`）で直接起動しないように注意してください。**
+
+```bash
+# bash
+cd ~/works
+claude
+```
+
+> [!NOTE]
+> **なぜプロジェクトディレクトリで起動するの?** Claude Code は起動したフォルダを「作業場所」として認識します。ホームディレクトリで起動してしまうと、すべてのファイルが見える状態になり、意図しない場所にファイルが作られることがあります。
+
+`>` プロンプトが表示されたら起動成功です。試しに話しかけてみてください。
+
+```plaintext
+# claude
+こんにちは！
+```
+
+Claude から返答が来れば完璧です。終了するには `/exit` と入力するか `Ctrl + C` を押してください。
+
+- [ ] `claude` コマンドで Claude Code が起動した
+- [ ] Claude に話しかけて返答が来た
+
+---
+
+## 完了チェックリスト
+
+Chapter 0 が完了したら、以下がすべてチェックできているはずです。
+
+- [ ] `code --version` でバージョン番号が表示される
+- [ ] `claude --version` でバージョン番号が表示される
+- [ ] `claude` コマンドで起動して会話できる
+- [ ] `git --version` でバージョン番号が表示される
+- [ ] `gh auth status` で認証済みと表示される
+- [ ] `node --version` でバージョン番号が表示される
+
+---
+
+## このチャプターのまとめ
+
+このチャプターでは、Claude Code を使うための環境を整えました。
+
+- **Visual Studio Code** でコードの閲覧・編集ができるようになりました
+- **Claude Code** をネイティブアプリとしてインストール・認証しました
+- **Git（ギット）** で変更履歴の管理ができるようになりました
+- **gh** で GitHub 操作がターミナルからできるようになりました
+- **nvm + Node.js** で JavaScript の実行環境を整えました
+- 作業用ディレクトリ `~/works` を用意しました
+
+次の Chapter 1 ではターミナル・Bash の基本操作を学び、Chapter 2 で Git・GitHub の使い方を体験します。Chapter 3 では Next.js アプリを作成して GitHub にリポジトリを公開します。
+
+すべてチェックできたら **Chapter 1** に進んでください。お疲れさまでした。
+
+---
+
+## 自己学習リソース（インストール後に読もう）
+
+インストール後や当日前日に視聴しておくと、ハンズオンがスムーズに進みます。
+「ターミナルって何？」「Git って何？」という疑問を事前に解消しておきましょう。
+
+### ターミナル・Linux コマンド
+
+ハンズオンでは黒い画面（ターミナル）にコマンドを打ち込む操作が頻出します。
+事前に「コマンドとはなにか」のイメージをつかんでおくと理解が早くなります。
+
+| 動画 | ポイント |
+|---|---|
+| [Linux コマンドとターミナルと仲良くなる勉強会（YouTube）](https://www.youtube.com/watch?v=M5JCfGttqno) | CTO・VPoE によるハンズオン勉強会の録画。「ターミナルとは何か」から基本コマンドまで約 30 分で解説 |
+
+> [!TIP]
+> **最低限知っておくとよいコマンド**: `cd`（移動）、`ls`（一覧）、`mkdir`（フォルダ作成）、`pwd`（現在地確認）
+
+### Git / GitHub
+
+聞いたことも、なんとなくの概念も知ってると思いますが、改めてしっかり学習しましょう。
+
+| リソース | ポイント |
+|---|---|
+| [Git・GitHub 入門（YouTube）](https://youtu.be/LDOR5HfI_sQ?si=7Fk-xOXzeokFn4d2) | Git と GitHub の基礎を動画でしっかり学べる |
+| [初心者必読！GitHubの使い方を徹底解説【完全網羅版】](https://www.creativevillage.ne.jp/category/topcreators/web-creator/web-programmer/128504/) | リポジトリ作成からブランチ・マージまで、図解つきで網羅した記事 |
+
+> [!TIP]
+> **確認ポイント**: リポジトリ、コミット、プッシュ の 3 つの言葉の意味がわかれば OK
+
+---
+
+## 事前準備リファレンス
+
+> [!NOTE]
+> このセクションには、後のチャプターで必要になるツールやアカウントをまとめています。
+> 各チャプターに進む前に、該当する項目を**必ず**準備してください。
+
+---
+
+### Supabase アカウント + supabase-js（Chapter 5 で使用）
+
+Chapter 3 で Supabase（データベースと認証を提供するクラウドサービス）を使います。
+
+1. [Supabase](https://supabase.com/) にアクセスしてアカウントを作成（GitHub 連携が簡単）
+2. パッケージのインストール（プロジェクトディレクトリで実行）:
+
+```bash
+# bash
+npm install @supabase/supabase-js
+```
+
+- [ ] Supabase アカウントを作成した
+- [ ] `@supabase/supabase-js` をインストールした
+
+---
+
+### Vercel アカウント + Vercel CLI（Chapter 8 で使用）
+
+Chapter 6 でアプリをインターネットに公開（デプロイ）します。
+
+1. [Vercel](https://vercel.com/) にアクセスしてアカウントを作成（GitHub 連携が簡単）
+2. Vercel CLI（ターミナルから Vercel を操作するツール）をインストール:
+
+```bash
+# bash
+npm install -g vercel
+```
+
+3. Vercel にログイン:
+
+```bash
+# bash
+vercel login
+```
+
+ブラウザが開くので、作成したアカウントでログインしてください。
+
+- [ ] Vercel アカウントを作成した
+- [ ] Vercel CLI をインストールした
+- [ ] `vercel login` でログインした
+
+---
+
+*最終更新: 2026-03-10*
+
+---
+
+[← プロローグ: 今日から私は](chapter-prologue.md) | [Chapter 1: ターミナル・Bash 入門 →](chapter-01-bash.md)
