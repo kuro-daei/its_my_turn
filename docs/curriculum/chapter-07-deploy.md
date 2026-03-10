@@ -8,7 +8,7 @@
 
 ## このチャプターで学ぶこと
 
-- Vercel CLI でプロジェクトを作成し、GitHub リポジトリと連携する
+- Vercel ダッシュボードでプロジェクトを作成し、GitHub リポジトリと連携する
 - Vercel に環境変数を設定してデプロイを実行する
 - 公開 URL でアプリの動作を確認する
 - Supabase の本番用 URL 設定が必要なケースを理解する
@@ -74,173 +74,66 @@ Claude Code がエラーの内容を確認して修正します。再度 `npm ru
 
 ---
 
-## Step 1: Vercel 設定（20分）
+## Step 1: Vercel ダッシュボードでプロジェクトを作成する（30分）
 
-このステップでは、GitHub リポジトリと Vercel を連携してデプロイの準備をします。
-
-> [!NOTE]
-> **Chapter 0 の確認:** 以下が完了していることを確認してください。完了していない場合は先に Chapter 0 の「Vercel アカウント + Vercel CLI」の手順を実施してください。
->
-> - [ ] Vercel アカウントを作成済み
-> - [ ] `vercel --version` でバージョン番号が表示される
-> - [ ] `vercel login` でログイン済み
-
-### 1-1. GitHub のリポジトリと Vercel を連携する
-
-Chapter 1 で作成した GitHub リポジトリと Vercel を連携します。**メインブランチのターミナル**で、プロジェクトのルートディレクトリ（`todos/` フォルダ）に移動してから実行します。
-
-```bash
-# bash
-vercel link
-```
-
-実行すると、いくつかの質問が対話形式で表示されます。以下のように答えてください。
-
-| 表示される質問 | 答え方 |
-|---|---|
-| `Set up "~/works/todos"?` | `y` を入力して Enter |
-| `Which scope should contain your project?` | ↑↓キーで自分のアカウント名を選んで Enter |
-| `Link to existing project?` | `n` を入力して Enter（新規作成なので） |
-| `What's your project's name?` | `todos` のまま Enter（または好みの名前） |
-| `In which directory is your code located?` | `./` のまま Enter |
-| `Want to modify these settings?` | `n` を入力して Enter |
-| `Do you want to change additional project settings?` | `n` を入力して Enter |
-| `Detected a repository. Connect it to this project?` | `y` を入力して Enter ← **ここが GitHub 連携の肝** |
-
-最後に以下の 2 行が表示されれば成功です。
-
-```text
-# output
-✅  Linked to your-account/todos (created .vercel)
-> Connecting GitHub repository: https://github.com/あなたのユーザー名/todos
-```
-
-> [!IMPORTANT]
-> **「Connecting GitHub repository」が大事な理由:** ここで GitHub リポジトリと Vercel が結びつくことで、今後 `git push` するたびに Vercel が自動で最新版をデプロイしてくれるようになります。「変更を保存してアップロードボタンを押す」という手間が永久になくなります。
+このステップでは、Vercel ダッシュボードから GitHub リポジトリをインポートし、プロジェクトを作成します。環境変数の設定と初回デプロイまで、一つの画面で完結します。
 
 > [!NOTE]
-> **`.vercel/` フォルダについて:** `vercel link` を実行すると `.vercel/` というフォルダが作られます。この中にプロジェクトの接続情報が保存されています。`.gitignore` に追加されているため Git には含まれません（他人に知られてはいけない情報が入っているためです）。
+> **Chapter 0 の確認:** Vercel アカウントを作成済みであることを確認してください。Vercel CLI のインストールや `vercel login` は今回は使いません。
 
-### Step 1 の確認ポイント
+### 1-1. GitHub リポジトリをインポートする
 
-- [ ] `vercel link` を実行して `✅ Linked to ...` が表示されている
-- [ ] `Connecting GitHub repository` が表示されて GitHub 連携が完了している
-
----
-
-## Step 2: 環境変数 & デプロイ（20分）
-
-このステップでは、Supabase の接続情報を Vercel に登録してからデプロイを実行します。
-
-### なぜ環境変数が必要か
-
-ローカル環境では `.env.local` ファイルに Supabase の URL とキーを保存していました。しかし `.env.local` は Git に含まれていないため、Vercel にはその情報が届きません。
-
-Vercel の「環境変数」機能を使って、本番サーバーにも同じ情報を安全に設定する必要があります。
-
-> [!NOTE]
-> **環境変数って何？** アプリが動く「環境」ごとに変わる設定値のことです。「自分のパソコン」と「Vercel のサーバー」では環境が違うので、それぞれに別々に設定します。`.env.local` はメモ帳に書いた個人のメモ、Vercel の環境変数は会社の金庫に保管した公式な設定書類のイメージです。
-
-### 2-1. 環境変数の値を確認する
-
-まず、設定が必要な値を確認します。ターミナルで以下を実行してください。
+1. `.env.local` の値をターミナルで確認しておく
 
 ```bash
 # bash
 cat .env.local
 ```
 
-以下の 2 つの値が表示されます。
+2. Vercel ダッシュボード（`https://vercel.com/dashboard`）をブラウザで開く
+3. 「Add New...」ボタンをクリックして「Project」を選択する
+4. 「Import Git Repository」のリストから、自分の GitHub リポジトリ（例: `todos`）を探して「Import」をクリックする
+   - リポジトリが表示されない場合は「Adjust GitHub App Permissions」をクリックして、対象リポジトリへのアクセスを許可する
+5. 「Configure Project」画面が開く：
+   - **Project Name**: 任意（デフォルトのまま OK）
+   - **Framework Preset**: `Next.js` が自動選択されていることを確認する
+   - **Root Directory**: `./` のまま（変更不要）
+6. 「Environment Variables」セクションを開いて、2 つの環境変数を追加する：
+   - `NEXT_PUBLIC_SUPABASE_URL` → `cat .env.local` で確認した URL を貼り付ける
+   - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` → 同じく確認した長い文字列を貼り付ける
+
+> [!IMPORTANT]
+> **環境変数をここで設定する理由:** デプロイ後に設定しようとすると、初回デプロイが環境変数なしで実行されてアプリが正常に動作しません。インポート画面で先に設定しておくことで、最初から正常に動く状態でデプロイできます。
+
+7. すべて設定したら「Deploy」ボタンをクリックする
+8. ビルドとデプロイが自動で実行される。完了すると「Congratulations!」の画面が表示され、公開 URL が発行される
 
 ```text
 # output
-NEXT_PUBLIC_SUPABASE_URL=https://xxxxxxxxxxxxxx.supabase.co
-NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=eyJhbGciO...（長い文字列）
+🎉 Congratulations!
+
+https://todos-xxxxxxxxxxxx.vercel.app
 ```
 
-> [!WARNING]
-> **注意:** これらの値を第三者に教えないでください。特に `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` は公開 API キーですが、Supabase の RLS（Chapter 3 で設定したセキュリティ機能）が有効であれば安全に使用できます。
-
-### 2-2. Vercel に環境変数を設定する
-
-Vercel ダッシュボードから手動で環境変数を登録します。
-
 > [!NOTE]
-> Claude で自動登録する方法もありますが、今回は確実に動作するダッシュボード操作で設定します。
+> **自動デプロイについて:** この設定が完了すると、今後は GitHub に `git push` するたびに Vercel が自動で新バージョンをデプロイします。「変更を保存してアップロードボタンを押す」という手間が永久になくなります。
 
-1. Vercel ダッシュボード（`https://vercel.com/dashboard`）をブラウザで開く
-2. 対象プロジェクトをクリックする
-3. 「Settings」タブをクリックする
-4. 左メニューの「Environment Variables」をクリックする
-5. 「Add New」ボタンをクリックする
-6. 1 つ目の環境変数を登録する：
-   - 「Key」に `NEXT_PUBLIC_SUPABASE_URL` と入力する
-   - 「Value」に `cat .env.local` で確認した URL（`https://xxxxxxxxxxxxxx.supabase.co` の形式）を貼り付ける
-   - 「Production」にチェックが入っていることを確認する
-   - 「Save」をクリックする
-7. 再度「Add New」をクリックし、2 つ目の環境変数を登録する：
-   - 「Key」に `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` と入力する
-   - 「Value」に `cat .env.local` で確認した長い文字列（`eyJ...` から始まる）を貼り付ける
-   - 「Production」にチェックが入っていることを確認する
-   - 「Save」をクリックする
+### Step 1 の確認ポイント
 
-登録後、「Environment Variables」の画面に 2 つの変数が表示されていれば設定完了です。
-
-### 2-3. ビルドを確認してデプロイする
-
-環境変数の設定が完了したら、ビルドの確認とデプロイを Claude Code に依頼します。
-
-> [!NOTE]
-> **ビルドとは？** プログラムのソースコードを、サーバーで動かせる形式に変換する処理です。料理でいえば「レシピ（コード）をもとに実際の料理（動くアプリ）を作る」工程です。デプロイ前にビルドが通るかを確認しておくと、本番でエラーが起きるリスクを減らせます。
-
-Claude Code に以下を入力してください。
-
-```plaintext
-# claude
-デプロイ前にビルドが通るか確認して、問題がなければ vercel deploy --prod で本番デプロイして
-```
-
-Claude Code はまず `npm run build` でビルドが通るかを確認し、問題があれば修正してからデプロイを実行します。問題がなければそのまま本番デプロイまで進みます。
-
-> [!NOTE]
-> **`vercel deploy --prod` と `git push` の違い:**
->
-> - `vercel deploy --prod`（CLI デプロイ）: ターミナルから直接デプロイします。初回デプロイや緊急の修正デプロイに使います。
-> - `git push`（自動デプロイ）: GitHub に変更を push すると Vercel が自動で検知してデプロイします。日常の開発フローはこちらが中心になります。
->
-> まずは CLI で初回デプロイを確認し、その後は `git push` による自動デプロイを使うのが標準的なフローです。
-
-### 2-4. デプロイ結果を確認する
-
-デプロイが完了すると、ターミナルに以下のような出力が表示されます。
-
-```text
-# output
-✓ Build completed
-✓ Deployment completed
-
-Production: https://todos-xxxxxxxxxxxx.vercel.app
-```
-
-`Production:` の行に表示された URL が、あなたのアプリの公開 URL です。ブラウザで開いて動作を確認してください。
-
-エラーが表示された場合は、「トラブルシューティング」を参照してください。
-
-### Step 2 の確認ポイント
-
-- [ ] Vercel ダッシュボードの「Environment Variables」に 2 つの環境変数（`NEXT_PUBLIC_SUPABASE_URL`・`NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`）が登録されている
-- [ ] `vercel deploy --prod` が成功して `✓ Deployment completed` が表示されている
+- [ ] Vercel ダッシュボードでプロジェクトが作成されている
+- [ ] GitHub リポジトリと Vercel が連携されている（「Congratulations!」画面が表示された）
 - [ ] 公開 URL（`https://プロジェクト名.vercel.app` のような形式）が発行されている
+- [ ] 2 つの環境変数（`NEXT_PUBLIC_SUPABASE_URL`・`NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`）がインポート時に設定された
 
 ---
 
-## Step 3: 本番動作確認 & 振り返り（20分）
+## Step 2: 本番動作確認（20分）
 
-このステップでは、公開されたアプリの動作を確認し、必要に応じて Supabase の設定を本番用に更新します。
+このステップでは、発行された公開 URL でアプリが正常に動作しているか確認します。
 
-### 3-1. 公開 URL でアプリを確認する
+### 2-1. 公開 URL でアプリを確認する
 
-Step 2 で発行された公開 URL（`https://プロジェクト名.vercel.app`）をブラウザで開きます。
+Step 1 で発行された公開 URL（`https://プロジェクト名.vercel.app`）をブラウザで開きます。
 
 以下のチェックリストで動作を確認します。
 
@@ -253,9 +146,9 @@ Step 2 で発行された公開 URL（`https://プロジェクト名.vercel.app`
 - [ ] ログアウトできる
 
 > [!WARNING]
-> **注意:** サインアップ後にメール確認が必要な場合があります。登録したメールアドレスに確認メールが届いていないか確認してください。確認メールのリンクが正しく機能しない場合は、Step 3-2 でメール確認用の本番 URL を設定してください。
+> **注意:** サインアップ後にメール確認が必要な場合があります。登録したメールアドレスに確認メールが届いていないか確認してください。確認メールのリンクが正しく機能しない場合は、Step 2-2 でメール確認用の本番 URL を設定してください。
 
-### 3-2. Supabase の本番用 URL を設定する（必要な場合のみ）
+### 2-2. Supabase の本番用 URL を設定する（必要な場合のみ）
 
 メールとパスワードによるサインアップ・ログイン・データの読み書きは、この設定をしなくても本番環境で動作します。
 
@@ -295,6 +188,12 @@ Step 2 で発行された公開 URL（`https://プロジェクト名.vercel.app`
 > https://プロジェクト名.vercel.app/**
 > ```
 
+### Step 2 の確認ポイント
+
+- [ ] サインアップ・ログインができる
+- [ ] TODO の追加・一覧・完了・削除ができる
+- [ ] ログアウトができる
+
 ---
 
 ### 振り返り: このカリキュラムで学んだ Claude Code 機能
@@ -320,13 +219,6 @@ Step 2 で発行された公開 URL（`https://プロジェクト名.vercel.app`
 > [!IMPORTANT]
 > **体験まとめ:** 最初は「ターミナルに何を打てばいいかわからない」状態から始まりました。今では Claude Code に日本語で依頼するだけで、コードの作成・修正・テスト・デプロイまでをサポートしてもらえます。これが Claude Code を使った開発の第一歩です。
 
-### Step 3 の確認ポイント
-
-- [ ] 公開 URL でサインアップ・ログインができる
-- [ ] 公開 URL で TODO の追加・一覧・完了・削除ができる
-- [ ] 公開 URL でログアウトができる
-- [ ] Supabase の Site URL と Redirect URLs を設定した（メール確認・パスワードリセット機能を使う場合のみ）
-
 ---
 
 ## チャプター全体の確認ポイント
@@ -334,9 +226,9 @@ Step 2 で発行された公開 URL（`https://プロジェクト名.vercel.app`
 このチャプターを完了すると、以下の状態になっているはずです。
 
 - [ ] **Vercel デプロイ済み**: 公開 URL でアプリが動いている
-- [ ] **環境変数設定済み**: Vercel に Supabase の接続情報が登録されている
+- [ ] **環境変数設定済み**: インポート時に Supabase の接続情報が登録されている
 - [ ] **Supabase 本番設定**: 本番 URL でサインアップ・ログインができる（メール確認・パスワードリセットを使う場合は Site URL・Redirect URLs も設定済み）
-- [ ] **全機能動作確認済み**: チェックリスト 7 項目がすべてクリア
+- [ ] **全機能動作確認済み**: サインアップ・ログイン・TODO 操作・ログアウトがすべてクリア
 
 ---
 
@@ -344,8 +236,8 @@ Step 2 で発行された公開 URL（`https://プロジェクト名.vercel.app`
 
 | 機能 | 体験した内容 |
 |------|-------------|
-| **デプロイ支援** | Claude Code に「ビルドを確認して本番デプロイして」と依頼するだけで、`npm run build` によるチェックから `vercel deploy --prod` による本番公開まで対応してもらえることを体験した |
-| **環境変数設定** | ローカル用の `.env.local` に書いた Supabase の接続情報を Vercel ダッシュボードから登録し、本番サーバーでアプリが動く状態にした |
+| **デプロイ支援** | Vercel ダッシュボードから GitHub リポジトリをインポートし、環境変数の設定と初回デプロイを一画面で完結させた |
+| **環境変数設定** | インポート画面の「Environment Variables」セクションで Supabase の接続情報を事前に設定し、初回デプロイから正常に動く状態にした |
 | **Supabase 本番設定** | 基本的な読み書き・ログインは設定なしで動作することを確認した。メール確認・パスワードリセット機能を追加する際は Site URL と Redirect URLs を設定する必要がある |
 
 ---
